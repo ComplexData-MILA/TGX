@@ -1,1 +1,1 @@
-from tgx.read_files import read_edgelist
+from tgn.read_files import read_edgelist

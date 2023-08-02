@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "tgx"
+name = "tgn"
 version = "1.0"
-description = "Temporal Graph Benchmark project repo"
+description = "Temporal Graph"
 authors = ["Razieh Shirzadkhani <razieh.shirzadkhani@gmail.com>", "shenyang Huang <shenyang.huang@mail.mcgill.ca>", "Farimah Poursafaei"]
 readme = "README.md"
-packages = [{include = "tgx"}]
+packages = [{include = "tgn"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
