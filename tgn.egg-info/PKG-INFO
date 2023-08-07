@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: tgn
+Version: 0.0.1
+Summary: Temporal graph
+Home-page: https://github.com/rshirzadkhani/tgn
+Author: Razieh Shirzadkhani
+Author-email: razieh.shirzadkhani@gmail.com
+License: MIT
+Keywords: demo project
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+test

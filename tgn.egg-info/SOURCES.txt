@@ -1,0 +1,9 @@
+LICENSE
+README.md
+setup.py
+tgn/__init__.py
+tgn/read_files.py
+tgn.egg-info/PKG-INFO
+tgn.egg-info/SOURCES.txt
+tgn.egg-info/dependency_links.txt
+tgn.egg-info/top_level.txt
