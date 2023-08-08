@@ -64,7 +64,7 @@ def read_edgelist(fname = None,
         return load_discrete_edgelist(fname, cols_to_read, header=header)
 
 
-def load_continuous_edgelist(fname, columns, time_interval, header=True):
+def load_continuous_edgelist(fname, columns, time_interval=86400, header=True):
     """
     load temporal edgelist into a dictionary
     assumption: the edges are ordered in increasing order of their timestamp
@@ -101,7 +101,7 @@ def load_continuous_edgelist(fname, columns, time_interval, header=True):
             total_time = float(values[ts_idx])
             interval_size = int(total_time / time_interval)
     else:
-        raise ValueError("Invalid time interval")
+        raise TypeError("Invalid time interval")
 
     temporal_edgelist = {}
     total_n_edges = 0
