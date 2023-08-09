@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from tgn.readwrite.read_files import *
+# from tgn.utils.edgelist import cont_to_disc_edgelist
 import seaborn as sns
+from tqdm import tqdm
 
 
 def TEA(
@@ -11,9 +12,16 @@ def TEA(
         fig_size = (7,5),
         font_size = 20, 
         network_name=None,
-        density = False
+        density = False,
+        intervals = None
         ):
     
+    # check number of unique timestamps:
+    # unique_ts = list(temp_edgelist.keys())
+    # if unique_ts > 100 or intervals is not None:
+    #     cont_to_disc_edgelist()
+
+
     ts_edges_dist, ts_edges_dist_density, edge_frequency_dict = TEA_process_edgelist_per_timestamp(temp_edgelist)
     
     TEA_plot_edges_bar(ts_edges_dist, 
@@ -48,6 +56,7 @@ def TEA_process_edgelist_per_timestamp(temp_edgelist):
     ts_edges_dist = []  # contains different features specifying the characteristics of the edge distribution over time
     ts_edges_dist_density = []
     for curr_t in unique_ts:
+            print(curr_t)
         # if curr_t < 63072000:
             prev_ts = [ts for ts in unique_ts if ts < curr_t]
             edges_in_prev_ts = {}
@@ -129,6 +138,7 @@ def TEA_plot_edges_bar(ts_edges_dist,
 
     duration = ts_edges_dist_df['ts'].tolist()
     timestamps = [i for i in range(len(duration))]
+    print(timestamps[int(0.85 * len(timestamps))])
     # timestamps = ts_edges_dist_df['ts'].tolist()
     
     new = ts_edges_dist_df['new'].tolist()
