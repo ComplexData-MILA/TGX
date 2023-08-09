@@ -16,19 +16,19 @@ DataPath={
     'Contacts'  : f"{common_path}/Contacts/Contacts.csv"}
 
 Data_specifications = {
-    'USLegis'   : {'header': True, 'index': False, 'continuous': False, 'intervals': None},
-    'CanParl'   : {'header': True, 'index': False, 'continuous': False, 'intervals': None},
-    'UNTrade'   : {'header': True, 'index': False, 'continuous': False, 'intervals': None},
-    'UNVote'    : {'header': True, 'index': False, 'continuous': False, 'intervals': None},
-    'Reddit'    : {'header': True, 'index': False, 'continuous': True, 'intervals': 'daily'},
-    'Wikipedia' : {'header': True, 'index': False, 'continuous': True, 'intervals': 'daily'},
-    'Enron'     : {'header': True, 'index': True, 'continuous': True, 'intervals': 'monthly'},
-    'MOOC'      : {'header': True, 'index': False, 'continuous': True, 'intervals': 28},
-    'UCI'       : {'header': True, 'index': True, 'continuous': True, 'intervals': 39},
-    'SocialEvo' : {'header': True, 'index': True, 'continuous': True, 'intervals': 40},
-    'Flights'   : {'header': True, 'index': False, 'continuous': False, 'intervals': None},
-    'LastFM'    : {'header': True, 'index': False, 'continuous': True, 'intervals': 'monthly'},
-    'Contacts'  : {'header': True, 'index': False, 'continuous': True, 'intervals': 'daily'}
+    'USLegis'   : {'header': True, 'index': False, 'cont_to_disc': False, 'intervals': None},
+    'CanParl'   : {'header': True, 'index': False, 'cont_to_disc': False, 'intervals': None},
+    'UNTrade'   : {'header': True, 'index': False, 'cont_to_disc': False, 'intervals': None},
+    'UNVote'    : {'header': True, 'index': False, 'cont_to_disc': False, 'intervals': None},
+    'Reddit'    : {'header': True, 'index': False, 'cont_to_disc': True, 'intervals': 'daily'},
+    'Wikipedia' : {'header': True, 'index': False, 'cont_to_disc': True, 'intervals': 'daily'},
+    'Enron'     : {'header': True, 'index': True, 'cont_to_disc': True, 'intervals': 'monthly'},
+    'MOOC'      : {'header': True, 'index': False, 'cont_to_disc': True, 'intervals': 28},
+    'UCI'       : {'header': True, 'index': True, 'cont_to_disc': True, 'intervals': 39},
+    'SocialEvo' : {'header': True, 'index': True, 'cont_to_disc': True, 'intervals': 40},
+    'Flights'   : {'header': True, 'index': False, 'cont_to_disc': False, 'intervals': None},
+    'LastFM'    : {'header': True, 'index': False, 'cont_to_disc': True, 'intervals': 'monthly'},
+    'Contacts'  : {'header': True, 'index': False, 'cont_to_disc': True, 'intervals': 'daily'}
 }
 
 def read_dataset(data):
@@ -39,13 +39,13 @@ def read_dataset(data):
     path = DataPath[data]
     header = Data_specifications[data]['header']
     index = Data_specifications[data]['index']
-    continuous = Data_specifications[data]['continuous']
+    cont_to_disc = Data_specifications[data]['cont_to_disc']
     intervals = Data_specifications[data]['intervals']
 
     return (path, 
             header, 
             index, 
-            continuous, 
+            cont_to_disc, 
             intervals)
 
 

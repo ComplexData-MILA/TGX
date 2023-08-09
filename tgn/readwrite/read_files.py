@@ -10,7 +10,7 @@ def read_edgelist(fname = None,
              sep = ",", 
              header = True,
              index = False,
-             continuous = False,
+             cont_to_disc = False,
              intervals = None,
              t_col = 2, 
              weight = False, 
@@ -26,7 +26,7 @@ def read_edgelist(fname = None,
 
     if data is not None:
         if isinstance(data, str):
-            fname, header, index, continuous, intervals = read_dataset(data)
+            fname, header, index, cont_to_disc, intervals = read_dataset(data)
         else:
             raise TypeError("Invalid data name type, try string")
 
@@ -58,13 +58,13 @@ def read_edgelist(fname = None,
     # feat_l = np.zeros((num_lines, feat_size))
     cols_to_read = [u_col, v_col, t_col, weight_col, feat_col]
 
-    if continuous:
-        return load_continuous_edgelist(fname, cols_to_read, time_interval=intervals, header=header)
+    if cont_to_disc:
+        return load_edgelist_cont_to_disc(fname, cols_to_read, time_interval=intervals, header=header)
     else:
-        return load_discrete_edgelist(fname, cols_to_read, header=header)
+        return load_edgelist(fname, cols_to_read, header=header)
 
 
-def load_continuous_edgelist(fname, columns, time_interval=86400, header=True):
+def load_edgelist_cont_to_disc(fname, columns, time_interval=86400, header=True):
     """
     load temporal edgelist into a dictionary
     assumption: the edges are ordered in increasing order of their timestamp
@@ -139,7 +139,8 @@ def load_continuous_edgelist(fname, columns, time_interval=86400, header=True):
     print("Loading edge-list: Total number of edges:", total_n_edges)
     return temporal_edgelist
 
-def load_discrete_edgelist(fname, columns, header):
+
+def load_edgelist(fname, columns, header):
     """
     treat each year as a timestamp
     """
@@ -147,7 +148,7 @@ def load_discrete_edgelist(fname, columns, header):
     edgelist.readline()
     lines = list(edgelist.readlines())
     edgelist.close()
-
+    
     u_idx, v_idx, ts_idx, _, _ = columns
     temp_edgelist = {}
     total_edges = 0
@@ -163,6 +164,8 @@ def load_discrete_edgelist(fname, columns, header):
         t = int(float(values[ts_idx]))
         u = values[u_idx]
         v = values[v_idx]
+
+        
         if t not in temp_edgelist:
             temp_edgelist[t] = {}
             temp_edgelist[t][(u, v)] = 1
@@ -175,7 +178,7 @@ def load_discrete_edgelist(fname, columns, header):
                 temp_edgelist[t][(u, v)] += 1
         total_edges += 1
     print("Number of loaded edges: " + str(total_edges))
-    # print("Available timestamps: ", temp_edgelist.keys())
+    print("Available timestamps: ", len(temp_edgelist.keys()))
     # print(temp_edgelist.values())
     return temp_edgelist
 
