@@ -10,7 +10,7 @@ def read_edgelist(fname = None,
              sep = ",", 
              header = True,
              index = False,
-             cont_to_disc = False,
+             discretize = False,
              intervals = None,
              t_col = 2, 
              weight = False, 
@@ -58,7 +58,7 @@ def read_edgelist(fname = None,
     # feat_l = np.zeros((num_lines, feat_size))
     cols_to_read = [u_col, v_col, t_col, weight_col, feat_col]
 
-    if cont_to_disc:
+    if discretize:
         return load_edgelist_with_discretizer(fname, cols_to_read, time_interval=intervals, header=header)
     else:
         return load_edgelist(fname, cols_to_read, header=header)
@@ -182,6 +182,47 @@ def load_edgelist(fname, columns, header):
     # print(temp_edgelist.values())
     return temp_edgelist
 
+def load_edgelist_2(fname, columns, header):
+    """
+    treat each year as a timestamp
+    """
+    edgelist = open(fname, "r")
+    edgelist.readline()
+    lines = list(edgelist.readlines())
+    edgelist.close()
+    
+    u_idx, v_idx, ts_idx, _, _ = columns
+    temp_edgelist = {}
+    total_edges = 0
+    if header:
+        first_line = 1
+    else:
+        first_line = 0
+    for i in range(first_line, len(lines)):
+        line = lines[i]
+        
+        values = line.split(',')
+        # print(values)
+        t = int(float(values[ts_idx]))
+        u = values[u_idx]
+        v = values[v_idx]
+
+        
+        if t not in temp_edgelist:
+            temp_edgelist[t] = {}
+            temp_edgelist[t][(u, v)] = 1
+            # print(temp_edgelist)
+            # break
+        else:
+            if (u, v) not in temp_edgelist[t]:
+                temp_edgelist[t][(u, v)] = 1
+            else:
+                temp_edgelist[t][(u, v)] += 1
+        total_edges += 1
+    print("Number of loaded edges: " + str(total_edges))
+    print("Available timestamps: ", len(temp_edgelist.keys()))
+    # print(temp_edgelist.values())
+    return temp_edgelist
 
 def csv_loader(fname, sep, header, columns, reindex_nodes, weight, edge_feat, feat_size=0):
 

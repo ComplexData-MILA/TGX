@@ -5,7 +5,7 @@ import seaborn as sns
 from tqdm import tqdm
 from tgx.utils.edgelist import edgelist_discritizer
 
-
+__all__ = ["TEA"]
 def TEA(
         temp_edgelist, 
         filepath,
@@ -18,8 +18,10 @@ def TEA(
     
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
-    if unique_ts > 100 or intervals is not None:
-        edgelist_discritizer()
+    if len(unique_ts) > 100 or intervals is not None:
+        temp_edgelist = edgelist_discritizer(temp_edgelist,
+                                             unique_ts,
+                                             time_interval = intervals)
 
 
     ts_edges_dist, ts_edges_dist_density, edge_frequency_dict = TEA_process_edgelist_per_timestamp(temp_edgelist)
@@ -56,8 +58,9 @@ def TEA_process_edgelist_per_timestamp(temp_edgelist):
     ts_edges_dist = []  # contains different features specifying the characteristics of the edge distribution over time
     ts_edges_dist_density = []
     for curr_t in unique_ts:
-            print(curr_t)
-        # if curr_t < 63072000:
+            
+        # if curr_t < 2:
+            # print("curr_t", curr_t)
             prev_ts = [ts for ts in unique_ts if ts < curr_t]
             edges_in_prev_ts = {}
             for bts in prev_ts:
@@ -105,8 +108,8 @@ def TEA_process_edgelist_per_timestamp(temp_edgelist):
                                             }
             ts_edges_dist.append(curr_ts_edges_dist)
             ts_edges_dist_density.append(curr_ts_edges_dist_density)
-            # print(len(edges_in_prev_ts))
-            # print(len(curr_ts_edge_list))
+    #         print(len(edges_in_prev_ts))
+    # print(len(ts_edges_dist))
             # print(edge_frequency_dict)
             # break
     return ts_edges_dist, ts_edges_dist_density, edge_frequency_dict
@@ -138,7 +141,7 @@ def TEA_plot_edges_bar(ts_edges_dist,
 
     duration = ts_edges_dist_df['ts'].tolist()
     timestamps = [i for i in range(len(duration))]
-    print(timestamps[int(0.85 * len(timestamps))])
+    # print(timestamps[int(0.85 * len(timestamps))])
     # timestamps = ts_edges_dist_df['ts'].tolist()
     
     new = ts_edges_dist_df['new'].tolist()
