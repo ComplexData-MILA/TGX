@@ -1,8 +1,8 @@
 Metadata-Version: 2.1
-Name: tgn
+Name: py-tgx
 Version: 0.0.1
 Summary: Temporal graph
-Home-page: https://github.com/rshirzadkhani/tgn
+Home-page: https://github.com/rshirzadkhani/tgx
 Author: Razieh Shirzadkhani
 Author-email: razieh.shirzadkhani@gmail.com
 License: MIT

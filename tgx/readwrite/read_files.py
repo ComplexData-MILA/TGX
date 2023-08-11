@@ -3,7 +3,7 @@ import csv
 from tqdm import tqdm
 import numpy as np
 import time
-from tgn.datasets.data_loader import read_dataset
+from tgx.datasets.data_loader import read_dataset
 
 def read_edgelist(fname = None, 
              data = None,
@@ -59,12 +59,12 @@ def read_edgelist(fname = None,
     cols_to_read = [u_col, v_col, t_col, weight_col, feat_col]
 
     if cont_to_disc:
-        return load_edgelist_cont_to_disc(fname, cols_to_read, time_interval=intervals, header=header)
+        return load_edgelist_with_discretizer(fname, cols_to_read, time_interval=intervals, header=header)
     else:
         return load_edgelist(fname, cols_to_read, header=header)
 
 
-def load_edgelist_cont_to_disc(fname, columns, time_interval=86400, header=True):
+def load_edgelist_with_discretizer(fname, columns, time_interval=86400, header=True):
     """
     load temporal edgelist into a dictionary
     assumption: the edges are ordered in increasing order of their timestamp

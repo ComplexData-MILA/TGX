@@ -7,17 +7,17 @@ def readme():
 
 
 setup(
-    name="tgn",
+    name="py-tgx",
     version="0.0.1",
     description="Temporal graph",
     long_description=readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/rshirzadkhani/tgn",
+    url="https://github.com/rshirzadkhani/tgx",
     author="Razieh Shirzadkhani",
     author_email="razieh.shirzadkhani@gmail.com",
     keywords="demo project",
     license="MIT",
-    packages=["tgn"],
+    packages=["tgx"],
     install_requires=[],
     include_package_data=True,
 )

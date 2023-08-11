@@ -1,5 +1,5 @@
-from tgn.readwrite.read_files import *
-from tgn.algorithms.visualization import TEA, TET
+from tgx.readwrite.read_files import *
+from tgx.algorithms.visualization import TEA, TET
 
 
 # network = [

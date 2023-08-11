@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+py_tgx.egg-info/PKG-INFO
+py_tgx.egg-info/SOURCES.txt
+py_tgx.egg-info/dependency_links.txt
+py_tgx.egg-info/top_level.txt
+tgx/__init__.py
