@@ -1,7 +1,7 @@
 import tgx
 
 
-mooc = tgx.data.uci()
+mooc = tgx.data.mooc()
 data = tgx.read_edgelist(data = mooc)
 plot_path = "./examples/plots/"
 # tgx.TEA(data, plot_path, network_name=mooc.name)

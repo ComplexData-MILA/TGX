@@ -150,8 +150,6 @@ def TEA_plot_edges_bar(ts_edges_dist,
     else:
         duration = ts_edges_dist_df['ts'].tolist()
         timestamps = [i for i in range(len(duration))]
-    # print(timestamps[int(0.85 * len(timestamps))])
-    # timestamps = ts_edges_dist_df['ts'].tolist()
     
     new = ts_edges_dist_df['new'].tolist()
     repeated = ts_edges_dist_df['repeated'].tolist()
