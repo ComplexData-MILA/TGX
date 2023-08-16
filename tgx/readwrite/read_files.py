@@ -3,7 +3,7 @@ import csv
 from tqdm import tqdm
 import numpy as np
 import time
-from tgx.datasets.data_loader import read_dataset
+# from tgx.datasets.data_loader import read_dataset
 
 def read_edgelist(fname = None, 
              data = None,
@@ -16,17 +16,26 @@ def read_edgelist(fname = None,
              weight = False, 
              edge_feat = False,
              feat_size = 0,
+             ts_sorted = True,
              reindex_nodes = False,
              return_csv = False):
     
-
     start_col = 0
     weight_col = np.inf
     feat_col = np.inf
 
+    
+    if not ts_sorted:
+        raise NotImplementedError("Only implemented for sorted data.")
+
+
     if data is not None:
-        if isinstance(data, str):
-            fname, header, index, cont_to_disc, intervals = read_dataset(data)
+        if isinstance(data, type):
+            fname, header, index, discretize, intervals = (data.path, 
+                                                             data.header, 
+                                                             data.index, 
+                                                             data.discretize, 
+                                                             data.intervals)
         else:
             raise TypeError("Invalid data name type, try string")
 
@@ -81,6 +90,7 @@ def load_edgelist_with_discretizer(fname, columns, time_interval=86400, header=T
     lines = list(edgelist.readlines())
     edgelist.close()
 
+    
     u_idx, v_idx, ts_idx, _, _ = columns
 
     if isinstance(time_interval, str):
@@ -149,47 +159,6 @@ def load_edgelist(fname, columns, header):
     lines = list(edgelist.readlines())
     edgelist.close()
     
-    u_idx, v_idx, ts_idx, _, _ = columns
-    temp_edgelist = {}
-    total_edges = 0
-    if header:
-        first_line = 1
-    else:
-        first_line = 0
-    for i in range(first_line, len(lines)):
-        line = lines[i]
-        
-        values = line.split(',')
-        # print(values)
-        t = int(float(values[ts_idx]))
-        u = values[u_idx]
-        v = values[v_idx]
-
-        
-        if t not in temp_edgelist:
-            temp_edgelist[t] = {}
-            temp_edgelist[t][(u, v)] = 1
-            # print(temp_edgelist)
-            # break
-        else:
-            if (u, v) not in temp_edgelist[t]:
-                temp_edgelist[t][(u, v)] = 1
-            else:
-                temp_edgelist[t][(u, v)] += 1
-        total_edges += 1
-    print("Number of loaded edges: " + str(total_edges))
-    print("Available timestamps: ", len(temp_edgelist.keys()))
-    # print(temp_edgelist.values())
-    return temp_edgelist
-
-def load_edgelist_2(fname, columns, header):
-    """
-    treat each year as a timestamp
-    """
-    edgelist = open(fname, "r")
-    edgelist.readline()
-    lines = list(edgelist.readlines())
-    edgelist.close()
     
     u_idx, v_idx, ts_idx, _, _ = columns
     temp_edgelist = {}
@@ -203,6 +172,7 @@ def load_edgelist_2(fname, columns, header):
         
         values = line.split(',')
         # print(values)
+        
         t = int(float(values[ts_idx]))
         u = values[u_idx]
         v = values[v_idx]
@@ -223,6 +193,8 @@ def load_edgelist_2(fname, columns, header):
     print("Available timestamps: ", len(temp_edgelist.keys()))
     # print(temp_edgelist.values())
     return temp_edgelist
+
+
 
 def csv_loader(fname, sep, header, columns, reindex_nodes, weight, edge_feat, feat_size=0):
 

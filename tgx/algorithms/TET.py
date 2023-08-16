@@ -1,19 +1,11 @@
-"""
-TET Plots
-"""
-
-import math
-from pathlib import Path
-
-import pandas as pd
+# TET Plot
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import figure
-from tqdm import tqdm
+import pandas as pd
 import seaborn as sns
-from matplotlib.patches import Rectangle
-import matplotlib.ticker as mticker
-from tgx.readwrite.read_files import load_continuous_edgelist
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+from tgx.utils.edgelist import edgelist_discritizer
+
 
 # some parameters to be used for drawing
 E_ABSENT = 0
@@ -32,6 +24,7 @@ E_INDUCTIVE = 40
 
 def TET(temp_edgelist, 
         filepath, 
+        intervals = None,
         network_name=None,
         add_frame = True,
         figsize = (9, 5),
@@ -40,6 +33,13 @@ def TET(temp_edgelist,
         axis_tick_gap = 20,
         timestamp_split_cross_mark_offset = 1) -> pd.DataFrame:
     
+    print("Plotting TET plots...")
+    unique_ts = list(temp_edgelist.keys())
+    
+    if len(unique_ts) > 100 or intervals is not None:
+        temp_edgelist = edgelist_discritizer(temp_edgelist,
+                                             unique_ts,
+                                             time_interval = intervals)
     edge_last_ts = generate_edge_last_timestamp(temp_edgelist)
     edge_idx_map = generate_edge_idx_map(temp_edgelist, edge_last_ts)
     idx_edge_map = {v: k for k, v in edge_idx_map.items()}  # key: edge index; value: actual edge (source, destination)
@@ -47,9 +47,11 @@ def TET(temp_edgelist,
 
     unique_ts_list = list(temp_edgelist.keys())
     e_presence_mat = generate_edge_presence_matrix(unique_ts_list, idx_edge_map, edge_idx_map, temp_edgelist)
+    print("Info: edge-presence-matrix shape: {}".format(e_presence_mat.shape))
+    print(np.unique(e_presence_mat, return_counts=True))
     e_presence_mat, test_split_ts_value = process_presence_matrix(e_presence_mat, test_ratio_p=0.85)
     print("Info: edge-presence-matrix shape: {}".format(e_presence_mat.shape))
-
+    print(np.unique(e_presence_mat, return_counts=True))
     fig_param = set_fig_param(network_name, filepath,
                               figsize = figsize,
                               axis_title_font_size = axis_title_font_size,
@@ -96,6 +98,13 @@ def generate_edge_idx_map(edges_per_ts, edge_last_ts):
 
 
 def generate_edge_presence_matrix(unique_ts_list, idx_edge_map, edge_idx_map, edges_per_ts):
+    '''
+    Returns presence matrix with values 0 and 1 which indicate:
+    value = 0 : edge is not present in this timestamp
+    value = 1 : edge is present in this timestamp
+
+    shape: (ts, total number of edges)
+    '''
     num_unique_ts = len(unique_ts_list)
     num_unique_edge = len(idx_edge_map)
     e_presence_mat = np.zeros([num_unique_ts, num_unique_edge], dtype=np.int8)
@@ -121,11 +130,16 @@ def process_presence_matrix(e_presence_matrix, test_ratio_p):
     num_unique_ts = e_presence_matrix.shape[0]
     num_unique_edges = e_presence_matrix.shape[1]
     ts_idx_list = [i for i in range(num_unique_ts)]
+
+    # generating timestamp list for train and test:
     test_split_ts_value = int(np.quantile(ts_idx_list, test_ratio_p))
     train_ts_list = [ts for ts in ts_idx_list if ts <= test_split_ts_value]  # any timestamp in train/validation split
     test_ts_list = [ts for ts in ts_idx_list if ts > test_split_ts_value]  # test_split_ts_value is in train
+
     # first level processing: differentiate train set edges: 1) Only in train set, 2) in train & test set
-    for tr_ts in train_ts_list:
+    print("First level processing: ")
+    print("Detecting edges present in train & test sets")
+    for tr_ts in tqdm(train_ts_list):
         for eidx in range(num_unique_edges):
             if e_presence_matrix[num_unique_ts - tr_ts - 1, eidx] == E_PRESENCE_GENERAL:
                 for test_ts_idx in range(test_split_ts_value + 1, num_unique_ts):
@@ -133,8 +147,10 @@ def process_presence_matrix(e_presence_matrix, test_ratio_p):
                         # the test set
                         e_presence_matrix[num_unique_ts - tr_ts - 1, eidx] = E_TRAIN_AND_TEST
                         break
+
     # differentiate test set edges: 1) transductive (seen in train, repeating in test), 2) inductive (only in test)
-    for ts in test_ts_list:
+    print("Detecting transductive edges (seen in train, repeating in test)")
+    for ts in tqdm(test_ts_list):
         for eidx in range(num_unique_edges):
             if e_presence_matrix[num_unique_ts - ts - 1, eidx] == E_PRESENCE_GENERAL:
                 for prev_ts_idx in range(test_split_ts_value, -1, -1):
@@ -142,8 +158,11 @@ def process_presence_matrix(e_presence_matrix, test_ratio_p):
                         # the training set
                         e_presence_matrix[num_unique_ts - ts - 1, eidx] = E_TRANSDUCTIVE
                         break
+
     # second level processing
-    for ts in range(num_unique_ts):
+    print("Second level processing:")
+    print("Detecting edges 1) Only in train set, 2) only in test (inductive)")
+    for ts in tqdm(range(num_unique_ts)):
         for eidx in range(num_unique_edges):
             if ts <= test_split_ts_value:
                 if e_presence_matrix[num_unique_ts - ts - 1, eidx] == E_PRESENCE_GENERAL:
@@ -174,7 +193,7 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
               '#fc8d59',  # E_TRANSDUCTIVE
               '#b2182b'  # E_INDUCTIVE
               ]
-
+    print(sns.color_palette(colors, as_cmap=True))
     frame_color = "grey" # "#bababa"
     time_split_color = "black"
     axis_title_font_size = fig_param.axis_title_font_size
@@ -231,8 +250,8 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
              fontsize=y_font_size, fontweight='heavy')
 
     if fig_param.fig_name != "":
-        print("Info: file name: {}".format(fig_param.fig_name))
-        plt.savefig(fig_param.fig_name)
+        # print("Info: file name: {}".format(fig_param.fig_name))
+        plt.savefig(f"{fig_param.fig_name}/{fig_param.network_name}.png")
         plt.close()
 
     plt.show()
@@ -265,222 +284,12 @@ def set_fig_param(network_name, fig_name,
     return fig_param
 
 class Fig_Param:
-    def __init__(self, fig_name, figsize, axis_title_font_size, ticks_font_size, axis_tick_gap,
+    def __init__(self, network_name, fig_name, figsize, axis_title_font_size, ticks_font_size, axis_tick_gap,
                  timestamp_split_cross_mark_offset):
+        self.network_name = network_name
         self.fig_name = fig_name
         self.figsize = figsize
         self.axis_title_font_size = axis_title_font_size
         self.ticks_font_size = ticks_font_size
         self.axis_tick_gap = axis_tick_gap
         self.timestamp_split_cross_mark_offset = timestamp_split_cross_mark_offset
-
-
-
-# def generate_edge_per_ts_and_idx_map(edgelist_df, directed):
-#     # edges per each timestamps & (source, destination) to edge index
-#     print("Info: Network Directed: {}".format(directed))
-#     print("Info: Total Number of edges: {}".format(edgelist_df.shape[0]))
-#     edges_per_ts = {}
-#     for idx, row in tqdm(edgelist_df.iterrows()):
-#         if directed:
-#             # 1. edges per timestamp
-#             if row['t'] not in edges_per_ts:
-#                 edges_per_ts[row['t']] = {}
-#                 edges_per_ts[row['t']][(row['u'], row['v'])] = 1
-#             else:
-#                 if (row['u'], row['v']) not in edges_per_ts[row['t']]:
-#                     edges_per_ts[row['t']][(row['u'], row['v'])] = 1
-#         else:
-#             print("Not implemented yet!")
-#             exit(1)
-
-#     edge_last_ts = generate_edge_last_timestamp(edges_per_ts)
-#     edge_idx_map = generate_edge_idx_map(edges_per_ts, edge_last_ts)
-#     idx_edge_map = {v: k for k, v in edge_idx_map.items()}  # key: edge index; value: actual edge (source, destination)
-
-#     print("Info: Number of distinct edges (from index-edge map): {}".format(len(idx_edge_map)))
-
-#     return edges_per_ts, idx_edge_map, edge_idx_map
-
-
-# def from_temporal_edgelist_to_edge_presence_plot(edgelist_filename, network_name, fig_name,
-#                                                  add_frame=False, directed=True):
-#     """
-#     read a temporal edge-list and generate a matrix which specifies the existence of edges over time
-#     """
-#     if network_name in ['US Legislative', 'Canadian Vote', 'UN Trade', 'UN Vote']:
-#         # read edge-list and unify the column names
-#         edgelist_df = pd.read_csv(edgelist_filename)
-#         edgelist_df.columns = ['t', 'u', 'v', 'w']
-#         # unique edges
-#         grouped_edges = edgelist_df.groupby(['u', 'v'])
-#         num_unique_edges = len(grouped_edges)
-#         print("Info: Number of unique edges: {}".format(num_unique_edges))
-#         # unique timestamps
-#         unique_ts_list = list(set(edgelist_df['t'].tolist()))
-#         num_unique_ts = len(unique_ts_list)
-#         print("Info: Number of unique timestamps: {}".format(num_unique_ts))
-#         # generate edges per timestamp and index-edge map
-#         edges_per_ts, idx_edge_map, edge_idx_map = generate_edge_per_ts_and_idx_map(edgelist_df, directed)
-
-#     elif network_name in ['Reddit', 'Wikipedia', 'MOOC']:
-#         edges_per_ts, idx_edge_map, edge_idx_map = load_continuous_edgelist(edgelist_filename)
-#     elif network_name in ['LastFM', 'Enron']:
-#         interval_size = 86400 * 30
-#         edges_per_ts, idx_edge_map, edge_idx_map = load_continuous_edgelist(edgelist_filename, interval_size)
-#     elif network_name in [ 'UCI', 'Social Evo.']:
-#         interval_size = 86400 * 5
-#         edges_per_ts, idx_edge_map, edge_idx_map = load_continuous_edgelist1(edgelist_filename, interval_size)
-#     # elif network_name in ['Flights']:
-#     #     edges_per_ts, idx_edge_map, edge_idx_map = load_flight_edgelist(edgelist_filename)
-#     # elif network_name in ['Political Science Retweet Network']:
-#     #     edges_per_ts, idx_edge_map, edge_idx_map = load_retweet_edgelist(edgelist_filename)
-#     else:
-#         print("Info: Invalid network name!")
-#         exit(-1)
-
-#     unique_ts_list = list(edges_per_ts.keys())
-#     e_presence_mat = generate_edge_presence_matrix(unique_ts_list, idx_edge_map, edge_idx_map, edges_per_ts)
-#     e_presence_mat, test_split_ts_value = process_presence_matrix(e_presence_mat, test_ratio_p=0.85)
-#     print("Info: edge-presence-matrix shape: {}".format(e_presence_mat.shape))
-
-#     fig_param = set_fig_param(network_name, fig_name)
-
-#     plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_list, list(idx_edge_map.keys()),
-#                               fig_param, add_frames=add_frame)
-
-
-# def set_fig_param_v1(network_name, fig_name):
-#     # general settings
-#     coeff = 2  # 1.618
-#     y_size = 5.5
-#     x_size = lambda y_size : int(y_size * coeff)
-#     figsize = (x_size(y_size), y_size)
-#     axis_title_font_size = 20
-#     x_font_size = 18
-#     y_font_size = 18
-#     axis_tick_gap = 20
-#     timestamp_split_cross_mark_offset = 1
-
-#     if network_name in ['US Legislative', 'Canadian Vote', 'UN Trade', 'UN Vote']:
-#         axis_tick_gap = axis_tick_gap * 0.35
-
-#     elif network_name in ['Reddit', 'Wikipedia', 'UCI', 'Social Evo.', 'Flights', 'LastFM', 'MOOC']:
-#         axis_tick_gap = axis_tick_gap * 0.5
-
-#     elif network_name in ['Enron']:
-#         axis_tick_gap = axis_tick_gap * 0.4
-
-#     fig_param = Fig_Param(network_name, fig_name,
-#                           figsize, axis_title_font_size,
-#                           x_font_size,
-#                           y_font_size,
-#                           axis_tick_gap,
-#                           timestamp_split_cross_mark_offset)
-
-#     return fig_param
-
-
-# def main():
-#     """
-#     generate a matrix containing the existence of edges over time.
-#     plot it!
-#     """
-#     common_path = f'/network/scratch/r/razieh.shirzadkhani/data/SocialEvo/'
-
-#     # network_name_list = [
-#     #     'US Legislative',                               # 0
-#     #     'Canadian Vote',                                # 1
-#     #     'UN Trade',                                     # 2
-#     #     'UN Vote',                                      # 3
-#     #     'Reddit',                                       # 4
-#     #     'Wikipedia',                                    # 5
-#     #     'Enron',                                        # 6
-#     #     'MOOC',                                         # 7
-#     #     'UCI',                                          # 8
-#     #     'Social Evo.',                                  # 9
-#     #     'Flights',                                      # 10
-#     #     'LastFM',                                       # 11
-#     # ]
-    
-#     # edgelist_filename_list = [
-#     #     "LegisEdgelist.txt",                            # 0
-#     #     "canVote_edgelist.txt",                         # 1
-#     #     "UNtrade_edgelist.txt",                         # 2
-#     #     "UNvote_edgelist.txt",                          # 3
-#     #     "ml_reddit.csv",                                # 4
-#     #     "ml_wikipedia.csv",                             # 5
-#     #     "ml_enron.csv",                                 # 6
-#     #     "ml_mooc.csv",                                  # 7
-#     #     "ml_uci.csv",                                   # 8
-#     #     "ml_socialevolve.csv",                          # 9
-#     #     "covid_20200301_20200630_ext.csv",              # 10
-#     #     "ml_lastfm.csv",                                # 11
-#     # ]
-#     network_name_list = [
-#         'Social Evo.'                                  # 9
-#     ]
-#     edgelist_filename_list = [
-#         "ml_SocialEvo.csv"                          # 9
-#     ]
-    
-#     directed = True  # whether to considered network as directed or not
-#     add_frame = True
-#     fig_index_list = [i for i in range(12)]  # i for i in range(12)
-#     for i in fig_index_list:
-#         edgelist_filename = f"{common_path}/{edgelist_filename_list[i]}"
-#         fig_name = f"./examples/plots/TET/{edgelist_filename_list[i].split('.')[0]}.png"  # png
-#         network_name = network_name_list[i]
-
-#         print("Info: Network name:", network_name)
-#         print("Info: Edge list file name:", edgelist_filename)
-#         from_temporal_edgelist_to_edge_presence_plot(edgelist_filename, network_name, fig_name,
-#                                                      add_frame=add_frame, directed=directed)
-
-# def load_continuous_edgelist1(fname, interval_size=86400):
-#     """
-#     load temporal edgelist into a dictionary
-#     assumption: the edges are ordered in increasing order of their timestamp
-#     '''
-#     the timestamp in the edgelist is based cardinal
-#     more detail see here: https://github.com/srijankr/jodie
-#     need to merge edges in a period of time into an interval
-#     86400 is # of secs in a day, good interval size
-#     '''
-#     # suitable for "Wikipedia" and "Reddit"
-#     """
-#     u_idx = 1
-#     v_idx = 2
-#     ts_idx = 3
-
-#     edges_per_ts, edge_idx_map = {}, {}
-#     total_n_edges = 0
-#     distinct_edge_idx = 0
-#     with open(fname) as f:
-#         s = next(f)  # skip the first line
-#         for idx, line in enumerate(f):
-#             total_n_edges += 1
-#             e = line.strip().split(',')
-#             u = e[u_idx]  # source node
-#             v = e[v_idx]  # destination node
-#             ts = float(e[ts_idx])  # timestamp
-#             ts_bin_id = int(ts / interval_size)
-#             # 1. edges_per_ts
-#             if ts_bin_id not in edges_per_ts:
-#                 edges_per_ts[ts_bin_id] = {}
-#                 edges_per_ts[ts_bin_id][(u, v)] = 1
-#             else:
-#                 if (u, v) not in edges_per_ts[ts_bin_id]:
-#                     edges_per_ts[ts_bin_id][(u, v)] = 1
-
-#     edge_last_ts = generate_edge_last_timestamp(edges_per_ts)
-#     edge_idx_map = generate_edge_idx_map(edges_per_ts, edge_last_ts)
-#     idx_edge_map = {v: k for k, v in edge_idx_map.items()}  # key: edge index; value: actual edge (source, destination)
-
-#     print("Info: Loading edge-list: Maximum timestamp is ", ts)
-#     print("Info: Loading edge-list: Maximum timestamp-bin-id is", ts_bin_id)
-#     print("Info: Loading edge-list: Total number of edges:", total_n_edges)
-#     print("Info: Loading edge-list: Number of distinct edges:", len(idx_edge_map))
-#     return edges_per_ts, idx_edge_map, edge_idx_map
-# if __name__ == '__main__':
-#     main()
