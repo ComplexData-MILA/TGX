@@ -14,7 +14,7 @@ def TEA(
         intervals = None, 
         real_dates = None
         ):
-    print("Plotting TEA plots...")
+    print("Generating TEA plot...")
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
     if len(unique_ts) > 100 or intervals is not None:
@@ -120,7 +120,8 @@ def TEA_plot_edges_bar(ts_edges_dist,
                    fig_size = (7,5),
                    font_size = 20,
                    network_name = None,
-                   real_dates = None):
+                   real_dates = None,
+                   intervals = None):
     
 
     ts_edges_dist_df = pd.DataFrame(ts_edges_dist, columns=['ts', 'new', 'repeated',
@@ -145,7 +146,7 @@ def TEA_plot_edges_bar(ts_edges_dist,
         start = real_dates[0]
         end = real_dates[1]
         metric = real_dates[2]
-        
+        create_ts_list(start, end, metric=metric, interval=intervals)
     else:
         duration = ts_edges_dist_df['ts'].tolist()
         timestamps = [i for i in range(len(duration))]
@@ -154,7 +155,7 @@ def TEA_plot_edges_bar(ts_edges_dist,
     
     new = ts_edges_dist_df['new'].tolist()
     repeated = ts_edges_dist_df['repeated'].tolist()
-
+    print(len(timestamps), repeated, new)
     # plotting stuffs
     # bar plot
     plt.bar(timestamps, repeated, label='Repeated', color='#404040', alpha=0.4)

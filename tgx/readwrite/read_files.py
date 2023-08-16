@@ -109,16 +109,13 @@ def load_edgelist_with_discretizer(fname, columns, time_interval=86400, header=T
             last_line = lines[-1]
             values = last_line.split(',')
             total_time = float(values[ts_idx])
-            interval_size = int(total_time / time_interval)
+            interval_size = int(total_time / (time_interval-1))
     else:
         raise TypeError("Invalid time interval")
 
     temporal_edgelist = {}
     total_n_edges = 0
-    # with open(fname) as f:
-    #     if header:
-    #         s = next(f)  # skip the first line
-    #     for idx, line in enumerate(f):
+    
     if header:
         first_line = 1
     else:

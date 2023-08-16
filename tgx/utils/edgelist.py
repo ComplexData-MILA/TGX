@@ -2,9 +2,9 @@
 def edgelist_discritizer(edgelist, 
                           unique_ts,
                           time_interval = None,
-                          max_intervals = 100):
+                          max_intervals = 200):
     print("intervals:", time_interval)
-    print(unique_ts[1], unique_ts[-1])
+    print(unique_ts[0], unique_ts[-1])
     total_time = unique_ts[-1] - unique_ts[0]
     if time_interval is not None:
         if isinstance(time_interval, str):
@@ -16,18 +16,19 @@ def edgelist_discritizer(edgelist,
                 interval_size = 86400 * 30
             elif time_interval == "yearly":
                 interval_size = 86400* 365
-            if int(total_time / interval_size) > 100:
-                user_input = input("Too many timestamps, discretizing data to 100 timestamps, do you want to proceed?(y/n): ")
+            if int(total_time / interval_size) > max_intervals:
+                user_input = input("Too many timestamps, discretizing data to 200 timestamps, do you want to proceed?(y/n): ")
                 if user_input.lower() == 'n':
                     print('Cannot proceed to TEA and TET plot')
                     exit()
                 else:
-                    interval_size = 100
+                    interval_size = max_intervals
         elif isinstance(time_interval, int):
             if time_interval > max_intervals:
                 raise ValueError(f"The maximum number of time intervals is {max_intervals}.")
             else:
                 interval_size = int(total_time / (time_interval-1))
+                print(total_time, interval_size)
                 
         else:
             raise TypeError("Invalid time interval")
@@ -38,7 +39,7 @@ def edgelist_discritizer(edgelist,
             exit()
         else:
             interval_size = int(total_time / 100)
-    
+    print(interval_size)
     print(f'Discretizing data to {int(total_time/interval_size)} timestamps...')
     if int(total_time/interval_size) == 0:
         print("Warning! Only one timestamp exist in the data.")

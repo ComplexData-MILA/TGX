@@ -24,7 +24,7 @@ Data_specifications = {
         'Wikipedia' : {'header': True, 'index': False, 'discretize': True, 'intervals': 'daily'},
         'Enron'     : {'header': True, 'index': True, 'discretize': True, 'intervals': 'monthly'},
         'MOOC'      : {'header': True, 'index': False, 'discretize': True, 'intervals': 'daily'},
-        'UCI'       : {'header': True, 'index': True, 'discretize': True, 'intervals': 38},
+        'UCI'       : {'header': True, 'index': True, 'discretize': True, 'intervals': 39},
         'SocialEvo' : {'header': True, 'index': True, 'discretize': True, 'intervals': 40},
         'Flights'   : {'header': True, 'index': False, 'discretize': False, 'intervals': 'daily'},
         'LastFM'    : {'header': True, 'index': False, 'discretize': True, 'intervals': 'monthly'},

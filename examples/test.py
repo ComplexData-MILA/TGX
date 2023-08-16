@@ -1,12 +1,21 @@
 import tgx
 
 
-mooc = tgx.data.mooc()
+mooc = tgx.data.uci()
 data = tgx.read_edgelist(data = mooc)
 plot_path = "./examples/plots/"
 # tgx.TEA(data, plot_path, network_name=mooc.name)
 # plot_path1 = "./examples/plots/TET/"
 # TET(data, plot_path1, network_name=ntw)
+
+
+plot_path = "./examples/plots/"
+G = tgx.Graph(data)
+tgx.edges_per_timestamp(G.discrite_graph, plot_path, network_name=mooc.name)
+tgx.average_degree(G.discrite_graph, plot_path, network_name=mooc.name)
+tgx.nodes_per_timestamp(G.discrite_graph, plot_path, network_name=mooc.name)
+
+
 
 # data = tgx.read_edgelist(fname="/home/mila/r/razieh.shirzadkhani/.conda/envs/tg/lib/"
 #                 "python3.9/site-packages/tgb/datasets/tgbl_wiki/tgbl-wiki_edgelist_v2.csv", 
@@ -66,8 +75,3 @@ plot_path = "./examples/plots/"
 # plot_path1 = "./examples/plots/TET/"
 # tgx.TET(data, plot_path1, network_name="tgbn_arxiv", intervals=30)
 
-
-G = tgx.Graph(data)
-tgx.edges_per_timestamp(G.discrite_graph, plot_path, network_name=mooc.name)
-tgx.average_degree(G.discrite_graph, plot_path, network_name=mooc.name)
-tgx.nodes_per_timestamp(G.discrite_graph, plot_path, network_name=mooc.name)
