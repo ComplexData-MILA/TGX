@@ -1,12 +1,12 @@
 import pandas as pd
 import csv
-from tqdm import tqdm
 import numpy as np
-import time
+from typing import Optional, Union
+from tgx.utils.edgelist import edgelist_discritizer
 # from tgx.datasets.data_loader import read_dataset
 
-def read_edgelist(fname = None, 
-             data = None,
+def read_edgelist(fname : str = None, 
+             data : type = None,
              sep = ",", 
              header = True,
              index = False,
@@ -31,13 +31,11 @@ def read_edgelist(fname = None,
 
     if data is not None:
         if isinstance(data, type):
-            fname, header, index, discretize, intervals = (data.path, 
-                                                             data.header, 
-                                                             data.index, 
-                                                             data.discretize, 
-                                                             data.intervals)
+            return _datasets_edgelist_loader(data.data, 
+                                             discretize = discretize, 
+                                             intervals = intervals)
         else:
-            raise TypeError("Invalid data name type, try string")
+            raise TypeError("Invalid data type, try data class")
 
     if index:
         start_col = 1
@@ -56,7 +54,6 @@ def read_edgelist(fname = None,
 
     if edge_feat:
         feat_col = int(start_col + 3) 
-        # print(feat_col)   
     
     if edge_feat and feat_size == 0:
         print("Calculating number of features ...")
@@ -64,16 +61,19 @@ def read_edgelist(fname = None,
         feat_size = len(line_len[0]) - (start_col + 3)
         print("Number of features: ", feat_size)
 
-    # feat_l = np.zeros((num_lines, feat_size))
-    cols_to_read = [u_col, v_col, t_col, weight_col, feat_col]
+    cols_to_read = [u_col, v_col, t_col]
 
     if discretize:
-        return load_edgelist_with_discretizer(fname, cols_to_read, time_interval=intervals, header=header)
+        return _load_edgelist_with_discretizer(fname, cols_to_read, time_interval=intervals, header=header)
     else:
-        return load_edgelist(fname, cols_to_read, header=header)
+        return _load_edgelist(fname, cols_to_read, header=header)
 
 
-def load_edgelist_with_discretizer(fname, columns, time_interval=86400, header=True):
+def _load_edgelist_with_discretizer(
+        fname : str, 
+        columns : list, 
+        time_interval : Union[str , int] = 86400, 
+        header : Optional[bool] = True):
     """
     load temporal edgelist into a dictionary
     assumption: the edges are ordered in increasing order of their timestamp
@@ -91,7 +91,7 @@ def load_edgelist_with_discretizer(fname, columns, time_interval=86400, header=T
     edgelist.close()
 
     
-    u_idx, v_idx, ts_idx, _, _ = columns
+    u_idx, v_idx, ts_idx = columns
 
     if isinstance(time_interval, str):
         if time_interval == "daily":
@@ -147,7 +147,7 @@ def load_edgelist_with_discretizer(fname, columns, time_interval=86400, header=T
     return temporal_edgelist
 
 
-def load_edgelist(fname, columns, header):
+def _load_edgelist(fname, columns, header):
     """
     treat each year as a timestamp
     """
@@ -157,7 +157,7 @@ def load_edgelist(fname, columns, header):
     edgelist.close()
     
     
-    u_idx, v_idx, ts_idx, _, _ = columns
+    u_idx, v_idx, ts_idx = columns
     temp_edgelist = {}
     total_edges = 0
     if header:
@@ -191,95 +191,31 @@ def load_edgelist(fname, columns, header):
     # print(temp_edgelist.values())
     return temp_edgelist
 
-
-
-def csv_loader(fname, sep, header, columns, reindex_nodes, weight, edge_feat, feat_size=0):
-
-    node_ids = {}
-    num_lines = sum(1 for line in open(fname)) - 1
-    u_list = np.zeros(num_lines)
-    v_list = np.zeros(num_lines)
-    ts_list = np.zeros(num_lines)
-    w_list = np.zeros(num_lines)
-    feat_l = np.zeros((num_lines, feat_size))
-
-    u_col, v_col, t_col, weight_col, feat_col = columns
+def _datasets_edgelist_loader(data, discretize=False, intervals : int = 100):
+    temp_edgelist = {}
+    total_edges = 0
     
-    with open(fname, "r") as csv_file:
-        print("Reading file ...")
-        csv_reader = csv.reader(csv_file, delimiter=sep)
-        idx = 0
-        for i, row in enumerate(csv_reader):
-                if header and idx == 0:
-                    idx += 1
-                    continue
-                elif not header and idx == 0:
-                    idx = 1
-                src = row[u_col]
-                dst = row[v_col]
-                ts = row[t_col]
-
-                if reindex_nodes:
-                    if src not in node_ids:
-                        node_ids[src] = node_uid
-                        node_uid += 1
-                    if dst not in node_ids:
-                        node_ids[dst] = node_uid
-                        node_uid += 1
-                    
-                    u_list[idx-1] = int(node_ids[src])
-                    v_list[idx-1] = int(node_ids[dst])
-                else:
-                    u_list[idx-1] = int(src)
-                    v_list[idx-1] = int(dst)
-
-                
-
-                if weight and edge_feat:
-                    w_list[idx-1] = row[weight_col]
-                    feat_l[idx-1,:] = np.array(row[feat_col:])
-                elif edge_feat:
-                    feat_l[idx-1,:] = np.array(row[feat_col:])
-                elif weight:
-                    w_list[idx-1] = row[weight_col]
-                
-                ts_list[idx-1] = int(ts)
-                idx += 1
-        if weight:
-            df = pd.DataFrame({"u": u_list,
-                                "v": v_list,
-                                "ts": ts_list,
-                                "w": w_list})
+    for line in data:
+        u = line[0]
+        v = line[1]
+        t = int(float(line[2]))
+        
+        if t not in temp_edgelist:
+            temp_edgelist[t] = {}
+            temp_edgelist[t][(u, v)] = 1
         else:
-            df = pd.DataFrame({"u": u_list,
-                                "v": v_list,
-                                "ts": ts_list})
-        # print(df.head())
-            
-if __name__ == "__main__":
-    # a = load_UN_temporarl_edgelist("/home/mila/r/razieh.shirzadkhani/tgx/data/UNtrade/UNtrade.csv")
-    # print(a)
+            if (u, v) not in temp_edgelist[t]:
+                temp_edgelist[t][(u, v)] = 1
+            else:
+                temp_edgelist[t][(u, v)] += 1
+        total_edges += 1
+    print("Number of loaded edges: " + str(total_edges))
+    print("Available timestamps: ", len(temp_edgelist.keys()))
 
-    read_edgelist(data=3,
-                  header=True,return_csv=True)
-    # read_edgelist("./data/full_clean_data_daily_agg.csv",
-    #               t_col=0,
-    #               weight=True)
-
-
-    # read_edgelist("./data/ml_enron.csv",
-    #               header=True,
-    #               index=True)
-
-    # read_edgelist("/home/mila/r/razieh.shirzadkhani/.conda/envs/tg/lib/"
-    #               "python3.9/site-packages/tgb/datasets/tgbl_wiki/tgbl-wiki_edgelist_v2.csv", 
-    #               header=True, 
-    #               edge_feat=True,
-    #               feat_size=173)
-
-    # read_edgelist("/home/mila/r/razieh.shirzadkhani/.conda/envs/tg/lib/"
-    #             "python3.9/site-packages/tgb/datasets/tgbl_review/tgbl-review_edgelist_v2.csv", 
-    #             header=True, 
-    #             t_col=0,
-    #             weight=True)
-    # dd = pd.read_csv("./data/ml_enron.csv", columns=["u", "i", "ts"])
+    if discretize:
+        unique_ts = list(temp_edgelist.keys())
+        return edgelist_discritizer(temp_edgelist,
+                                    unique_ts=unique_ts,
+                                    time_interval=intervals)
+    
+    return temp_edgelist

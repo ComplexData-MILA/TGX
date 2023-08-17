@@ -153,7 +153,7 @@ def TEA_plot_edges_bar(ts_edges_dist,
     
     new = ts_edges_dist_df['new'].tolist()
     repeated = ts_edges_dist_df['repeated'].tolist()
-    print(len(timestamps), repeated, new)
+    # print(len(timestamps), repeated, new)
     # plotting stuffs
     # bar plot
     plt.bar(timestamps, repeated, label='Repeated', color='#404040', alpha=0.4)
@@ -169,5 +169,6 @@ def TEA_plot_edges_bar(ts_edges_dist,
     plt.legend()
     plt.savefig(f"{filepath}/{network_name}.png")
     plt.close()
+    print("Plotting done!")
 
 

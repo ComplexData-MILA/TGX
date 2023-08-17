@@ -1,10 +1,11 @@
 
-def edgelist_discritizer(edgelist, 
-                          unique_ts,
-                          time_interval = None,
-                          max_intervals = 200):
-    print("intervals:", time_interval)
-    print(unique_ts[0], unique_ts[-1])
+def edgelist_discritizer(edgelist,
+                         unique_ts,
+                         time_interval = None,
+                         max_intervals = 200):
+    
+    # print("intervals:", time_interval)
+    # print(unique_ts[0], unique_ts[-1])
     total_time = unique_ts[-1] - unique_ts[0]
     if time_interval is not None:
         if isinstance(time_interval, str):
@@ -39,7 +40,7 @@ def edgelist_discritizer(edgelist,
             exit()
         else:
             interval_size = int(total_time / 100)
-    print(interval_size)
+    # print(interval_size)
     print(f'Discretizing data to {int(total_time/interval_size)} timestamps...')
     if int(total_time/interval_size) == 0:
         print("Warning! Only one timestamp exist in the data.")
