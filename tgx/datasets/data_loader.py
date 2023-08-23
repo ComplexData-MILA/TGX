@@ -3,6 +3,7 @@ import numpy as np
 from tgb.linkproppred.dataset import LinkPropPredDataset
 from tgb.nodeproppred.dataset import NodePropPredDataset
 
+__all__ = ["data"]
 DataPath={
     'USLegis'   : "/data/USLegis/ml_USLegis.csv",
     'CanParl'   : "/data/CanParl/ml_CanParl.csv",
@@ -29,7 +30,7 @@ Data_specifications = {
         'Enron'     : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'monthly'},
         'MOOC'      : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'daily'},
         'UCI'       : {'header': True, 'index': 0, 'discretize': True, 'intervals': 39},
-        'SocialEvo' : {'header': True, 'index': 0, 'discretize': True, 'intervals': 40},
+        'SocialEvo' : {'header': True, 'index': 0, 'discretize': True, 'intervals': 49},
         'Flights'   : {'header': True, 'index': 0, 'discretize': False,'intervals': 'daily'},
         'LastFM'    : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'monthly'},
         'Contacts'  : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'daily'}
@@ -37,7 +38,72 @@ Data_specifications = {
 
 class data():
     def __init__(self):
+        """
+        Data class for loading default (in-package) temporal datasets
+
+        In order to use "tgb" datasets install tgb package
+        for more detals visit here: https://tgb.complexdatalab.com/
+
+        In order to use dgb datasets download and extract dataset file
+        from here: https://zenodo.org/record/7213796#.Y1cO6y8r30o
+        and locate them in ./data/ directory.
+        """
         pass
+
+    @classmethod
+    def tgb(self, dname):
+        """
+        Load datasets from "tgb" package. To load these datasets you need to install tgb package.
+        Parameters:
+            dname: str, name of the dataset from the list:
+                        ["tgbl-wiki", "tgbl-review", 
+                        "tgbl-coin", "tgbl-comment", 
+                        "tgbl-flight","tgbn-trade", 
+                        "tgbn-genre", "tgbn-reddit"]
+        
+        Returns:
+            self.name: str, name of the dataset
+            self.data: array, a numpy array with shape (Edges, Time)
+        """
+        link_pred = ["tgbl-wiki", "tgbl-review", "tgbl-coin", "tgbl-comment", "tgbl-flight"]
+        node_pred = ["tgbn-trade", "tgbn-genre", "tgbn-reddit"]
+        if dname in link_pred:
+            data = LinkPropPredDataset(name=dname, root="datasets", preprocess=True)
+        elif dname in node_pred:
+            data = NodePropPredDataset(name=dname, root="datasets", preprocess=True)
+        else:
+            raise ValueError("Invalid tgb dataset name")
+        
+        data = data.full_data
+        data = np.array([data['sources'], data["destinations"], data["timestamps"]])
+        self.data = np.transpose(data)
+        self.name = dname
+        return self
+
+
+    def read_specifications(self, data):
+        """
+        Load dataset specifications for dgb datasets
+        Parameters:
+            data: str, name of the dataset
+        Returns:
+            self.name: str, name of the dataset
+            self.path: dataset path in your local machine 
+            self.
+        """
+        self.name = data
+        self.path = DataPath[data]
+        self.header = Data_specifications[data]['header']
+        self.index = Data_specifications[data]['index']
+        self.discretize = Data_specifications[data]['discretize']
+        self.intervals = Data_specifications[data]['intervals']
+        return self
+    
+    def load_dgb_data(self):
+        data = pd.read_csv(f"{self.root}{self.path}", index_col=0)
+        self.data =  data.iloc[:, 0:3].to_numpy()
+        return self
+    
 
     @classmethod
     def mooc(self, root):
@@ -141,37 +207,6 @@ class data():
         self.root = root
         self.read_specifications(self, data)
         self.load_dgb_data(self)
-        return self
-
-    @classmethod
-    def tgb(self, dname, root):
-        link_pred = ["tgbl-wiki", "tgbl-review", "tgbl-coin", "tgbl-comment", "tgbl-flight"]
-        node_pred = ["tgbn-trade", "tgbn-genre", "tgbn-reddit"]
-        if dname in link_pred:
-            data = LinkPropPredDataset(name=dname, root="datasets", preprocess=True)
-        elif dname in node_pred:
-            data = NodePropPredDataset(name=dname, root="datasets", preprocess=True)
-        else:
-            raise ValueError("Invalid tgb dataset name")
-        
-        data = data.full_data
-        data = np.array([data['sources'], data["destinations"], data["timestamps"]])
-        self.data = np.transpose(data)
-        return self
-
-
-    def read_specifications(self, data):
-        self.name = data
-        self.path = DataPath[data]
-        self.header = Data_specifications[data]['header']
-        self.index = Data_specifications[data]['index']
-        self.discretize = Data_specifications[data]['discretize']
-        self.intervals = Data_specifications[data]['intervals']
-        return self
-    
-    def load_dgb_data(self):
-        data = pd.read_csv(f"{self.root}{self.path}", index_col=0)
-        self.data =  data.iloc[:, 0:3].to_numpy()
         return self
 
 if __name__ == "__main__":

@@ -14,9 +14,13 @@ def TEA(
         intervals = None, 
         real_dates = None
         ):
+    r"""
+    generating TEA plot
+    """
     print("Generating TEA plot...")
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
+    
     if len(unique_ts) > 100 or intervals is not None:
         temp_edgelist = edgelist_discritizer(temp_edgelist,
                                              unique_ts,

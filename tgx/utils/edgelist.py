@@ -4,8 +4,6 @@ def edgelist_discritizer(edgelist,
                          time_interval = None,
                          max_intervals = 200):
     
-    # print("intervals:", time_interval)
-    # print(unique_ts[0], unique_ts[-1])
     total_time = unique_ts[-1] - unique_ts[0]
     if time_interval is not None:
         if isinstance(time_interval, str):
@@ -28,8 +26,7 @@ def edgelist_discritizer(edgelist,
             if time_interval > max_intervals:
                 raise ValueError(f"The maximum number of time intervals is {max_intervals}.")
             else:
-                interval_size = int(total_time / (time_interval-1))
-                print(total_time, interval_size)
+                interval_size = int(total_time / (time_interval))
                 
         else:
             raise TypeError("Invalid time interval")
@@ -40,27 +37,28 @@ def edgelist_discritizer(edgelist,
             exit()
         else:
             interval_size = int(total_time / 100)
-    # print(interval_size)
-    print(f'Discretizing data to {int(total_time/interval_size)} timestamps...')
-    if int(total_time/interval_size) == 0:
+    num_intervals = int(total_time/interval_size)
+    print(f'Discretizing data to {num_intervals} timestamps...')
+    if num_intervals == 0:
         print("Warning! Only one timestamp exist in the data.")
     updated_edgelist = {}
-    timestamps = {unique_ts[0] : 0}
-    new_t = 0
+    new_ts = {}
+    curr_t = 0
     for ts, edge_data in edgelist.items():
         bin_ts = int(ts / interval_size)
-        
-        if bin_ts not in timestamps:
-            timestamps[bin_ts] = new_t
-            new_t += 1
+        if bin_ts >= num_intervals:
+            bin_ts -= 1
 
-        curr_t = timestamps[bin_ts]
-        if curr_t not in updated_edgelist:
-            updated_edgelist[curr_t] = {}
+        if bin_ts not in new_ts:
+            new_ts[bin_ts] = curr_t
+            curr_t += 1
+        
+        if new_ts[bin_ts] not in updated_edgelist:
+            updated_edgelist[new_ts[bin_ts]] = {}
 
         for (u,v), n in edge_data.items():
-            if (u, v) not in updated_edgelist[curr_t]:
-                updated_edgelist[curr_t][(u, v)] = n
+            if (u, v) not in updated_edgelist[new_ts[bin_ts]]:
+                updated_edgelist[new_ts[bin_ts]][(u, v)] = n
             else:
-                updated_edgelist[curr_t][(u, v)] += n
+                updated_edgelist[new_ts[bin_ts]][(u, v)] += n
     return updated_edgelist
