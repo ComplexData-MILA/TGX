@@ -1,0 +1,12 @@
+/home/mila/r/razieh.shirzadkhani/tgx
+file found, skipping download
+Dataset directory is  /home/mila/r/razieh.shirzadkhani/.conda/envs/tg/lib/python3.9/site-packages/tgb/datasets/tgbl_review
+loading processed file
+Number of loaded edges: 4873540
+Available timestamps:  6865
+Discretizing data to 51 timestamps...
+Plotting TET plots...
+Info: Number of distinct edges (from index-edge map): 4730223
+Info: edge-presence-matrix shape: (52, 4730223)
+First level processing: 
+Detecting edges present in train & test sets

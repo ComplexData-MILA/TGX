@@ -1,12 +1,15 @@
-import matplotlib.pyplot as plt
+from tgx.utils.plotting_utils import plot_for_snapshots, plot_nodes_edges_per_ts
 
-__all__ = ["average_degree",
-           "nodes_per_timestamp",
-           "edges_per_timestamp",
-           "plot_nodes_edges_per_ts"]
+__all__ = ["average_degree_per_ts",
+           "nodes_per_ts",
+           "edges_per_ts",
+           "nodes_and_edges_per_ts"]
 
 
-def average_degree(graph, total_nodes, plot_path, network_name):
+def average_degree_per_ts(graph: list, 
+                          total_nodes: int, 
+                          plot_path: str, 
+                          network_name: str) -> None:
     '''
     input: a list containing graph snapshots
     '''
@@ -18,7 +21,9 @@ def average_degree(graph, total_nodes, plot_path, network_name):
     return 
 
 
-def nodes_per_timestamp(graph, plot_path, network_name):
+def nodes_per_ts(graph: list, 
+                 plot_path: str, 
+                 network_name: str) -> None:
     '''
     input: a list containing graph snapshots
     '''
@@ -29,7 +34,9 @@ def nodes_per_timestamp(graph, plot_path, network_name):
     print("Plotting Done!")
     return 
 
-def edges_per_timestamp(graph, plot_path, network_name):
+def edges_per_ts(graph: list, 
+                 plot_path: str, 
+                 network_name: str) -> None:
     '''
     input: a list containing graph snapshots
     '''
@@ -40,29 +47,16 @@ def edges_per_timestamp(graph, plot_path, network_name):
     print("Plotting Done!")
     return 
 
-def plot_nodes_edges_per_ts(graph, plot_path, network_name):
+def nodes_and_edges_per_ts(graph: list, 
+                           plot_path: list, 
+                           network_name: list):
+    
     edges = _calculate_edge_per_ts(graph)
     nodes = _calculate_node_per_ts(graph)
-
     ts = list(range(0, len(graph)))
-    fig = plt.figure(facecolor='w', figsize=(12, 8))
-    ax1 = fig.add_subplot(111)
-    ax2 = ax1.twinx()
 
-    c1, = ax1.plot(ts, edges, color='black', lw=3, label="Edges")
-    c2, = ax2.plot(ts, nodes, color='gray', linestyle='dashed', lw=3, label="Nodes")
-    curves = [c1, c2]
-    ax1.legend(curves, [curve.get_label() for curve in curves], fontsize = 20)
-    ax1.set_xlabel('time', fontsize=20)
-    ax1.set_ylabel('# of Edges per Timestamp', fontsize=20)
-    ax2.set_ylabel('# of Nodes per Timestamp', fontsize=20)
-    ax1.tick_params(labelsize=20)
-    ax2.tick_params(labelsize=20)
-    ax1.set_ylim(0)
-    ax2.set_ylim(0)
-    ax1.set_xlim(0, len(ts)-1)
-    filename = f"{network_name}_node&edge_per_ts"
-    plt.savefig(f'{plot_path}/{filename}')
+    return plot_nodes_edges_per_ts(edges, nodes, ts, plot_path, network_name)
+    
 
 def _calculate_average_degree_per_ts(graph, total_nodes):
     total_ts = len(graph)
@@ -70,7 +64,7 @@ def _calculate_average_degree_per_ts(graph, total_nodes):
     for t1 in range(total_ts):
         num_edges = graph[t1].number_of_edges()
         ave_degree.append(num_edges*2/ total_nodes)
-    return average_degree
+    return ave_degree
 
 
 def _calculate_node_per_ts(graph):
@@ -86,17 +80,3 @@ def _calculate_edge_per_ts(graph):
     return active_edges
 
 
-def plot_for_snapshots(data, plot_path, filename, y_title):
-    '''
-    plot
-    '''
-    ts = list(range(0, len(data)))
-
-    fig = plt.figure(facecolor='w', figsize=(12, 8))
-    ax = fig.add_subplot(111)
-    ax.plot(ts, data, color='black', lw=3)
-
-    ax.set_xlabel('time', fontsize=20)
-    ax.set_ylabel(y_title, fontsize=20)
-    ax.tick_params(labelsize=20)
-    plt.savefig(f'{plot_path}/{filename}')

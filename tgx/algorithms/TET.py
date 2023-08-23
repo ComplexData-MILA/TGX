@@ -48,10 +48,10 @@ def TET(temp_edgelist,
     unique_ts_list = list(temp_edgelist.keys())
     e_presence_mat = generate_edge_presence_matrix(unique_ts_list, idx_edge_map, edge_idx_map, temp_edgelist)
     print("Info: edge-presence-matrix shape: {}".format(e_presence_mat.shape))
-    print(np.unique(e_presence_mat, return_counts=True))
+    # print(np.unique(e_presence_mat, return_counts=True))
     e_presence_mat, test_split_ts_value = process_presence_matrix(e_presence_mat, test_ratio_p=0.85)
     print("Info: edge-presence-matrix shape: {}".format(e_presence_mat.shape))
-    print(np.unique(e_presence_mat, return_counts=True))
+    # print(np.unique(e_presence_mat, return_counts=True))
     fig_param = set_fig_param(network_name, filepath,
                               figsize = figsize,
                               axis_title_font_size = axis_title_font_size,
@@ -193,7 +193,7 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
               '#fc8d59',  # E_TRANSDUCTIVE
               '#b2182b'  # E_INDUCTIVE
               ]
-    print(sns.color_palette(colors, as_cmap=True))
+    # print(sns.color_palette(colors, as_cmap=True))
     frame_color = "grey" # "#bababa"
     time_split_color = "black"
     axis_title_font_size = fig_param.axis_title_font_size

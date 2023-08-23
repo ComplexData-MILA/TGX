@@ -1,0 +1,10 @@
+/home/mila/r/razieh.shirzadkhani/tgx
+file found, skipping download
+Dataset directory is  /home/mila/r/razieh.shirzadkhani/.conda/envs/tg/lib/python3.9/site-packages/tgb/datasets/tgbl_flight
+loading processed file
+Number of loaded edges: 67169570
+Available timestamps:  1385
+Discretizing data to 51 timestamps...
+Generate graph subsample...
+14758
+--- 417.6154487133026 seconds ---

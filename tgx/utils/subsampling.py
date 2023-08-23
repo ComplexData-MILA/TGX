@@ -1,6 +1,12 @@
 import numpy as np
-from typing import Union
-def graph_subsampling(graph: Union[object, dict], node_list:list =[], random_selection=False, N=100) -> dict:
+from typing import Union, Optional
+
+
+def graph_subsampling(graph: Union[object, dict], 
+                      node_list: Optional[list] = [], 
+                      random_selection: Optional[bool] = False, 
+                      N: Optional[int] = 100
+                      ) -> dict:
     """
     Subsampling a part of graph by only monitoring the contacts from specific nodes' list
 
@@ -13,6 +19,7 @@ def graph_subsampling(graph: Union[object, dict], node_list:list =[], random_sel
     Returns:
         new_edgelist: dict, a dictionary of edges corresponding to nodes in the node_list
     """
+    print("Generate graph subsample...")
     if isinstance(graph, dict):
         edgelist = graph
         nodes = _node_list(graph)
