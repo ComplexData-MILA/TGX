@@ -1,12 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from typing import Union
 from tgx.utils.edgelist import edgelist_discritizer
 from tgx.utils.plotting_utils import create_ts_list
 __all__ = ["TEA"]
 
 def TEA(
         temp_edgelist, 
-        filepath,
+        filepath : Union[str, None] = None,
         fig_size = (7,5),
         font_size = 20, 
         network_name=None,
@@ -30,7 +31,7 @@ def TEA(
     ts_edges_dist, ts_edges_dist_density, edge_frequency_dict = TEA_process_edgelist_per_timestamp(temp_edgelist)
     
     TEA_plot_edges_bar(ts_edges_dist, 
-                       filepath, 
+                       filepath = filepath, 
                        fig_size = fig_size, 
                        font_size = font_size, 
                        network_name=network_name,
@@ -120,7 +121,7 @@ def TEA_process_edgelist_per_timestamp(temp_edgelist):
 
 
 def TEA_plot_edges_bar(ts_edges_dist, 
-                   filepath, 
+                   filepath = None, 
                    fig_size = (7,5),
                    font_size = 20,
                    network_name = None,
@@ -171,8 +172,11 @@ def TEA_plot_edges_bar(ts_edges_dist,
     plt.xlabel("Timestamp", fontsize=font_size)
     plt.ylabel("Number of edges", fontsize=font_size)
     plt.legend()
-    plt.savefig(f"{filepath}/{network_name}.png")
-    plt.close()
+    if filepath is not None:
+        plt.savefig(f"{filepath}/{network_name}.png")
+        plt.close()
+    else:
+        plt.show()
     print("Plotting done!")
 
 
