@@ -122,7 +122,7 @@ def TEA_process_edgelist_per_timestamp(temp_edgelist):
 
 def TEA_plot_edges_bar(ts_edges_dist, 
                    filepath = None, 
-                   fig_size = (7,5),
+                   fig_size = (9,5),
                    font_size = 20,
                    network_name = None,
                    real_dates = None,
@@ -145,8 +145,9 @@ def TEA_plot_edges_bar(ts_edges_dist,
     fig, ax = plt.subplots(figsize=fig_size)  # lastfm, mooc, reddit, UNtrade, UNvote
     plt.subplots_adjust(bottom=0.2, left=0.2)
     font_size = font_size
-    ticks_font_size = 18
-
+    ticks_font_size = 15
+    plt.yticks(fontsize=ticks_font_size)
+    plt.xticks(fontsize=ticks_font_size)
     if real_dates is not None:
         start = real_dates[0]
         end = real_dates[1]
@@ -171,7 +172,7 @@ def TEA_plot_edges_bar(ts_edges_dist,
     plt.margins(x=0)
     plt.xlabel("Timestamp", fontsize=font_size)
     plt.ylabel("Number of edges", fontsize=font_size)
-    plt.legend()
+    plt.legend(fontsize = 15)
     if filepath is not None:
         plt.savefig(f"{filepath}/{network_name}.png")
         plt.close()

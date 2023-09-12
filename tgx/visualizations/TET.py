@@ -30,7 +30,7 @@ def TET(temp_edgelist,
         add_frame = True,
         figsize = (9, 5),
         axis_title_font_size = 20,
-        ticks_font_size = 22,
+        ticks_font_size = 20,
         axis_tick_gap = 20,
         timestamp_split_cross_mark_offset = 1) -> pd.DataFrame:
     
