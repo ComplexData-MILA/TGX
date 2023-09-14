@@ -1,12 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from typing import Union
 from tgx.utils.edgelist import edgelist_discritizer
 from tgx.utils.plotting_utils import create_ts_list
 __all__ = ["TEA"]
 
 def TEA(
         temp_edgelist, 
-        filepath,
+        filepath : Union[str, None] = None,
         fig_size = (7,5),
         font_size = 20, 
         network_name=None,
@@ -30,7 +31,7 @@ def TEA(
     ts_edges_dist, ts_edges_dist_density, edge_frequency_dict = TEA_process_edgelist_per_timestamp(temp_edgelist)
     
     TEA_plot_edges_bar(ts_edges_dist, 
-                       filepath, 
+                       filepath = filepath, 
                        fig_size = fig_size, 
                        font_size = font_size, 
                        network_name=network_name,
@@ -120,8 +121,8 @@ def TEA_process_edgelist_per_timestamp(temp_edgelist):
 
 
 def TEA_plot_edges_bar(ts_edges_dist, 
-                   filepath, 
-                   fig_size = (7,5),
+                   filepath = None, 
+                   fig_size = (9,5),
                    font_size = 20,
                    network_name = None,
                    real_dates = None,
@@ -144,8 +145,9 @@ def TEA_plot_edges_bar(ts_edges_dist,
     fig, ax = plt.subplots(figsize=fig_size)  # lastfm, mooc, reddit, UNtrade, UNvote
     plt.subplots_adjust(bottom=0.2, left=0.2)
     font_size = font_size
-    ticks_font_size = 18
-
+    ticks_font_size = 15
+    plt.yticks(fontsize=ticks_font_size)
+    plt.xticks(fontsize=ticks_font_size)
     if real_dates is not None:
         start = real_dates[0]
         end = real_dates[1]
@@ -170,9 +172,12 @@ def TEA_plot_edges_bar(ts_edges_dist,
     plt.margins(x=0)
     plt.xlabel("Timestamp", fontsize=font_size)
     plt.ylabel("Number of edges", fontsize=font_size)
-    plt.legend()
-    plt.savefig(f"{filepath}/{network_name}.png")
-    plt.close()
+    plt.legend(fontsize = 15)
+    if filepath is not None:
+        plt.savefig(f"{filepath}/{network_name}.png")
+        plt.close()
+    else:
+        plt.show()
     print("Plotting done!")
 
 
