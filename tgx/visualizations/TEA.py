@@ -170,8 +170,8 @@ def TEA_plot_edges_bar(ts_edges_dist,
     # test split line
     if test_split:
         plt.axvline(x=(timestamps[int(0.85 * len(timestamps))]), color="blue", linestyle="--", linewidth=2)
-    plt.text((timestamps[int(0.85 * len(timestamps))]), 0,
-             'x', va='center', ha='center', fontsize=font_size, fontweight='heavy', color='blue')
+        plt.text((timestamps[int(0.85 * len(timestamps))]), 0,
+                'x', va='center', ha='center', fontsize=font_size, fontweight='heavy', color='blue')
 
     plt.margins(x=0)
     plt.xlabel("Timestamp", fontsize=font_size)

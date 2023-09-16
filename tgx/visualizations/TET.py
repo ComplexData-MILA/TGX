@@ -239,7 +239,7 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
             break
 
     # rectangle for different parts of the dataset
-    if add_frames:
+    if add_frames and test_split:
         print("Info: Border edge index:", e_border_idx)
         print("Info: Test split timestamp value:", test_split_ts_value)
         rect_train = plt.Rectangle((0, y_length - test_split_ts_value + 0.085), e_border_idx, test_split_ts_value + 0.9,
@@ -253,11 +253,15 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
         ax.add_patch(rect_train)
         ax.add_patch(rect_test_mayseen)
         ax.add_patch(rect_test_new)
-
+    
+    elif add_frames:
+        ax.add_patch(plt.Rectangle((0, 0), x_length, y_length,
+                                          fill=False, linewidth=2, edgecolor=frame_color))
     # test split horizontal line
-    plt.axhline(y=test_split_idx_value, color=time_split_color, linestyle="--", linewidth=2, label='x')
-    plt.text(x=0, y=test_split_idx_value, s='x', color=time_split_color, va='center', ha='center',
-             fontsize=y_font_size, fontweight='heavy')
+    if test_split:
+        plt.axhline(y=test_split_idx_value, color=time_split_color, linestyle="--", linewidth=2, label='x')
+        plt.text(x=0, y=test_split_idx_value, s='x', color=time_split_color, va='center', ha='center',
+                fontsize=y_font_size, fontweight='heavy')
 
     if fig_param.fig_name is not None:
         # print("Info: file name: {}".format(fig_param.fig_name))
