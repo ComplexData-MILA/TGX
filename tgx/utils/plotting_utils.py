@@ -30,14 +30,14 @@ def plot_nodes_edges_per_ts(edges: list,
                             ylabel_1 = 'Edges per Timestamp',
                             ylabel_2 = 'Nodes per Timestamp'):
 
-    fig = plt.figure(facecolor='w', figsize=(9, 6))
+    fig = plt.figure(facecolor='w', figsize=(11, 6))
     ax1 = fig.add_subplot(111)
     ax2 = ax1.twinx()
 
     c1, = ax1.plot(ts, edges, color='black', lw=3, label=ylabel_1)
     c2, = ax2.plot(ts, nodes, color='gray', linestyle='dashed', lw=3, label=ylabel_2)
     curves = [c1, c2]
-    ax1.legend(curves, [curve.get_label() for curve in curves], fontsize = 15)
+    ax1.legend(curves, [curve.get_label() for curve in curves], fontsize = 18)
     ax1.set_xlabel('Time', fontsize=20)
     ax1.set_ylabel(ylabel_1, fontsize=20)
     ax2.set_ylabel(ylabel_2, fontsize=20)
@@ -57,14 +57,14 @@ def plot_for_snapshots(data,  filename, y_title, plot_path = None,):
     '''
     ts = list(range(0, len(data)))
 
-    fig = plt.figure(facecolor='w', figsize=(9, 6))
+    fig = plt.figure(facecolor='w', figsize=(9,6))
     ax = fig.add_subplot(111)
     ax.plot(ts, data, color='black', lw=3)
 
     ax.set_xlabel('Time', fontsize=20)
     ax.set_ylabel(y_title, fontsize=20)
     ax.tick_params(labelsize=20)
-    ax.set_ylim(0)
+    ax.set_ylim(0, 5)
     ax.set_xlim(0, len(ts)-1)
     if plot_path is not None:
         plt.savefig(f'{plot_path}/{filename}')

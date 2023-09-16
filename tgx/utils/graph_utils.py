@@ -2,7 +2,7 @@ import numpy as np
 from typing import Union, Optional
 
 
-def graph_subsampling(graph: Union[object, dict], 
+def subsampling(graph: Union[object, dict], 
                       node_list: Optional[list] = [], 
                       random_selection: Optional[bool] = False, 
                       N: Optional[int] = 100
@@ -59,3 +59,42 @@ def _node_list(dict_edgelist: dict) -> list:
             if v not in node_list:
                 node_list[v] = 1
     return list(node_list.keys())
+
+
+def train_test_split(data : dict, 
+                     val : bool = False,
+                     ratio : list = [85, 15]) -> dict:
+    """
+    Generate train/test split for the data
+
+    Parameters:
+        data:dictionary of data
+        val: whether we want to have a validation split as well
+        ratio: list indication the ratio of the data in split. Sum of the list components should be 100.
+
+    Returns:
+        two (train/test) or three (train/val/test) data dictionaries
+    """
+    sum = 0
+    for i in ratio:
+        sum += i
+    if sum != 100:
+        raise ValueError("invalid train/test split ratio. Sum of the ratios should be 100.")
+    
+    if val and len(ratio) != 3:
+        raise Exception("Provide train/val/test ratio")
+    elif not val and len(ratio) == 3:
+        print("Warning! Data is being splitted to train and test only!")
+    
+    data_len = len(data)
+    train_split = int(data_len * ratio[0] / 100)
+    train_data = {k: v for k, v in data.items() if k < train_split}
+    if val:
+        val_split = int(data_len * ratio[1] / 100) + train_split
+        val_data = {k: v for k, v in data.items() if train_split <= k < val_split}
+        test_data = {k: v for k, v in data.items() if val_split <= k <= data_len}
+        return train_data, val_data, test_data
+    
+    else:
+        test_data = {k: v for k, v in data.items() if train_split <= k <= data_len}
+        return train_data, test_data

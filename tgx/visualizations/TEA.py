@@ -13,7 +13,8 @@ def TEA(
         network_name=None,
         density = False,
         intervals = None, 
-        real_dates = None
+        real_dates = None,
+        test_split = False
         ):
     r"""
     generating TEA plot
@@ -35,7 +36,8 @@ def TEA(
                        fig_size = fig_size, 
                        font_size = font_size, 
                        network_name=network_name,
-                       real_dates = real_dates)
+                       real_dates = real_dates,
+                       test_split = test_split)
 
     if density:
         return ts_edges_dist_density, edge_frequency_dict
@@ -126,7 +128,8 @@ def TEA_plot_edges_bar(ts_edges_dist,
                    font_size = 20,
                    network_name = None,
                    real_dates = None,
-                   intervals = None):
+                   intervals = None,
+                   test_split = False):
     
 
     ts_edges_dist_df = pd.DataFrame(ts_edges_dist, columns=['ts', 'new', 'repeated',
@@ -165,7 +168,8 @@ def TEA_plot_edges_bar(ts_edges_dist,
     plt.bar(timestamps, repeated, label='Repeated', color='#404040', alpha=0.4)
     plt.bar(timestamps, new, label='New', bottom=repeated, color='#ca0020', alpha=0.8, hatch='//')
     # test split line
-    plt.axvline(x=(timestamps[int(0.85 * len(timestamps))]), color="blue", linestyle="--", linewidth=2)
+    if test_split:
+        plt.axvline(x=(timestamps[int(0.85 * len(timestamps))]), color="blue", linestyle="--", linewidth=2)
     plt.text((timestamps[int(0.85 * len(timestamps))]), 0,
              'x', va='center', ha='center', fontsize=font_size, fontweight='heavy', color='blue')
 

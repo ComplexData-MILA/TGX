@@ -28,6 +28,7 @@ def TET(temp_edgelist,
         intervals = None,
         network_name=None,
         add_frame = True,
+        test_split = False,
         figsize = (9, 5),
         axis_title_font_size = 20,
         ticks_font_size = 20,
@@ -62,7 +63,7 @@ def TET(temp_edgelist,
                               timestamp_split_cross_mark_offset = timestamp_split_cross_mark_offset)
 
     plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_list, list(idx_edge_map.keys()),
-                              fig_param, add_frames=add_frame)
+                              fig_param, test_split = test_split, add_frames=add_frame)
     return 
 
 
@@ -177,7 +178,7 @@ def process_presence_matrix(e_presence_matrix, test_ratio_p):
 
 
 def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_list,
-                              idx_edge_list, fig_param, add_frames=True):
+                              idx_edge_list, fig_param, test_split = False, add_frames=True):
     print("Info: plotting edge presence heatmap for {} ...".format(fig_param.fig_name))
 
     fig, ax = plt.subplots(figsize=fig_param.figsize)
@@ -189,12 +190,19 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
     #           '#ef8a62',  # E_TRANSDUCTIVE
     #           '#b2182b'  # E_INDUCTIVE
     #           ]
-    colors = ['white',  # E_ABSENCE
-              '#018571',  # E_ONLY_TRAIN    2c7bb6
-              '#fc8d59',  # E_TRAIN_AND_TEST
-              '#fc8d59',  # E_TRANSDUCTIVE
-              '#b2182b'  # E_INDUCTIVE
-              ]
+    if test_split:
+        colors = ['white',  # E_ABSENCE
+                '#018571',  # E_ONLY_TRAIN    2c7bb6
+                '#fc8d59',  # E_TRAIN_AND_TEST
+                '#fc8d59',  # E_TRANSDUCTIVE
+                '#b2182b'  # E_INDUCTIVE
+                ]
+    else:
+        colors = ['white',
+                  '#018571',
+                  '#018571',
+                  '#018571',
+                  '#018571',]
     # print(sns.color_palette(colors, as_cmap=True))
     frame_color = "grey" # "#bababa"
     time_split_color = "black"
