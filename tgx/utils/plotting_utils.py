@@ -1,6 +1,7 @@
 import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 def create_ts_list(start, end, metric=None, interval=None):
     if metric == "Unix" or metric == "unix" or metric == "UNIX":
@@ -56,7 +57,7 @@ def plot_for_snapshots(data,  filename, y_title, plot_path = None,):
     plot
     '''
     ts = list(range(0, len(data)))
-
+    # plt.rcParams["font.family"] = "Times New Roman"
     fig = plt.figure(facecolor='w', figsize=(9,6))
     ax = fig.add_subplot(111)
     ax.plot(ts, data, color='black', lw=3)
