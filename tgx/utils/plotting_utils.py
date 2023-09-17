@@ -52,7 +52,7 @@ def plot_nodes_edges_per_ts(edges: list,
         plt.savefig(f'{plot_path}/{filename}')
     plt.show()
 
-def plot_for_snapshots(data,  filename, y_title, plot_path = None,):
+def plot_for_snapshots(data,  filename, y_title, show_ave=True, plot_path = None):
     '''
     plot
     '''
@@ -67,6 +67,9 @@ def plot_for_snapshots(data,  filename, y_title, plot_path = None,):
     ax.tick_params(labelsize=20)
     ax.set_ylim(0, 5)
     ax.set_xlim(0, len(ts)-1)
+    if show_ave:
+        ave_deg = [np.average(data) for i in range(len(ts))]
+        ax.plot(ts, ave_deg, color='blue', linestyle='dashed')
     if plot_path is not None:
         plt.savefig(f'{plot_path}/{filename}')
     plt.show()
