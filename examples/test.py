@@ -10,7 +10,7 @@ start_time = time.time()
 data_path = '/network/scratch/r/razieh.shirzadkhani/'
 dataset = tgx.data.mooc(root=data_path)
 # dataset = tgx.data.tgb("tgbl-coin")
-data = tgx.read_edgelist(data=dataset, discretize=True, intervals=20)
+data = tgx.read_edgelist(data=dataset, discretize=True, intervals=50)
 
 # print(get_index_metrics(train_data, test_data))
 # r = get_reoccurrence(data)
@@ -21,7 +21,7 @@ G = tgx.Graph(data)
 plot_path = "./examples/plots/"
 # tgx.nodes_and_edges_per_ts(G.discrite_graph, plot_path=plot_path , network_name=dataset.name)
 total_nodes = G.number_of_nodes()
-tgx.average_degree_per_ts(G.discrite_graph, total_nodes, plot_path=plot_path, network_name=dataset.name)
+tgx.average_degree_per_ts(G.discrite_graph, total_nodes, plot_path=plot_path, network_name=dataset.name+'2')
 
 # total_nodes = G.number_of_nodes()
 # plot_path = "./examples/plots/"
