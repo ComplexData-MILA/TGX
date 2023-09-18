@@ -1,0 +1,20 @@
+/home/mila/r/razieh.shirzadkhani/TGX
+file found, skipping download
+Dataset directory is  /home/mila/r/razieh.shirzadkhani/.conda/envs/tg/lib/python3.9/site-packages/tgb/datasets/tgbl_coin
+loading processed file
+Number of loaded edges: 22809486
+Available timestamps:  1295720
+Discretizing data to 30 timestamps...
+Descritization Done..!
+Plotting TET plots...
+Info: Number of distinct edges (from index-edge map): 3862031
+Info: edge-presence-matrix shape: (31, 3862031)
+First level processing: 
+Detecting edges present in train & test sets
+Detecting transductive edges (seen in train, repeating in test)
+Second level processing:
+Detecting edges 1) Only in train set, 2) only in test (inductive)
+Info: edge-presence-matrix shape: (31, 3862031)
+Info: plotting edge presence heatmap for ./examples/plots/TET/ ...
+Info: plotting done!
+--- Total elapsed time: 863.9072399139404 seconds ---

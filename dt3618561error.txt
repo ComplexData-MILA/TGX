@@ -1,0 +1,2 @@
+[=== Module miniconda/3 loaded ===]
+python: can't open file '/home/mila/r/razieh.shirzadkhani/tgx/examples/test.py': [Errno 2] No such file or directory

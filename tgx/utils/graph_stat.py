@@ -184,15 +184,22 @@ def get_reoccurrence(graph_edgelist, test_ratio=0.15):
     """
     train_val_e_set, test_e_set = _split_data_chronological(graph_edgelist, test_ratio)
     train_val_size = len(train_val_e_set)
-    intersect = 0
-    total_train_freq = 0
-    for e, freq in train_val_e_set.items():
-        total_train_freq += freq
-        if e in test_e_set:
-            intersect += freq
+    # intersect = 0
+    # total_train_freq = 0
+    # for e, freq in train_val_e_set.items():
+    #     if freq > 1:
+    #         print(e)
+    #     total_train_freq += freq
+    #     if e in test_e_set:
+    #         intersect += freq
 
-    print(total_train_freq, intersect)
-    reoccurrence = float(intersect * 1.0 / total_train_freq)
+    # # print(total_train_freq, intersect)
+    # reoccurrence = float(intersect * 1.0 / total_train_freq)
+    intersect = 0
+    for e in test_e_set:
+        if e in train_val_e_set:
+            intersect += 1
+    reoccurrence = float(intersect * 1.0 / train_val_size)
     print(f"INFO: Reoccurrence: {reoccurrence}")
     return reoccurrence
 
@@ -209,7 +216,7 @@ def get_surprise(graph_edgelist, test_ratio=0.15):
         total_test_freq += freq
         if e not in train_val_e_set:
             difference += freq
-    print(total_test_freq, difference)
+    # print(total_test_freq, difference)
     surprise = float(difference * 1.0 / total_test_freq)
     print(f"INFO: Surprise: {surprise}")
     return surprise

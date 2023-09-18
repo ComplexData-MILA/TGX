@@ -14,5 +14,5 @@ conda activate /home/mila/r/razieh.shirzadkhani/.conda/envs/tg
 
 
 pwd
-python /home/mila/r/razieh.shirzadkhani/tgx/examples/test.py
+python /home/mila/r/razieh.shirzadkhani/TGX/examples/test.py
 

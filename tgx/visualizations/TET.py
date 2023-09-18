@@ -255,7 +255,7 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
         ax.add_patch(rect_test_new)
     
     elif add_frames:
-        ax.add_patch(plt.Rectangle((0, 0), x_length, y_length,
+        ax.add_patch(plt.Rectangle((0, 0), x_length, y_length+1,
                                           fill=False, linewidth=2, edgecolor=frame_color))
     # test split horizontal line
     if test_split:

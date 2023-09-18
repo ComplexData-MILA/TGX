@@ -32,7 +32,7 @@ Data_specifications = {
         'UCI'       : {'header': True, 'index': 0, 'discretize': True, 'intervals': 39},
         'SocialEvo' : {'header': True, 'index': 0, 'discretize': True, 'intervals': 49},
         'Flights'   : {'header': True, 'index': 0, 'discretize': False,'intervals': 'daily'},
-        'LastFM'    : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'monthly'},
+        'LastFM'    : {'header': True, 'index': 0, 'discretize': True, 'intervals': 50},
         'Contacts'  : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'daily'}
         }
 
