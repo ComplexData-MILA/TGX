@@ -2,6 +2,8 @@ site_name: Temporal Graph Xplore
 nav:
   - Overview: index.md
   - About: about.md
+  - API: 
+    - tgx.utils: api/tgx.utils.md
 theme:
   name: material
   features:
