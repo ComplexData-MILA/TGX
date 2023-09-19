@@ -1,5 +1,4 @@
 # Welcome to Temporal Graph Xplore
 
-For full documentation visit [github](https://github.com/rshirzadkhani/TGX).
+For full documentation visit [github](https://github.com/fpour/TGX).
 
-::: readwrite.read_files
