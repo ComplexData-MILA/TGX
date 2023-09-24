@@ -11,28 +11,19 @@ start_time = time.time()
 data_path = './'
 
 
-dataset = tgx.data.wikipedia(root=data_path)
+dataset = tgx.data.social_evo(root=data_path)
 # dataset = tgx.data.tgb("tgbl-review")
 # data = tgx.read_edgelist(data=dataset, discretize=True, intervals=51)
 data = tgx.read_edgelist(data=dataset)
 
 G = tgx.Graph(data)
 
-<<<<<<< HEAD
 # get_avg_e_per_ts(G.edgelist)
 # get_avg_degree(G.edgelist)
 # # get_num_timestamps(G.edgelist)  # not needed!
 # get_num_unique_edges(G.edgelist)
 # get_reoccurrence(G.edgelist, test_ratio=0.15)
 # get_surprise(G.edgelist, test_ratio=0.15)
-=======
-get_avg_e_per_ts(G.edgelist)
-get_avg_degree(G.edgelist)
-# get_num_timestamps(G.edgelist)  # not needed!
-get_num_unique_edges(G.edgelist)
-get_reoccurrence(G.edgelist, test_ratio=0.15)
-get_surprise(G.edgelist, test_ratio=0.15)
->>>>>>> 842df170b1e156fa63cc1245a4c408d78b68ba2c
 get_avg_node_activity(G.edgelist)
 
 # total_nodes = G.number_of_nodes()

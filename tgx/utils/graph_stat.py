@@ -238,11 +238,7 @@ def get_avg_node_activity(graph_edgelist):
             if e[1] not in node_ts:
                 node_ts[e[1]] = {ts: True}
             else:
-<<<<<<< HEAD
                 if ts not in node_ts[e[1]]:
-=======
-                if ts not in node_ts[e[0]]:
->>>>>>> 842df170b1e156fa63cc1245a4c408d78b68ba2c
                     node_ts[e[1]][ts] = True
 
     node_activity_ratio = []
