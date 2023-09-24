@@ -61,5 +61,4 @@ def edgelist_discritizer(edgelist,
                 updated_edgelist[new_ts[bin_ts]][(u, v)] = n
             else:
                 updated_edgelist[new_ts[bin_ts]][(u, v)] += n
-    print("Descritization Done..!")
     return updated_edgelist

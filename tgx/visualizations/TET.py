@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tqdm import tqdm
+from typing import Union
 import matplotlib.pyplot as plt
 from tgx.utils.edgelist import edgelist_discritizer
 
@@ -23,13 +24,13 @@ E_TRANSDUCTIVE = 30
 E_INDUCTIVE = 40
 
 def TET(temp_edgelist, 
-        filepath, 
+        filepath: Union[str, None] = None, 
         intervals = None,
         network_name=None,
         add_frame = True,
         figsize = (9, 5),
         axis_title_font_size = 20,
-        ticks_font_size = 22,
+        ticks_font_size = 20,
         axis_tick_gap = 20,
         timestamp_split_cross_mark_offset = 1) -> pd.DataFrame:
     
@@ -52,7 +53,8 @@ def TET(temp_edgelist,
     e_presence_mat, test_split_ts_value = process_presence_matrix(e_presence_mat, test_ratio_p=0.85)
     print("Info: edge-presence-matrix shape: {}".format(e_presence_mat.shape))
     # print(np.unique(e_presence_mat, return_counts=True))
-    fig_param = set_fig_param(network_name, filepath,
+    fig_param = set_fig_param(network_name, 
+                              fig_name = filepath,
                               figsize = figsize,
                               axis_title_font_size = axis_title_font_size,
                               ticks_font_size = ticks_font_size,
@@ -249,15 +251,15 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
     plt.text(x=0, y=test_split_idx_value, s='x', color=time_split_color, va='center', ha='center',
              fontsize=y_font_size, fontweight='heavy')
 
-    if fig_param.fig_name != "":
+    if fig_param.fig_name is not None:
         # print("Info: file name: {}".format(fig_param.fig_name))
         plt.savefig(f"{fig_param.fig_name}/{fig_param.network_name}.png")
         plt.close()
-
-    plt.show()
+    else:
+        plt.show()
     print("Info: plotting done!")
 
-def set_fig_param(network_name, fig_name,
+def set_fig_param(network_name, fig_name = None,
                   figsize = (9, 5),
                   axis_title_font_size = 20,
                   ticks_font_size = 22,
