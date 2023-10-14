@@ -5,7 +5,7 @@ import seaborn as sns
 from tqdm import tqdm
 from typing import Union
 import matplotlib.pyplot as plt
-from tgx.utils.edgelist import edgelist_discritizer
+from tgx.utils.graph_utils import edgelist_discritizer
 
 
 # some parameters to be used for drawing
@@ -28,6 +28,7 @@ def TET(temp_edgelist,
         intervals = None,
         network_name=None,
         add_frame = True,
+        test_split = False,
         figsize = (9, 5),
         axis_title_font_size = 20,
         ticks_font_size = 20,
@@ -62,7 +63,7 @@ def TET(temp_edgelist,
                               timestamp_split_cross_mark_offset = timestamp_split_cross_mark_offset)
 
     plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_list, list(idx_edge_map.keys()),
-                              fig_param, add_frames=add_frame)
+                              fig_param, test_split = test_split, add_frames=add_frame)
     return 
 
 
@@ -177,7 +178,7 @@ def process_presence_matrix(e_presence_matrix, test_ratio_p):
 
 
 def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_list,
-                              idx_edge_list, fig_param, add_frames=True):
+                              idx_edge_list, fig_param, test_split = False, add_frames=True):
     print("Info: plotting edge presence heatmap for {} ...".format(fig_param.fig_name))
 
     fig, ax = plt.subplots(figsize=fig_param.figsize)
@@ -189,12 +190,19 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
     #           '#ef8a62',  # E_TRANSDUCTIVE
     #           '#b2182b'  # E_INDUCTIVE
     #           ]
-    colors = ['white',  # E_ABSENCE
-              '#018571',  # E_ONLY_TRAIN    2c7bb6
-              '#fc8d59',  # E_TRAIN_AND_TEST
-              '#fc8d59',  # E_TRANSDUCTIVE
-              '#b2182b'  # E_INDUCTIVE
-              ]
+    if test_split:
+        colors = ['white',  # E_ABSENCE
+                '#018571',  # E_ONLY_TRAIN    2c7bb6
+                '#fc8d59',  # E_TRAIN_AND_TEST
+                '#fc8d59',  # E_TRANSDUCTIVE
+                '#b2182b'  # E_INDUCTIVE
+                ]
+    else:
+        colors = ['white',
+                  '#ca0020',
+                  '#ca0020',
+                  '#ca0020',
+                  '#ca0020',]
     # print(sns.color_palette(colors, as_cmap=True))
     frame_color = "grey" # "#bababa"
     time_split_color = "black"
@@ -231,7 +239,7 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
             break
 
     # rectangle for different parts of the dataset
-    if add_frames:
+    if add_frames and test_split:
         print("Info: Border edge index:", e_border_idx)
         print("Info: Test split timestamp value:", test_split_ts_value)
         rect_train = plt.Rectangle((0, y_length - test_split_ts_value + 0.085), e_border_idx, test_split_ts_value + 0.9,
@@ -245,11 +253,15 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
         ax.add_patch(rect_train)
         ax.add_patch(rect_test_mayseen)
         ax.add_patch(rect_test_new)
-
+    
+    elif add_frames:
+        ax.add_patch(plt.Rectangle((0, 0), x_length, y_length+1,
+                                          fill=False, linewidth=2, edgecolor=frame_color))
     # test split horizontal line
-    plt.axhline(y=test_split_idx_value, color=time_split_color, linestyle="--", linewidth=2, label='x')
-    plt.text(x=0, y=test_split_idx_value, s='x', color=time_split_color, va='center', ha='center',
-             fontsize=y_font_size, fontweight='heavy')
+    if test_split:
+        plt.axhline(y=test_split_idx_value, color=time_split_color, linestyle="--", linewidth=2, label='x')
+        plt.text(x=0, y=test_split_idx_value, s='x', color=time_split_color, va='center', ha='center',
+                fontsize=y_font_size, fontweight='heavy')
 
     if fig_param.fig_name is not None:
         # print("Info: file name: {}".format(fig_param.fig_name))

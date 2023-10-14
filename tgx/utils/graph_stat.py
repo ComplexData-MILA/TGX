@@ -1,6 +1,7 @@
 from tgx.utils.plotting_utils import plot_for_snapshots, plot_nodes_edges_per_ts
 import networkx as nx
 import numpy as np
+from tgx.utils.graph_utils import train_test_split
 
 __all__ = ["average_degree_per_ts",
            "nodes_per_ts",
@@ -153,18 +154,28 @@ def _split_data_chronological(graph_edgelist, test_ratio):
     # split the temporal graph data chronologically
     unique_ts = np.sort(list(graph_edgelist.keys()))
     test_split_time = list(np.quantile(unique_ts, [1 - test_ratio]))[0]
-
+    
     # make train-validation & test splits
     train_val_e_set, test_e_set = {}, {}
-    for ts, e_list in graph_edgelist.items():
-        for e, repeat in e_list:
-            if ts < test_split_time:
-                if e not in train_val_e_set:
-                    train_val_e_set[e] = True
-            else:
-                if e not in test_e_set:
-                    test_e_set[e] = True
+    # for ts, e_list in graph_edgelist.items():
+    #     for (u,v), repeat in e_list.items():
+            
+    #         if ts < test_split_time:
+    #             if (u,v) not in train_val_e_set:
+    #                 train_val_e_set[(u,v)] = True
+    #         else:
+    #             if (u,v) not in test_e_set:
+    #                 test_e_set[(u,v)] = True
 
+    for ts, e_list in graph_edgelist.items():
+        for (u,v), freq in e_list.items():
+            
+            if ts < test_split_time:
+                if (u,v) not in train_val_e_set:
+                    train_val_e_set[(u,v)] = freq
+            else:
+                if (u,v) not in test_e_set:
+                    test_e_set[(u,v)] = freq
     return train_val_e_set, test_e_set
 
 def get_reoccurrence(graph_edgelist, test_ratio=0.15):
@@ -173,12 +184,21 @@ def get_reoccurrence(graph_edgelist, test_ratio=0.15):
     """
     train_val_e_set, test_e_set = _split_data_chronological(graph_edgelist, test_ratio)
     train_val_size = len(train_val_e_set)
+    # intersect = 0
+    # total_train_freq = 0
+    # for e, freq in train_val_e_set.items():
+    #     if freq > 1:
+    #         print(e)
+    #     total_train_freq += freq
+    #     if e in test_e_set:
+    #         intersect += freq
 
+    # print(total_train_freq, intersect)
+    # reoccurrence = float(intersect * 1.0 / total_train_freq)
     intersect = 0
     for e in test_e_set:
         if e in train_val_e_set:
             intersect += 1
-
     reoccurrence = float(intersect * 1.0 / train_val_size)
     print(f"INFO: Reoccurrence: {reoccurrence}")
     return reoccurrence
@@ -191,31 +211,37 @@ def get_surprise(graph_edgelist, test_ratio=0.15):
     test_size = len(test_e_set)
 
     difference = 0
+    # total_test_freq = 0
+    # for e, freq in test_e_set.items():
+    #     total_test_freq += freq
+    #     if e not in train_val_e_set:
+    #         difference += freq
+    # surprise = float(difference * 1.0 / total_test_freq)
+
     for e in test_e_set:
         if e not in train_val_e_set:
             difference += 1
-
     surprise = float(difference * 1.0 / test_size)
     print(f"INFO: Surprise: {surprise}")
     return surprise
 
-# def get_novelty(graph_edgelist):
-#     r"""
-#     get novelty index
-#     """
-#     unique_ts = np.sort(list(graph_edgelist.keys()))
-#     novelty_ts = []
-#     for ts_idx, ts in enumerate(unique_ts):
-#         e_set_this_ts = set(list(graph_edgelist[ts].keys()))
-#         e_set_seen = []
-#         for idx in range(0, ts_idx):
-#             e_set_seen.append(list(graph_edgelist[unique_ts[idx]].keys()))
-#         e_set_seen = set(item for sublist in e_set_seen for item in sublist)
-#         novelty_ts.append(float(len(e_set_this_ts - e_set_seen) * 1.0 / len(e_set_this_ts)))
-#
-#     novelty = float(np.sum(novelty_ts) * 1.0 / len(unique_ts))
-#     print(f"INFO: Surprise: {novelty}")
-#     return novelty
+def get_novelty(graph_edgelist):
+    r"""
+    get novelty index
+    """
+    unique_ts = np.sort(list(graph_edgelist.keys()))
+    novelty_ts = []
+    for ts_idx, ts in enumerate(unique_ts):
+        e_set_this_ts = set(list(graph_edgelist[ts].keys()))
+        e_set_seen = []
+        for idx in range(0, ts_idx):
+            e_set_seen.append(list(graph_edgelist[unique_ts[idx]].keys()))
+        e_set_seen = set(item for sublist in e_set_seen for item in sublist)
+        novelty_ts.append(float(len(e_set_this_ts - e_set_seen) * 1.0 / len(e_set_this_ts)))
+
+    novelty = float(np.sum(novelty_ts) * 1.0 / len(unique_ts))
+    print(f"INFO: Novelty: {novelty}")
+    return novelty
 
 
 def get_avg_node_activity(graph_edgelist):
@@ -248,4 +274,3 @@ def get_avg_node_activity(graph_edgelist):
     avg_node_activity = float(np.sum(node_activity_ratio) * 1.0 / len(node_activity_ratio))
     print(f"INFO: Node activity ratio: {avg_node_activity}")
     return avg_node_activity
-

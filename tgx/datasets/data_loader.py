@@ -21,19 +21,25 @@ DataPath={
     }
 
 Data_specifications = {
-        'USLegis'   : {'header': True, 'index': 0, 'discretize': False,'intervals': None},
-        'CanParl'   : {'header': True, 'index': 0, 'discretize': False,'intervals': None},
-        'UNTrade'   : {'header': True, 'index': 0, 'discretize': False,'intervals': None},
-        'UNVote'    : {'header': True, 'index': 0, 'discretize': False,'intervals': None},
-        'Reddit'    : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'daily'},
-        'Wikipedia' : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'daily'},
-        'Enron'     : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'monthly'},
-        'MOOC'      : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'daily'},
-        'UCI'       : {'header': True, 'index': 0, 'discretize': True, 'intervals': 39},
-        'SocialEvo' : {'header': True, 'index': 0, 'discretize': True, 'intervals': 49},
-        'Flights'   : {'header': True, 'index': 0, 'discretize': False,'intervals': 'daily'},
-        'LastFM'    : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'monthly'},
-        'Contacts'  : {'header': True, 'index': 0, 'discretize': True, 'intervals': 'daily'}
+        'USLegis'       : {'discretize' : False,    'intervals': None},
+        'CanParl'       : {'discretize' : False,    'intervals': None},
+        'UNVote'        : {'discretize' : False,    'intervals': None},
+        'Reddit'        : {'discretize' : True,     'intervals': 'daily'},
+        'Enron'         : {'discretize' : True,     'intervals': 'monthly'},
+        'MOOC'          : {'discretize' : True,     'intervals': 'daily'},
+        'UCI'           : {'discretize' : True,     'intervals': 'weekly'},
+        'SocialEvo'     : {'discretize' : True,     'intervals': 'weekly'},
+        'Flights'       : {'discretize' : False,    'intervals': None},
+        'Contacts'      : {'discretize' : True,     'intervals': 'daily'},
+        'LastFM'        : {'discretize' : True,     'intervals': 'monthly'},
+        'tgbl-wiki'     : {'discretize' : True,     'intervals': 'daily'},
+        'tgbl-review'   : {'discretize' : True,     'intervals': 'yearly'},
+        'tgbl-coin'     : {'discretize' : True,     'intervals': 'weekly'},
+        'tgbl-comment'  : {'discretize' : True,     'intervals': 'monthly'},
+        'tgbl-flight'   : {'discretize' : True,     'intervals': 'monthly'},
+        'tgbn-trade'    : {'discretize' : False,    'intervals': None},
+        'tgbn-genre'    : {'discretize' : True,     'intervals': 'monthly'},
+        'tgbn-reddit'   : {'discretize' : True,     'intervals': 'monthly'}
         }
 
 class data():
@@ -77,6 +83,8 @@ class data():
         data = data.full_data
         data = np.array([data['sources'], data["destinations"], data["timestamps"]])
         self.data = np.transpose(data)
+        self.discretize = Data_specifications[dname]['discretize']
+        self.intervals = Data_specifications[dname]['intervals']
         self.name = dname
         return self
 
@@ -93,8 +101,8 @@ class data():
         """
         self.name = data
         self.path = DataPath[data]
-        self.header = Data_specifications[data]['header']
-        self.index = Data_specifications[data]['index']
+        # self.header = Data_specifications[data]['header']
+        # self.index = Data_specifications[data]['index']
         self.discretize = Data_specifications[data]['discretize']
         self.intervals = Data_specifications[data]['intervals']
         return self

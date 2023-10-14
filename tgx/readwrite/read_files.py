@@ -3,7 +3,7 @@ from typing import Union
 import csv
 import numpy as np
 from typing import Optional, Union
-from tgx.utils.edgelist import edgelist_discritizer
+from tgx.utils.graph_utils import edgelist_discritizer
 # from tgx.datasets.data_loader import read_dataset
 
 
@@ -41,8 +41,8 @@ def read_edgelist(fname: Union[str, None] = None,
     """
     
     start_col = 0
-    weight_col = np.inf
-    feat_col = np.inf
+    # weight_col = np.inf
+    # feat_col = np.inf
 
     
     if not ts_sorted:
@@ -69,18 +69,18 @@ def read_edgelist(fname: Union[str, None] = None,
     v_col = u_col + 1
 
 
-    if weight:
-        weight_col = start_col + 3
-        start_col += 1
+    # if weight:
+    #     weight_col = start_col + 3
+    #     start_col += 1
 
-    if edge_feat:
-        feat_col = int(start_col + 3) 
+    # if edge_feat:
+    #     feat_col = int(start_col + 3) 
     
-    if edge_feat and feat_size == 0:
-        print("Calculating number of features ...")
-        line_len = [l for i, l in enumerate(csv.reader(open(fname), delimiter=sep)) if i == 2]
-        feat_size = len(line_len[0]) - (start_col + 3)
-        print("Number of features: ", feat_size)
+    # if edge_feat and feat_size == 0:
+    #     print("Calculating number of features ...")
+    #     line_len = [l for i, l in enumerate(csv.reader(open(fname), delimiter=sep)) if i == 2]
+    #     feat_size = len(line_len[0]) - (start_col + 3)
+    #     print("Number of features: ", feat_size)
 
     cols_to_read = [u_col, v_col, t_col]
 
@@ -99,7 +99,9 @@ def _load_edgelist(fname, columns, header):
     """
     read edges from the file and store them in a dictionary
     Parameters:
-        fname: 
+        fname: file address
+        columns: order of the nodes and timestamp
+        header: Whether the data file contains header
     """
     edgelist = open(fname, "r")
     edgelist.readline()
@@ -109,6 +111,7 @@ def _load_edgelist(fname, columns, header):
     
     u_idx, v_idx, ts_idx = columns
     temp_edgelist = {}
+    unique_edges = {}
     total_edges = 0
     if header:
         first_line = 1
@@ -116,29 +119,69 @@ def _load_edgelist(fname, columns, header):
         first_line = 0
     for i in range(first_line, len(lines)):
         line = lines[i]
-        
         values = line.split(',')
-        # print(values)
-        
         t = int(float(values[ts_idx]))
         u = values[u_idx]
         v = values[v_idx]
 
-        
         if t not in temp_edgelist:
             temp_edgelist[t] = {}
             temp_edgelist[t][(u, v)] = 1
-            # print(temp_edgelist)
-            # break
+            
         else:
             if (u, v) not in temp_edgelist[t]:
                 temp_edgelist[t][(u, v)] = 1
             else:
                 temp_edgelist[t][(u, v)] += 1
+        
+        if (u,v) not in unique_edges:
+            unique_edges[(u, v)] = 1
+
+        total_edges += 1
+
+    print("Number of loaded edges: " + str(total_edges))
+    print("Number of unique edges:" + len(unique_edges.keys()))
+    print("Available timestamps: ", len(temp_edgelist.keys()))
+    return temp_edgelist
+
+def _datasets_edgelist_loader(data, 
+                              discretize=False, 
+                              intervals : int = 200, 
+                              max_intervals=200) -> dict:
+    """
+    load built-in datasets and tgb datasets
+    """
+    temp_edgelist = {}
+    total_edges = 0
+    unique_edges = {}
+    for line in data:
+        u = line[0]
+        v = line[1]
+        t = int(float(line[2]))
+        
+        if t not in temp_edgelist:
+            temp_edgelist[t] = {}
+            temp_edgelist[t][(u, v)] = 1
+        else:
+            if (u, v) not in temp_edgelist[t]:
+                temp_edgelist[t][(u, v)] = 1
+            else:
+                temp_edgelist[t][(u, v)] += 1
+        
+        if (u,v) not in unique_edges:
+            unique_edges[(u,v)] = 1
         total_edges += 1
     print("Number of loaded edges: " + str(total_edges))
+    print("Number of unique edges:" + str(len(unique_edges.keys())))
     print("Available timestamps: ", len(temp_edgelist.keys()))
-    # print(temp_edgelist.values())
+
+    if discretize:
+        unique_ts = list(temp_edgelist.keys())
+        return edgelist_discritizer(temp_edgelist,
+                                    unique_ts=unique_ts,
+                                    time_interval=intervals,
+                                    max_intervals=max_intervals)
+    
     return temp_edgelist
 
 
@@ -222,32 +265,3 @@ def _load_edgelist_with_discretizer(
 
 
 
-def _datasets_edgelist_loader(data, discretize=False, intervals : int = 200, max_intervals=200):
-    temp_edgelist = {}
-    total_edges = 0
-    
-    for line in data:
-        u = line[0]
-        v = line[1]
-        t = int(float(line[2]))
-        
-        if t not in temp_edgelist:
-            temp_edgelist[t] = {}
-            temp_edgelist[t][(u, v)] = 1
-        else:
-            if (u, v) not in temp_edgelist[t]:
-                temp_edgelist[t][(u, v)] = 1
-            else:
-                temp_edgelist[t][(u, v)] += 1
-        total_edges += 1
-    print("Number of loaded edges: " + str(total_edges))
-    print("Available timestamps: ", len(temp_edgelist.keys()))
-
-    if discretize:
-        unique_ts = list(temp_edgelist.keys())
-        return edgelist_discritizer(temp_edgelist,
-                                    unique_ts=unique_ts,
-                                    time_interval=intervals,
-                                    max_intervals=max_intervals)
-    
-    return temp_edgelist
