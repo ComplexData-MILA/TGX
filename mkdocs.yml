@@ -1,7 +1,10 @@
-site_name: Temporal Graph Xplore 
+site_name: TGX
+# site_url: https://github.com/fpour/TGX
 nav:
-  - Overview: index.md
-  - About: about.md
+    - Home: index.md
+    - API: api_references.md
+
+
 theme:
   name: material
   features:
@@ -20,38 +23,18 @@ theme:
       toggle:
         icon: material/toggle-switch-off-outline 
         name: Switch to dark mode
-      primary: teal 
-      accent: purple
+      primary: navy
+      accent: red
     - scheme: slate 
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode    
-      primary: teal
+      primary: orange
       accent: lime
 
-markdown_extensions:
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - admonition
-  - pymdownx.arithmatex:
-      generic: true
-  - footnotes
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.mark
-  - attr_list
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
 
-plugins:
-  - mkdocstrings:
-      handlers:
-       python:
-          setup_commands:
-            - import sys
-            - sys.path.append("tgx")
-          selection:
-                    new_path_syntax: true
+plugins: 
+    - mkdocstrings
+#         handlers:
+#           python:
+#             paths: [.] 

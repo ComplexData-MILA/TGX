@@ -99,7 +99,9 @@ def _load_edgelist(fname, columns, header):
     """
     read edges from the file and store them in a dictionary
     Parameters:
-        fname: 
+        fname: file address
+        columns: order of the nodes and timestamp
+        header: Whether the data file contains header
     """
     edgelist = open(fname, "r")
     edgelist.readline()
@@ -140,6 +142,46 @@ def _load_edgelist(fname, columns, header):
     print("Number of loaded edges: " + str(total_edges))
     print("Number of unique edges:" + len(unique_edges.keys()))
     print("Available timestamps: ", len(temp_edgelist.keys()))
+    return temp_edgelist
+
+def _datasets_edgelist_loader(data, 
+                              discretize=False, 
+                              intervals : int = 200, 
+                              max_intervals=200) -> dict:
+    """
+    load built-in datasets and tgb datasets
+    """
+    temp_edgelist = {}
+    total_edges = 0
+    unique_edges = {}
+    for line in data:
+        u = line[0]
+        v = line[1]
+        t = int(float(line[2]))
+        
+        if t not in temp_edgelist:
+            temp_edgelist[t] = {}
+            temp_edgelist[t][(u, v)] = 1
+        else:
+            if (u, v) not in temp_edgelist[t]:
+                temp_edgelist[t][(u, v)] = 1
+            else:
+                temp_edgelist[t][(u, v)] += 1
+        
+        if (u,v) not in unique_edges:
+            unique_edges[(u,v)] = 1
+        total_edges += 1
+    print("Number of loaded edges: " + str(total_edges))
+    print("Number of unique edges:" + str(len(unique_edges.keys())))
+    print("Available timestamps: ", len(temp_edgelist.keys()))
+
+    if discretize:
+        unique_ts = list(temp_edgelist.keys())
+        return edgelist_discritizer(temp_edgelist,
+                                    unique_ts=unique_ts,
+                                    time_interval=intervals,
+                                    max_intervals=max_intervals)
+    
     return temp_edgelist
 
 
@@ -223,36 +265,3 @@ def _load_edgelist_with_discretizer(
 
 
 
-def _datasets_edgelist_loader(data, discretize=False, intervals : int = 200, max_intervals=200):
-    temp_edgelist = {}
-    total_edges = 0
-    unique_edges = {}
-    for line in data:
-        u = line[0]
-        v = line[1]
-        t = int(float(line[2]))
-        
-        if t not in temp_edgelist:
-            temp_edgelist[t] = {}
-            temp_edgelist[t][(u, v)] = 1
-        else:
-            if (u, v) not in temp_edgelist[t]:
-                temp_edgelist[t][(u, v)] = 1
-            else:
-                temp_edgelist[t][(u, v)] += 1
-        
-        if (u,v) not in unique_edges:
-            unique_edges[(u,v)] = 1
-        total_edges += 1
-    print("Number of loaded edges: " + str(total_edges))
-    print("Number of unique edges:" + str(len(unique_edges.keys())))
-    print("Available timestamps: ", len(temp_edgelist.keys()))
-
-    if discretize:
-        unique_ts = list(temp_edgelist.keys())
-        return edgelist_discritizer(temp_edgelist,
-                                    unique_ts=unique_ts,
-                                    time_interval=intervals,
-                                    max_intervals=max_intervals)
-    
-    return temp_edgelist
