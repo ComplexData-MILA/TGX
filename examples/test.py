@@ -54,6 +54,7 @@ data_path = '/network/scratch/r/razieh.shirzadkhani/'
 # data = tgx.read_edgelist(data=dataset, discretize=True, intervals=dataset.intervals)
 # get_novelty(data)
 
+
 tgb_list = ["tgbn-reddit"]
 # tgb_list = ["tgbl-comment"]
 # tgb_list = ["tgbl-flight"]
@@ -66,6 +67,12 @@ for i in tgb_list:
     get_avg_node_activity(data)
     # r = get_reoccurrence(data)
     # r = get_surprise(data)
+=======
+dataset = tgx.data.social_evo(root=data_path)
+# dataset = tgx.data.tgb("tgbl-review")
+# data = tgx.read_edgelist(data=dataset, discretize=True, intervals=51)
+data = tgx.read_edgelist(data=dataset)
+
 
 
 # G = tgx.Graph(data)
@@ -73,6 +80,14 @@ for i in tgb_list:
 # tgx.nodes_and_edges_per_ts(G.discrite_graph, plot_path=plot_path , network_name=dataset.name)
 # total_nodes = G.number_of_nodes()
 # tgx.average_degree_per_ts(G.discrite_graph, total_nodes, plot_path=plot_path, network_name=dataset.name+'2')
+# get_avg_e_per_ts(G.edgelist)
+# get_avg_degree(G.edgelist)
+# # get_num_timestamps(G.edgelist)  # not needed!
+# get_num_unique_edges(G.edgelist)
+# get_reoccurrence(G.edgelist, test_ratio=0.15)
+# get_surprise(G.edgelist, test_ratio=0.15)
+# get_avg_node_activity(G.edgelist)
+
 
 # total_nodes = G.number_of_nodes()
 # plot_path = "./examples/plots/"
