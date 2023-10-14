@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from typing import Union
-from tgx.utils.edgelist import edgelist_discritizer
+from tgx.utils.graph_utils import edgelist_discritizer
 from tgx.utils.plotting_utils import create_ts_list
 __all__ = ["TEA"]
 

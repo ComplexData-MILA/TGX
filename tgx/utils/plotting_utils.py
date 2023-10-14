@@ -65,11 +65,11 @@ def plot_for_snapshots(data,  filename, y_title, show_ave=True, plot_path = None
     ax.set_xlabel('Time', fontsize=20)
     ax.set_ylabel(y_title, fontsize=20)
     ax.tick_params(labelsize=20)
-    ax.set_ylim(0)
+    ax.set_ylim(0, 7.5)
     ax.set_xlim(0, len(ts)-1)
     if show_ave:
         ave_deg = [np.average(data) for i in range(len(ts))]
-        ax.plot(ts, ave_deg, color='blue', linestyle='dashed', lw=3)
+        ax.plot(ts, ave_deg, color='#ca0020', linestyle='dashed', lw=3)
     if plot_path is not None:
         plt.savefig(f'{plot_path}/{filename}')
     plt.show()

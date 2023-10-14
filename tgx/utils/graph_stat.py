@@ -193,7 +193,7 @@ def get_reoccurrence(graph_edgelist, test_ratio=0.15):
     #     if e in test_e_set:
     #         intersect += freq
 
-    # # print(total_train_freq, intersect)
+    # print(total_train_freq, intersect)
     # reoccurrence = float(intersect * 1.0 / total_train_freq)
     intersect = 0
     for e in test_e_set:
@@ -211,33 +211,37 @@ def get_surprise(graph_edgelist, test_ratio=0.15):
     test_size = len(test_e_set)
 
     difference = 0
-    total_test_freq = 0
-    for e, freq in test_e_set.items():
-        total_test_freq += freq
+    # total_test_freq = 0
+    # for e, freq in test_e_set.items():
+    #     total_test_freq += freq
+    #     if e not in train_val_e_set:
+    #         difference += freq
+    # surprise = float(difference * 1.0 / total_test_freq)
+
+    for e in test_e_set:
         if e not in train_val_e_set:
-            difference += freq
-    # print(total_test_freq, difference)
-    surprise = float(difference * 1.0 / total_test_freq)
+            difference += 1
+    surprise = float(difference * 1.0 / test_size)
     print(f"INFO: Surprise: {surprise}")
     return surprise
 
-# def get_novelty(graph_edgelist):
-#     r"""
-#     get novelty index
-#     """
-#     unique_ts = np.sort(list(graph_edgelist.keys()))
-#     novelty_ts = []
-#     for ts_idx, ts in enumerate(unique_ts):
-#         e_set_this_ts = set(list(graph_edgelist[ts].keys()))
-#         e_set_seen = []
-#         for idx in range(0, ts_idx):
-#             e_set_seen.append(list(graph_edgelist[unique_ts[idx]].keys()))
-#         e_set_seen = set(item for sublist in e_set_seen for item in sublist)
-#         novelty_ts.append(float(len(e_set_this_ts - e_set_seen) * 1.0 / len(e_set_this_ts)))
-#
-#     novelty = float(np.sum(novelty_ts) * 1.0 / len(unique_ts))
-#     print(f"INFO: Surprise: {novelty}")
-#     return novelty
+def get_novelty(graph_edgelist):
+    r"""
+    get novelty index
+    """
+    unique_ts = np.sort(list(graph_edgelist.keys()))
+    novelty_ts = []
+    for ts_idx, ts in enumerate(unique_ts):
+        e_set_this_ts = set(list(graph_edgelist[ts].keys()))
+        e_set_seen = []
+        for idx in range(0, ts_idx):
+            e_set_seen.append(list(graph_edgelist[unique_ts[idx]].keys()))
+        e_set_seen = set(item for sublist in e_set_seen for item in sublist)
+        novelty_ts.append(float(len(e_set_this_ts - e_set_seen) * 1.0 / len(e_set_this_ts)))
+
+    novelty = float(np.sum(novelty_ts) * 1.0 / len(unique_ts))
+    print(f"INFO: Novelty: {novelty}")
+    return novelty
 
 
 def get_avg_node_activity(graph_edgelist):
@@ -260,7 +264,7 @@ def get_avg_node_activity(graph_edgelist):
             if e[1] not in node_ts:
                 node_ts[e[1]] = {ts: True}
             else:
-                if ts not in node_ts[e[0]]:
+                if ts not in node_ts[e[1]]:
                     node_ts[e[1]][ts] = True
 
     node_activity_ratio = []
@@ -270,31 +274,3 @@ def get_avg_node_activity(graph_edgelist):
     avg_node_activity = float(np.sum(node_activity_ratio) * 1.0 / len(node_activity_ratio))
     print(f"INFO: Node activity ratio: {avg_node_activity}")
     return avg_node_activity
-
-def get_index_metrics(train_val_data, test_data):
-    r"""
-    compute `surprise` and `recurrence` indices
-    """
-    train_val_e_set = {}
-    for src, dst in zip(train_val_data['sources'], train_val_data['destinations']):
-        if (src, dst) not in train_val_e_set:
-            train_val_e_set[(src, dst)] = True
-    
-    test_e_set = {}
-    for src, dst in zip(test_data['sources'], test_data['destinations']):
-        if (src, dst) not in test_e_set:
-            test_e_set[(src, dst)] = True
-    
-    train_val_size = len(train_val_data['sources'])
-    test_size = len(test_data['sources'])
-
-    intersect = difference = 0
-    for e in test_e_set:
-        if e in train_val_e_set:
-            intersect += 1
-        else:
-            difference += 1
-
-    surprise = float(difference * 1.0 / test_size)
-    reoccurrence = float(intersect * 1.0 / train_val_size)
-    return surprise, reoccurrence

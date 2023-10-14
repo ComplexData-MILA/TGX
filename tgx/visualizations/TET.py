@@ -5,7 +5,7 @@ import seaborn as sns
 from tqdm import tqdm
 from typing import Union
 import matplotlib.pyplot as plt
-from tgx.utils.edgelist import edgelist_discritizer
+from tgx.utils.graph_utils import edgelist_discritizer
 
 
 # some parameters to be used for drawing
@@ -199,10 +199,10 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
                 ]
     else:
         colors = ['white',
-                  '#018571',
-                  '#018571',
-                  '#018571',
-                  '#018571',]
+                  '#ca0020',
+                  '#ca0020',
+                  '#ca0020',
+                  '#ca0020',]
     # print(sns.color_palette(colors, as_cmap=True))
     frame_color = "grey" # "#bababa"
     time_split_color = "black"
