@@ -311,3 +311,24 @@ def get_avg_node_activity(graph_edgelist: dict) -> float:
     avg_node_activity = float(np.sum(node_activity_ratio) * 1.0 / len(node_activity_ratio))
     print(f"INFO: Node activity ratio: {avg_node_activity}")
     return avg_node_activity
+
+
+def get_avg_node_engagement(graph_edgelist): 
+    r"""
+    get the average node engagement over time.
+    node engagement represents the average number of distinct nodes that establish
+    at least one new connection during each time step.
+    """
+    engaging_nodes = []
+    previous_edges = set()
+    for ts, e_list in graph_edgelist.items():
+        node_set = set()
+        new_edges = {(u, v) for (u, v), _ in e_list.items() if frozenset({u, v}) not in previous_edges}
+        for u, v in new_edges:
+            if u not in node_set:
+                node_set.add(u)
+            if v not in node_set:
+                node_set.add(v)
+        engaging_nodes.append(len(node_set))
+        previous_edges = {frozenset({u, v}) for (u, v), _ in e_list.items()}        # Update the set of previous edges for the next timestamp
+    return engaging_nodes
