@@ -9,20 +9,20 @@ from tgx.utils.graph_utils import edgelist_discritizer
 
 def read_edgelist(fname: Union[str, None] = None, 
              data: Union[object, None] = None,
-             sep = ",", 
-             header = True,
-             index = False,
-             discretize = False,
+             sep: str = ",", 
+             header: bool = True,
+             index: bool = False,
+             discretize: bool = False,
              intervals: Union[str, int, None] = None,
-             t_col = 2, 
-             ts_sorted = True,
-             max_intervals = 200,
-             weight = False, 
-             edge_feat = False,
-             feat_size = 0) -> dict:
+             t_col: int = 2, 
+             ts_sorted: bool = True,
+             max_intervals: int = 200,
+             weight: bool = False, 
+             edge_feat: bool = False,
+             feat_size: int = 0) -> dict:
     
     """
-    read temporal edgelist and store it in a dictionary.
+    Read temporal edgelist and store it in a dictionary.
     Parameters:
         fname: directory of a dataset in .csv format
         data: data object created from loading dgb/tgb datasets 
@@ -30,8 +30,7 @@ def read_edgelist(fname: Union[str, None] = None,
         header: whether first line of data file is header
         index: whether the first column is row indices
         discretize: whether to discretize the data
-        intervals: to discretize data based on "daily", 
-        "weekly", "monthly" or "yearly" or give the number of intervals
+        intervals: to discretize data based on "daily", "weekly", "monthly" or "yearly" or give the number of intervals
         t_col: column indext for timestamps (0 or 2)
         ts_sorted: if data are sorted based on timestamp
         max_intervals: maximum number of intervals to discretize data

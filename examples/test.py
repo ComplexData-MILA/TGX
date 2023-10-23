@@ -5,7 +5,6 @@ import numpy as np
 from tgx.utils.graph_stat import get_novelty, get_avg_node_activity, get_reoccurrence, get_surprise
 
 data_path = '/network/scratch/r/razieh.shirzadkhani/'
-# start_time = time.time()
 # dataset = tgx.data.reddit(root=data_path)
 
 
@@ -65,7 +64,7 @@ data_path = '/network/scratch/r/razieh.shirzadkhani/'
 # tgx.average_degree_per_ts(G.subsampled_graph, n_sampling, plot_path=plot_path, network_name=dataset.name)
 
 
-# TEA_path = "./examples/plots/TEA/"
+# TEA_path = "./examples/plots/TEA/1"
 
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name+'disc')
 # TET_path = "./examples/plots/TET/"
