@@ -205,6 +205,80 @@ def _split_data_chronological(graph_edgelist, test_ratio):
                     test_e_set[(u,v)] = freq
     return train_val_e_set, test_e_set
 
+def find(x, parent):
+    if parent[x] == x:
+        return x
+    parent[x] = find(parent[x], parent)  
+    return parent[x]
+
+
+def merge(x, y, parent):
+    root_x = find(x, parent)
+    root_y = find(y, parent)
+
+    if root_x != root_y:
+        parent[root_x] = root_y  
+
+
+def size_connected_components(graph):
+    """
+    get the sizes of connected components per timestamp.
+
+    Returns:
+    - list: A list containing the sizes of connected components in each timestamp.
+    """
+    
+    component_sizes = []
+    for t in range(len(graph)):
+        parent = list(range(graph[t].number_of_nodes))
+
+        for _, edge_data in graph[t].edgelist.items():
+            for (u, v), _ in edge_data.items():
+                merge(u, v, parent)
+
+        component_sizes_t = {}
+        for u in graph[t].nodes():
+            root = find(u, parent)
+            if root not in component_sizes_t:
+                component_sizes_t[root] = 0  
+            component_sizes_t[root] += 1  
+
+        component_sizes.append(component_sizes_t)
+
+    return component_sizes
+        
+
+def num_connected_components_per_ts(graph: list,  
+                 network_name: str,
+                 plot_path: str = None) -> None:
+    """
+    
+    plot the number of connected components per timestamp.
+
+    """
+
+    num_components = []
+    for t in range(len(graph)):
+        parent = list(range(graph[t].number_of_nodes))
+
+        for _, edge_data in graph[t].edgelist.items():
+            for (u, v), _ in edge_data.items():
+                merge(u, v, parent)
+
+        num = 0
+        for u in graph[t].nodes():
+            if parent[u] == u:
+                num += 1
+        num_components.append(num)   
+
+    filename = f"{network_name}_num_connected_components_per_ts"
+    plot_for_snapshots(num_components, filename, "Number of connected components", plot_path = plot_path)
+    print(num_components)
+    print("Plotting Done!")
+
+    return 
+
+
 def get_reoccurrence(graph_edgelist: dict, test_ratio: float=0.15) -> float:
     r"""
     Calculate the recurrence index
@@ -329,6 +403,6 @@ def get_avg_node_engagement(graph_edgelist):
                 node_set.add(u)
             if v not in node_set:
                 node_set.add(v)
-        engaging_nodes.append(len(node_set))
+        engaging_nodes.append((ts, len(node_set)))
         previous_edges = {frozenset({u, v}) for (u, v), _ in e_list.items()}        # Update the set of previous edges for the next timestamp
     return engaging_nodes
