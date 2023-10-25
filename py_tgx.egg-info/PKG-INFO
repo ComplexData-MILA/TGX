@@ -1,16 +1,14 @@
 Metadata-Version: 2.1
 Name: py-tgx
-Version: 0.1.0
+Version: 0.1.1
 Summary: Temporal graph
-Home-page: https://github.com/rshirzadkhani/tgx
+Home-page: https://github.com/fpour/tgx
 Author: Razieh Shirzadkhani
 Author-email: razieh.shirzadkhani@gmail.com
 License: MIT
 Project-URL: Bug Tracker, https://github.com/fpour/TGX/issues
 Keywords: demo project
-Classifier: Programming Language :: Python :: 3
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.9
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE
@@ -29,12 +27,6 @@ source ~/tgx_env/bin/activate
 pip install -r requirements.txt
 ```
 
-install Pytorch and PyG dependencies (#! currently not used)
-```
-pip install torch==2.0.0 --index-url https://download.pytorch.org/whl/cu117
-pip install torch_geometric==2.3.0
-pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.0.0+cu117.html
-```
 
 3. install local dependencies under root directory `/TGX`
 ```
