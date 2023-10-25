@@ -13,15 +13,15 @@ __all__ = ["average_degree_per_ts",
            "get_num_unique_edges",
            "get_reoccurrence",
            "get_surprise",
-           "get_avg_node_activity"
-           ]
+           "get_avg_node_activity",
+           "get_avg_node_engagement"]
 
 
 def average_degree_per_ts(graph: list, 
                           total_nodes: int, 
                           network_name: str,
                           plot_path: str = None) -> None:
-    '''
+    r'''
     Plot average degree per timestamp.
     Parameters:
      graph: a list containing graph snapshots
@@ -40,7 +40,7 @@ def average_degree_per_ts(graph: list,
 def nodes_per_ts(graph: list,  
                  network_name: str,
                  plot_path: str = None) -> None:
-    '''
+    r'''
     Plot number of active nodes per timestamp.
     Parameters:
      graph: a list containing graph snapshots
@@ -57,7 +57,7 @@ def nodes_per_ts(graph: list,
 def edges_per_ts(graph: list, 
                  plot_path: str, 
                  network_name: str) -> None:
-    '''
+    r'''
     Plot number of edges per timestamp.
     Parameters:
      graph: a list containing graph snapshots
@@ -74,7 +74,7 @@ def edges_per_ts(graph: list,
 def nodes_and_edges_per_ts(graph: list, 
                            network_name: str,
                            plot_path: str = None):
-    """
+    r"""
     Plot number of nodes per timestamp and number of edges per timestamp in one fiugre.
     Parameters:
      graph: a list containing graph snapshots

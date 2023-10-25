@@ -2,14 +2,18 @@ import tgx
 import time
 import numpy as np
 # from tgx.utils.graph_utils import subsampling, train_test_split, edgelist_discritizer
-from tgx.utils.graph_stat import get_novelty, get_avg_node_activity, get_reoccurrence, get_surprise
-
+from tgx.utils.graph_stat import get_novelty, get_avg_node_activity, get_reoccurrence, get_surprise, get_avg_node_engagement
+from tgx.utils.plotting_utils import plot_for_snapshots
 data_path = '/network/scratch/r/razieh.shirzadkhani/'
 # dataset = tgx.data.reddit(root=data_path)
 
 
 dataset = tgx.data.uci(root=data_path)
 data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+node_engagement = get_avg_node_engagement(data)
+plot_path = "./examples/plots/"
+filename = f"{dataset.name}_ave_node_engagement_per_ts"
+plot_for_snapshots(node_engagement, filename, "node engagement", plot_path=plot_path)
 # get_avg_node_activity(data)
 # print(dataset.name)
 # dataset = tgx.data.lastfm(root=data_path)

@@ -1,6 +1,13 @@
 import numpy as np
 from typing import Union, Optional
 
+__all__ = ["train_test_split",
+           "edgelist_discritizer",
+           "subsampling",
+           "node_list",
+           "is_discretized"]
+
+
 def edgelist_discritizer(edgelist,
                          unique_ts = None,
                          time_interval = None,
@@ -88,7 +95,7 @@ def subsampling(graph: Union[object, dict],
     print("Generate graph subsample...")
     if isinstance(graph, dict):
         edgelist = graph
-        nodes = _node_list(graph)
+        nodes = node_list(graph)
     else:
         edgelist = graph.edgelist
         nodes = graph.nodes()
@@ -113,7 +120,7 @@ def subsampling(graph: Union[object, dict],
     # print(new_edgelist)
     return new_edgelist
 
-def _node_list(dict_edgelist: dict) -> list:
+def node_list(dict_edgelist: dict) -> list:
     """
     create a list of nodes from edgelist dictionary
     """
@@ -164,3 +171,16 @@ def train_test_split(data : dict,
     else:
         test_data = {k: v for k, v in data.items() if train_split <= k <= data_len}
         return train_data, test_data
+    
+
+def is_discretized(edgelist: Optional[dict],
+                   max_timestamps: Optional[int] = 400) -> bool:
+    r"""
+    Check if an edgelist is discretized or not.
+    """
+    timestamps = list(edgelist.keys())
+    discretized = True
+    if len(timestamps) > max_timestamps:
+        discretized = False
+    
+    return discretized
