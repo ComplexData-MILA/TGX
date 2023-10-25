@@ -42,7 +42,7 @@ class Graph(object):
         return len(node_list.keys())
 
     def nodes(self) -> list:
-        """
+        r"""
         Return a list of nodes present in an edgelist
         """
         node_list = {}
@@ -59,7 +59,7 @@ class Graph(object):
     def _generate_graph(self, 
                         edgelist: Optional[dict] = None
                         ) -> list:
-        '''
+        r'''
         Generate a list of graph snapshots. Each snapshot is a 
         Networkx graph object.
         Parameters:
