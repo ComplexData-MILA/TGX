@@ -2,7 +2,7 @@ import networkx as nx
 from typing import Optional
 
 
-class Graph():
+class Graph(object):
     def __init__(self, 
                  edgelist: Optional[dict] = None, 
                  discretized: Optional[bool] = True):
@@ -23,8 +23,10 @@ class Graph():
         
         
     def number_of_nodes(self, edgelist: dict = None) -> int:
-        """
+        r"""
         Calculate total number of nodes present in an edgelist
+        Parameters:
+            edgelist: dictionary in the 
         """
         if self.edgelist is None:
             return []

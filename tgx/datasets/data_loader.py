@@ -42,7 +42,7 @@ Data_specifications = {
         'tgbn-reddit'   : {'discretize' : True,     'intervals': 'monthly'}
         }
 
-class data():
+class data(object):
     def __init__(self):
         """
         Data class for loading default (in-package) temporal datasets
@@ -57,7 +57,7 @@ class data():
         pass
 
     @classmethod
-    def tgb(self, dname):
+    def tgb(self, dname: str):
         """
         Load datasets from "tgb" package. To load these datasets you need to install tgb package.
         Parameters:
@@ -66,10 +66,7 @@ class data():
                         "tgbl-coin", "tgbl-comment", 
                         "tgbl-flight","tgbn-trade", 
                         "tgbn-genre", "tgbn-reddit"]
-        
-        Returns:
-            self.name: str, name of the dataset
-            self.data: array, a numpy array with shape (Edges, Time)
+    
         """
         link_pred = ["tgbl-wiki", "tgbl-review", "tgbl-coin", "tgbl-comment", "tgbl-flight"]
         node_pred = ["tgbn-trade", "tgbn-genre", "tgbn-reddit"]
@@ -89,15 +86,12 @@ class data():
         return self
 
 
-    def read_specifications(self, data):
+    def read_specifications(self, 
+                            data: type):
         """
         Load dataset specifications for dgb datasets
         Parameters:
             data: str, name of the dataset
-        Returns:
-            self.name: str, name of the dataset
-            self.path: dataset path in your local machine 
-            self.
         """
         self.name = data
         self.path = DataPath[data]

@@ -1,4 +1,4 @@
-# calc
+# TGX
 
 ::: tgx.classes.graph
 ::: tgx.datasets.data_loader

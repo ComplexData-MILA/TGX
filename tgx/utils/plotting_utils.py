@@ -28,9 +28,19 @@ def plot_nodes_edges_per_ts(edges: list,
                             ts: list,
                             network_name: str, 
                             plot_path: str = None, 
-                            ylabel_1 = 'Edges per Timestamp',
-                            ylabel_2 = 'Nodes per Timestamp'):
-
+                            ylabel_1: str = 'Edges per Timestamp',
+                            ylabel_2: str = 'Nodes per Timestamp'):
+    """
+    Plot nodes and edges per timestamp in one figure
+    Parameters:
+        edges: A list containing number of edges per timestamp
+        nodes: A list containing number of nodes per timestamp
+        ts: list of timestamps
+        network_name: Name of the network to be used in the output file name
+        plot_path: Path to save the output figure
+        ylabel_1: Label for the edges per timestamp line
+        ylabel_2: Label for the nodes per timestamp line
+    """
     fig = plt.figure(facecolor='w', figsize=(11, 6))
     ax1 = fig.add_subplot(111)
     ax2 = ax1.twinx()
@@ -52,9 +62,19 @@ def plot_nodes_edges_per_ts(edges: list,
         plt.savefig(f'{plot_path}/{filename}')
     plt.show()
 
-def plot_for_snapshots(data,  filename, y_title, show_ave=True, plot_path = None):
+def plot_for_snapshots(data: list,  
+                       filename: str, 
+                       y_title: str, 
+                       show_ave: bool=True, 
+                       plot_path:str = None):
     '''
-    plot
+    Plot a variable for different timestamps
+    Parameters:
+        data: A list of desired variable to be plotted
+        filename: Name of the output file name
+        y_title: Title of the y axis
+        show_ave: Whether to plot a line showing the average of the variable over all timestamps
+        plot_path: The path to save the output file
     '''
     ts = list(range(0, len(data)))
     # plt.rcParams["font.family"] = "Times New Roman"

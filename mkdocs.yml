@@ -2,7 +2,16 @@ site_name: TGX
 # site_url: https://github.com/fpour/TGX
 nav:
     - Home: index.md
-    - API: api_references.md
+    - API: 
+      - Classes: classes.md
+      - Datasets: datasets.md
+      - ReadWrite: readwrite.md
+      - Utils: utils.md
+      - Visualizations: vis.md
+
+    - Tutorials:
+      - Load data: tutorials/data_loader.ipynb
+      - Generate TEA and TET plots: tutorials/TEA&TET.ipynb
 
 
 theme:
@@ -34,7 +43,25 @@ theme:
 
 
 plugins: 
-    - mkdocstrings
+  - mkdocstrings:
+      # watch:
+      #   - tgx/
+      handlers:
+        python:
+          setup_commands:
+            - import sys
+            - sys.path.append("docs")
+            - sys.path.append("tgx")
+          selection:
+            new_path_syntax: true
+          rendering:
+            show_root_heading: false
+            heading_level: 3
+            show_root_full_path: false
+
+
+  - mkdocs-jupyter:
+      execute: false
 #         handlers:
 #           python:
 #             paths: [.] 

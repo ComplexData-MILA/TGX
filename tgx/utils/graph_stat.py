@@ -22,7 +22,12 @@ def average_degree_per_ts(graph: list,
                           network_name: str,
                           plot_path: str = None) -> None:
     '''
-    input: a list containing graph snapshots
+    Plot average degree per timestamp.
+    Parameters:
+     graph: a list containing graph snapshots
+     total_nodes: number of nodes that appear through all the snapshots
+     network_name: name of the graph to be used in the output file name
+     plot_path: path to save the output figure
     '''
     print("Plotting average degree per timestamp")
     ave_degree = _calculate_average_degree_per_ts(graph, total_nodes)
@@ -36,7 +41,11 @@ def nodes_per_ts(graph: list,
                  network_name: str,
                  plot_path: str = None) -> None:
     '''
-    input: a list containing graph snapshots
+    Plot number of active nodes per timestamp.
+    Parameters:
+     graph: a list containing graph snapshots
+     network_name: name of the graph to be used in the output file name
+     plot_path: path to save the output figure
     '''
     print("Plotting number of nodes per timestamp")
     active_nodes = _calculate_node_per_ts(graph)
@@ -49,7 +58,11 @@ def edges_per_ts(graph: list,
                  plot_path: str, 
                  network_name: str) -> None:
     '''
-    input: a list containing graph snapshots
+    Plot number of edges per timestamp.
+    Parameters:
+     graph: a list containing graph snapshots
+     network_name: name of the graph to be used in the output file name
+     plot_path: path to save the output figure
     '''
     print("Plotting number of edges per timestamp")
     active_edges = _calculate_edge_per_ts(graph)
@@ -61,7 +74,13 @@ def edges_per_ts(graph: list,
 def nodes_and_edges_per_ts(graph: list, 
                            network_name: str,
                            plot_path: str = None):
-    
+    """
+    Plot number of nodes per timestamp and number of edges per timestamp in one fiugre.
+    Parameters:
+     graph: a list containing graph snapshots
+     network_name: name of the graph to be used in the output file name
+     plot_path: path to save the output figure
+    """
     edges = _calculate_edge_per_ts(graph)
     nodes = _calculate_node_per_ts(graph)
     ts = list(range(0, len(graph)))
@@ -90,9 +109,11 @@ def _calculate_edge_per_ts(graph):
         active_edges.append(graph[ts].number_of_edges())
     return active_edges
 
-def get_avg_e_per_ts(graph_edgelist):
+def get_avg_e_per_ts(graph_edgelist: dict) -> float:
     r"""
-    calculate the average number of edges per timestamp
+    Calculate the average number of edges per timestamp
+    Parameters:
+     graph_edgelist: Dictionary containing graph data
     """
     sum_num_e_per_ts = 0
     unique_ts = list(graph_edgelist.keys())
@@ -108,9 +129,11 @@ def get_avg_e_per_ts(graph_edgelist):
     return avg_num_e_per_ts
 
 
-def get_avg_degree(graph_edgelist):
+def get_avg_degree(graph_edgelist: dict) -> float:
     r"""
-    get average degree over the timestamps
+    Calculate average degree over the timestamps
+    Parameters:
+     graph_edgelist: Dictionary containing graph data
     """
     degree_avg_at_ts_list = []
     unique_ts = list(graph_edgelist.keys())
@@ -127,16 +150,20 @@ def get_avg_degree(graph_edgelist):
     return np.mean(degree_avg_at_ts_list)
 
 
-def get_num_timestamps(graph_edgelist):
+def get_num_timestamps(graph_edgelist:dict) -> int:
     r"""
-    get number of timestamps
+    Calculate the number of timestamps
+    Parameters:
+     graph_edgelist: Dictionary containing graph data
     """
     print(f"INFO: Number of timestamps: {len(graph_edgelist)}")
     return len(graph_edgelist)
 
-def get_num_unique_edges(graph_edgelist):
+def get_num_unique_edges(graph_edgelist: dict) -> int:
     r"""
-    get the number of unique edges
+    Calculate the number of unique edges
+    Parameters:
+     graph_edgelist: Dictionary containing graph data
     """
     unique_edges = {}
     for ts, e_list in graph_edgelist.items():
@@ -252,9 +279,12 @@ def num_connected_components_per_ts(graph: list,
     return 
 
 
-def get_reoccurrence(graph_edgelist, test_ratio=0.15):
+def get_reoccurrence(graph_edgelist: dict, test_ratio: float=0.15) -> float:
     r"""
-    get the recurrence index
+    Calculate the recurrence index
+    Parameters:
+        graph_edgelist: Dictionary containing graph data
+        test_ratio: The ratio to split the data chronologically
     """
     train_val_e_set, test_e_set = _split_data_chronological(graph_edgelist, test_ratio)
     train_val_size = len(train_val_e_set)
@@ -277,9 +307,12 @@ def get_reoccurrence(graph_edgelist, test_ratio=0.15):
     print(f"INFO: Reoccurrence: {reoccurrence}")
     return reoccurrence
 
-def get_surprise(graph_edgelist, test_ratio=0.15):
+def get_surprise(graph_edgelist: dict, test_ratio: float = 0.15) -> float:
     r"""
-    get the surprise index
+    Calculate the surprise index
+    Parameters:
+        graph_edgelist: Dictionary containing graph data
+        test_ratio: The ratio to split the data chronologically
     """
     train_val_e_set, test_e_set = _split_data_chronological(graph_edgelist, test_ratio)
     test_size = len(test_e_set)
@@ -299,9 +332,11 @@ def get_surprise(graph_edgelist, test_ratio=0.15):
     print(f"INFO: Surprise: {surprise}")
     return surprise
 
-def get_novelty(graph_edgelist):
+def get_novelty(graph_edgelist: dict) -> float:
     r"""
-    get novelty index
+    Calculate the novelty index
+    Parameters:
+        graph_edgelist: Dictionary containing graph data
     """
     unique_ts = np.sort(list(graph_edgelist.keys()))
     novelty_ts = []
@@ -318,10 +353,12 @@ def get_novelty(graph_edgelist):
     return novelty
 
 
-def get_avg_node_activity(graph_edgelist):
+def get_avg_node_activity(graph_edgelist: dict) -> float:
     r"""
-    get average node activity
+    Calculate the average node activity
         the proportion of time steps a node is present
+    Parameters:
+        graph_edgelist: Dictionary containing graph data
     """
     num_unique_ts = len(graph_edgelist)
     node_ts = {}
