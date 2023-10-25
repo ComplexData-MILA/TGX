@@ -8,8 +8,8 @@ data_path = '/network/scratch/r/razieh.shirzadkhani/'
 # dataset = tgx.data.reddit(root=data_path)
 
 
-# dataset = tgx.data.uci(root=data_path)
-# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+dataset = tgx.data.uci(root=data_path)
+data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # get_avg_node_activity(data)
 # print(dataset.name)
 # dataset = tgx.data.lastfm(root=data_path)
