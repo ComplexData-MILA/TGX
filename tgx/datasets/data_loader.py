@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
-from tgb.linkproppred.dataset import LinkPropPredDataset
-from tgb.nodeproppred.dataset import NodePropPredDataset
+
 
 __all__ = ["data"]
 DataPath={
@@ -68,6 +67,9 @@ class data(object):
                         "tgbn-genre", "tgbn-reddit"]
     
         """
+        from tgb.linkproppred.dataset import LinkPropPredDataset
+        from tgb.nodeproppred.dataset import NodePropPredDataset
+        
         link_pred = ["tgbl-wiki", "tgbl-review", "tgbl-coin", "tgbl-comment", "tgbl-flight"]
         node_pred = ["tgbn-trade", "tgbn-genre", "tgbn-reddit"]
         if dname in link_pred:

@@ -7,13 +7,26 @@ from tgx.utils.plotting_utils import plot_for_snapshots
 data_path = '/network/scratch/r/razieh.shirzadkhani/'
 # dataset = tgx.data.reddit(root=data_path)
 
+dataset = tgx.data.lastfm(root=data_path)
+print(type(dataset))
+print(isinstance(dataset, type))
 
-dataset = tgx.data.uci(root=data_path)
-data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
-node_engagement = get_avg_node_engagement(data)
-plot_path = "./examples/plots/"
-filename = f"{dataset.name}_ave_node_engagement_per_ts"
-plot_for_snapshots(node_engagement, filename, "node engagement", plot_path=plot_path)
+data_class = tgx.data()
+dataset1 = data_class.uci(root=data_path)
+print(type(dataset1))
+print(isinstance(dataset1, type))
+data1 = tgx.read_edgelist(data=dataset1, discretize=dataset1.discretize, intervals=dataset1.intervals)
+
+print(dataset1.name)
+      
+dataset2 = data_class.mooc(root=data_path)
+data2 = tgx.read_edgelist(data=dataset2, discretize=dataset2.discretize, intervals=dataset2.intervals)
+
+print(dataset1.name,dataset2.name)
+# node_engagement = get_avg_node_engagement(data)
+# plot_path = "./examples/plots/"
+# filename = f"{dataset.name}_ave_node_engagement_per_ts"
+# plot_for_snapshots(node_engagement, filename, "node engagement", plot_path=plot_path)
 # get_avg_node_activity(data)
 # print(dataset.name)
 # dataset = tgx.data.lastfm(root=data_path)

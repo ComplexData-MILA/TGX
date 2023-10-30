@@ -403,6 +403,7 @@ def get_avg_node_engagement(graph_edgelist):
                 node_set.add(u)
             if v not in node_set:
                 node_set.add(v)
-        engaging_nodes.append((ts, len(node_set)))
+        # engaging_nodes.append((ts, len(node_set)))
+        engaging_nodes.append(len(node_set))
         previous_edges = {frozenset({u, v}) for (u, v), _ in e_list.items()}        # Update the set of previous edges for the next timestamp
     return engaging_nodes

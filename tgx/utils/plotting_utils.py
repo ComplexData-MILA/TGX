@@ -66,7 +66,8 @@ def plot_for_snapshots(data: list,
                        filename: str, 
                        y_title: str, 
                        show_ave: bool=True, 
-                       plot_path:str = None):
+                       plot_path:str = None,
+                       plot_title:str = None):
     '''
     Plot a variable for different timestamps
     Parameters:
@@ -87,6 +88,7 @@ def plot_for_snapshots(data: list,
     ax.tick_params(labelsize=20)
     # ax.set_ylim(0, 7.5)
     ax.set_xlim(0, len(ts)-1)
+    ax.set_title(plot_title, fontsize=20)
     if show_ave:
         ave_deg = [np.average(data) for i in range(len(ts))]
         ax.plot(ts, ave_deg, color='#ca0020', linestyle='dashed', lw=3)

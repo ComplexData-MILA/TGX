@@ -13,6 +13,10 @@ nav:
       - Load data: tutorials/data_loader.ipynb
       - Generate TEA and TET plots: tutorials/TEA&TET.ipynb
 
+    - Gallery:
+      - TEA Plots: gallery/tea.md
+      - TET Plots: gallery/tet.md
+
 
 theme:
   name: material
