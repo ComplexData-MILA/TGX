@@ -335,6 +335,7 @@ def get_surprise(graph_edgelist: dict, test_ratio: float = 0.15) -> float:
 def get_novelty(graph_edgelist: dict) -> float:
     r"""
     Calculate the novelty index
+    $\operatorname{ker} f=\{g\in G:f(g)=e_{H}\}{\mbox{.}}$
     Parameters:
         graph_edgelist: Dictionary containing graph data
     """

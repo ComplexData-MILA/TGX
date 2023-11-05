@@ -1,3 +1,0 @@
-# Classes
-
-::: tgx.classes.graph

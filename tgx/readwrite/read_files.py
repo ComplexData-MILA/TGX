@@ -1,5 +1,4 @@
 import pandas as pd
-from typing import Union
 import csv
 import numpy as np
 from typing import Optional, Union
@@ -173,7 +172,7 @@ def _datasets_edgelist_loader(data,
     print("Number of loaded edges: " + str(total_edges))
     print("Number of unique edges:" + str(len(unique_edges.keys())))
     print("Available timestamps: ", len(temp_edgelist.keys()))
-
+    print(discretize)
     if discretize:
         unique_ts = list(temp_edgelist.keys())
         return edgelist_discritizer(temp_edgelist,

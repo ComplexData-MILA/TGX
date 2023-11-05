@@ -1,23 +1,65 @@
-# TEA plots
+# Plot by type
 
-### Canadian Parliment
-![Canadian Parliment](TEA/CanParl.png)
-<!-- <figcaption>Canadian Parliment</figcaption> -->
+## TEA plots
 
-### UCI
-![UCI](TEA/UCI.png)
 
-### Contacts
-![image](TEA/Contacts.png)
-
-### Enron
-![image](TEA/Enron.png)
-
-### Flights
-![image](TEA/Flights.png)
-
-### LastFM
-![image](TEA/LastFM.png)
+### Reddit
+![image](TEA/Reddit.png){ width="400"}
 
 ### MOOC
-![image](TEA/MOOC.png)
+![image](TEA/MOOC.png){ width="400"}
+
+### LastFM
+![image](TEA/LastFM.png){ width="400"}
+
+### Enron
+![image](TEA/Enron.png){ width="400"}
+
+### Social Evo
+  ![image](TEA/SocialEvo.png){ width="400"}
+
+
+### UCI
+  ![UCI](TEA/UCI.png){ width="400"}
+
+### Flights
+![image](TEA/Flights.png){ width="400"}
+
+### Can. Parl.
+![Canadian Parliment](TEA/CanParl.png){ width="400"}
+
+### US Legis
+![image](TEA/USLegis.png){ width="400"}
+
+### UN Vote
+![image](TEA/UNVote.png){ width="400"}
+
+### Contacts
+![image](TEA/Contacts.png){ width="400"}
+
+### tgbl-wiki
+![image](TEA/tgbl-wiki.png){ width="400"}
+
+### tgbl-review
+![image](TEA/tgbl-review.png){ width="400"}
+
+### tgbl-coin
+![image](TEA/tgbl-coin.png){ width="400"}
+
+
+### tgbl-comment
+![image](TEA/tgbl-comment.png){ width="400"}
+
+### tgbl-flight
+![image](TEA/tgbl-flight.png){ width="400"}
+
+### tgbn-trade
+![image](TEA/tgbn-trade.png){ width="400"}
+
+### tgbn-genre
+![image](TEA/tgbn-genre.png){ width="400"}
+
+### tgbn-reddit
+![image](TEA/tgbn-reddit.png){ width="400"}
+
+

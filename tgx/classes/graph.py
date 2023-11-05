@@ -5,7 +5,7 @@ from typing import Optional
 class Graph(object):
     def __init__(self, 
                  edgelist: Optional[dict] = None, 
-                 discretized: Optional[bool] = True):
+                 discretized: Optional[bool] = False):
         """
         Create a Graph object with specific characteristics
         Args:

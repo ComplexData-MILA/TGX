@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tqdm import tqdm
-from typing import Union
+from typing import Union, Optional
 import matplotlib.pyplot as plt
 from tgx.utils.graph_utils import edgelist_discritizer
 
@@ -24,21 +24,24 @@ E_TRANSDUCTIVE = 30
 E_INDUCTIVE = 40
 
 def TET(temp_edgelist, 
-        filepath: Union[str, None] = None, 
-        intervals = None,
-        network_name=None,
-        add_frame = True,
-        test_split = False,
-        figsize = (9, 5),
-        axis_title_font_size = 20,
-        ticks_font_size = 20,
-        axis_tick_gap = 20,
-        timestamp_split_cross_mark_offset = 1) -> pd.DataFrame:
-    
+        filepath: Optional[str] = None, 
+        intervals : Union[str, int] = None,
+        network_name : str = None,
+        add_frame : bool = True,
+        test_split : bool = False,
+        figsize : tuple = (9, 5),
+        axis_title_font_size : int = 20,
+        ticks_font_size : int = 20,
+        axis_tick_gap : int = 20,
+        max_intervals : int = 200,
+        timestamp_split_cross_mark_offset : int = 1) -> pd.DataFrame:
+    r"""
+    Generate TET plots
+    """
     print("Plotting TET plots...")
     unique_ts = list(temp_edgelist.keys())
     
-    if len(unique_ts) > 100 or intervals is not None:
+    if len(unique_ts) > 200 or intervals is not None:
         temp_edgelist = edgelist_discritizer(temp_edgelist,
                                              unique_ts,
                                              time_interval = intervals)

@@ -5,24 +5,87 @@ import numpy as np
 from tgx.utils.graph_stat import get_novelty, get_avg_node_activity, get_reoccurrence, get_surprise, get_avg_node_engagement
 from tgx.utils.plotting_utils import plot_for_snapshots
 data_path = '/network/scratch/r/razieh.shirzadkhani/'
+TEA_path = "./docs/gallery/TEA/"
+TET_path = "./docs/gallery/TET/"
+
 # dataset = tgx.data.reddit(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
 
-dataset = tgx.data.lastfm(root=data_path)
-print(type(dataset))
-print(isinstance(dataset, type))
 
-data_class = tgx.data()
-dataset1 = data_class.uci(root=data_path)
-print(type(dataset1))
-print(isinstance(dataset1, type))
-data1 = tgx.read_edgelist(data=dataset1, discretize=dataset1.discretize, intervals=dataset1.intervals)
+# dataset = tgx.data.uci(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
 
-print(dataset1.name)
-      
-dataset2 = data_class.mooc(root=data_path)
-data2 = tgx.read_edgelist(data=dataset2, discretize=dataset2.discretize, intervals=dataset2.intervals)
+# dataset = tgx.data.mooc(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
 
-print(dataset1.name,dataset2.name)
+# dataset = tgx.data.lastfm(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+
+# dataset = tgx.data.canparl(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+
+# dataset = tgx.data.contacts(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+
+# dataset= tgx.data.enron(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+
+# dataset = tgx.data.flights(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+
+# dataset = tgx.data.unvote(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+
+# dataset = tgx.data.uslegis(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+
+# dataset = tgx.data.social_evo(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# print(dataset.name)
+# tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+# tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+
+
+
+# data_name = ["tgbl-comment"]
+
+# for name in data_name:
+#     dataset = tgx.data.tgb(name)
+#     data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=12)
+#     print(dataset.name)
+#     tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
+#     tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+
 # node_engagement = get_avg_node_engagement(data)
 # plot_path = "./examples/plots/"
 # filename = f"{dataset.name}_ave_node_engagement_per_ts"
@@ -84,7 +147,6 @@ print(dataset1.name,dataset2.name)
 # TEA_path = "./examples/plots/TEA/1"
 
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name+'disc')
-# TET_path = "./examples/plots/TET/"
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
 
 # print("--- Total elapsed time: %s seconds ---" % (time.time() - start_time))

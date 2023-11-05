@@ -89,6 +89,7 @@ pip install mkdocs-material
 pip install mkdocstrings-python
 pip install mkdocs-jupyter
 pip install notebook
+pip install mkdocs-glightbox
 ```
 
 

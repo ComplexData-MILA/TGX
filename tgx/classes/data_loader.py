@@ -28,7 +28,7 @@ Data_specifications = {
         'MOOC'          : {'discretize' : True,     'intervals': 'daily'},
         'UCI'           : {'discretize' : True,     'intervals': 'weekly'},
         'SocialEvo'     : {'discretize' : True,     'intervals': 'weekly'},
-        'Flights'       : {'discretize' : False,    'intervals': None},
+        'Flights'       : {'discretize' : False,     'intervals': 121},
         'Contacts'      : {'discretize' : True,     'intervals': 'daily'},
         'LastFM'        : {'discretize' : True,     'intervals': 'monthly'},
         'tgbl-wiki'     : {'discretize' : True,     'intervals': 'daily'},
@@ -59,7 +59,7 @@ class data(object):
     def tgb(self, dname: str):
         """
         Load datasets from "tgb" package. To load these datasets you need to install tgb package.
-        Parameters:
+        Args:
             dname: str, name of the dataset from the list:
                         ["tgbl-wiki", "tgbl-review", 
                         "tgbl-coin", "tgbl-comment", 

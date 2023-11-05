@@ -1,29 +1,32 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from typing import Union
+from typing import Union, Optional
 from tgx.utils.graph_utils import edgelist_discritizer
 from tgx.utils.plotting_utils import create_ts_list
 __all__ = ["TEA"]
 
 def TEA(
-        temp_edgelist, 
-        filepath : Union[str, None] = None,
-        fig_size = (7,5),
-        font_size = 20, 
-        network_name=None,
-        density = False,
-        intervals = None, 
-        real_dates = None,
-        test_split = False
+        temp_edgelist : dict, 
+        filepath : Optional[str] = None,
+        fig_size : tuple = (7,5),
+        font_size : int = 20, 
+        network_name : str =None,
+        intervals : Union[str, int] = None, 
+        real_dates : bool = None,
+        test_split : bool = False,
+        max_intervals : int = 200,
+        density : bool = False
         ):
     r"""
     generating TEA plot
+    Args:
+        temp_edgelist: a dictionary of temporal edges in the form of {t: {(u, v), freq}}
+        filepath: Path to save the TEA Plot
     """
-    print("Generating TEA plot...")
+
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
-    
-    if len(unique_ts) > 100 or intervals is not None:
+    if len(unique_ts) > max_intervals or intervals is not None:
         temp_edgelist = edgelist_discritizer(temp_edgelist,
                                              unique_ts,
                                              time_interval = intervals)
