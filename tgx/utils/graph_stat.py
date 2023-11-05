@@ -1,4 +1,4 @@
-from tgx.utils.plotting_utils import plot_for_snapshots, plot_nodes_edges_per_ts
+from tgx.utils.plotting_utils import plot_for_snapshots, plot_nodes_edges_per_ts, plot_density_map
 import networkx as nx
 import numpy as np
 from tgx.utils.graph_utils import train_test_split
@@ -408,3 +408,37 @@ def get_avg_node_engagement(graph_edgelist):
         engaging_nodes.append(len(node_set))
         previous_edges = {frozenset({u, v}) for (u, v), _ in e_list.items()}        # Update the set of previous edges for the next timestamp
     return engaging_nodes
+
+
+def get_degree_density(graph_edgelist, network_name: str, k=10, plot_path: str = None) -> None:
+    r"""
+    get the node degree density plot over timestamps
+    """
+    degrees_by_k_list = []
+    temp = []
+    temp_idx = 0
+    unique_ts = list(graph_edgelist.keys())
+    for ts in unique_ts:
+        e_at_this_ts = graph_edgelist[ts]
+        G = nx.MultiGraph()
+        for e, repeat in e_at_this_ts.items():
+            G.add_edge(e[0], e[1], weight=repeat)
+        nodes = G.nodes()
+        degrees = [G.degree[n] for n in nodes]
+
+        if temp_idx<k:
+            temp.extend(degrees)
+            temp_idx += 1
+        else: 
+            degrees_by_k_list.append(temp)
+            temp = degrees
+            temp_idx = 1
+
+    if temp:
+        degrees_by_k_list.append(temp)
+
+
+    filename = f"{network_name}_get_degree_density"
+    plot_density_map(degrees_by_k_list, filename, "Node Degree", plot_path = plot_path)
+    print("Plotting Done!")
+    return 
