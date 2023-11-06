@@ -3,18 +3,18 @@ site_name: TGX
 nav:
     - Home: index.md
     - API: 
-      - Classes: 
-        - Graph: classes/graph.md
-        - Datasets: classes/datasets.md
       - ReadWrite: 
-        -  Read Data: readwrite.md
+        -  Read Data: io.md
       - Utils: 
         - Graph stats: utils/graph_stats.md
         - Graph Utils: utils/graph_utils.md
         - Plotting Utils: utils/plotting_utils.md
-      - Visualizations: 
-        -  TEA Plot: visualizations/vis_tea.md
-        -  TET Plot: visualizations/vis_tet.md
+      - Visualization: 
+        -  TEA Plot: viz/vis_tea.md
+        -  TET Plot: viz/vis_tet.md
+      - Classes: 
+        - Graph: classes/graph.md
+        - Datasets: classes/datasets.md
     - Tutorials:
       - Load data: tutorials/data_loader.ipynb
       - Generate TEA and TET plots: tutorials/TEA&TET.ipynb
