@@ -4,11 +4,12 @@ import numpy as np
 # from tgx.utils.graph_utils import subsampling, train_test_split, edgelist_discritizer
 from tgx.utils.graph_stat import get_novelty, get_avg_node_activity, get_reoccurrence, get_surprise, get_avg_node_engagement
 from tgx.utils.plotting_utils import plot_for_snapshots
-# data_path = '/network/scratch/r/razieh.shirzadkhani/'
-data_path = "."
+data_path = '/network/scratch/r/razieh.shirzadkhani/'
+# data_path = "."
 TEA_path = "./docs/gallery/TEA/"
 TET_path = "./docs/gallery/TET/"
-
+ne_path = "./docs/gallery/node_edge/"
+degree_path = "./docs/gallery/degree/"
 # data_path = "/home/mila/r/razieh.shirzadkhani/TGX-2/data/ml_mooc_unsorted.csv"
 # dataset = tgx.data.reddit(root=data_path)
 # data = tgx.read_edgelist(data_path, discretize=False, index=True)
@@ -17,74 +18,121 @@ TET_path = "./docs/gallery/TET/"
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
 
 
-dataset = tgx.data.mooc(root=data_path)
-data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# dataset = tgx.data.uci(root=data_path)
+# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 # dataset = tgx.data.mooc(root=data_path)
 # data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 # dataset = tgx.data.lastfm(root=data_path)
 # data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 # dataset = tgx.data.canparl(root=data_path)
 # data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 # dataset = tgx.data.contacts(root=data_path)
 # data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 # dataset= tgx.data.enron(root=data_path)
 # data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 # dataset = tgx.data.flights(root=data_path)
 # data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 # dataset = tgx.data.unvote(root=data_path)
 # data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 # dataset = tgx.data.uslegis(root=data_path)
 # data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 # dataset = tgx.data.social_evo(root=data_path)
 # data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
+# G = tgx.Graph(data)
+# total_nodes = G.number_of_nodes()
+# tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+# tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 
 
+data_name = ["tgbl-wiki", "tgbl-review", 
+                        "tgbl-coin", 
+                        "tgbn-trade", 
+                        "tgbn-genre", "tgbn-reddit"]
 
-# data_name = ["tgbl-comment"]
 
-# for name in data_name:
-#     dataset = tgx.data.tgb(name)
-#     data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=12)
-#     print(dataset.name)
+for name in data_name:
+    dataset = tgx.data.tgb(name)
+    data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=12)
+    print(dataset.name)
+    G = tgx.Graph(data)
+    total_nodes = G.number_of_nodes()
+    tgx.nodes_and_edges_per_ts(G.graph, plot_path=ne_path, network_name=dataset.name)
+    tgx.average_degree_per_ts(G.graph, total_nodes, plot_path=degree_path, network_name=dataset.name)
 #     tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 #     tgx.TET(data, filepath = TET_path, network_name=dataset.name)
 

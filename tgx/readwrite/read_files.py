@@ -11,11 +11,12 @@ def read_edgelist(fname: Union[str, None] = None,
              sep: str = ",", 
              header: bool = True,
              index: bool = False,
+             is_discretized: bool = False,
              discretize: bool = False,
              intervals: Union[str, int, None] = None,
              t_col: int = 2, 
              ts_sorted: bool = True,
-             max_intervals: int = 200,
+             max_intervals: int = 2000,
              weight: bool = False, 
              edge_feat: bool = False,
              feat_size: int = 0) -> dict:
@@ -91,6 +92,17 @@ def read_edgelist(fname: Union[str, None] = None,
                                     time_interval=intervals,
                                     max_intervals=max_intervals)
     
+    elif not discretize and not is_discretized:
+        unique_ts = list(temp_edgelist.keys())
+        inp = input("Is the dataset discretized? (y/n)").lower()
+        if inp == "y":
+            return temp_edgelist
+        elif inp == "n":
+            intervals_inp = input("Please enter number of intervals (integer) or duration of interval (daily, weekly, etc.)")
+            return edgelist_discritizer(temp_edgelist,
+                                    unique_ts=unique_ts,
+                                    time_interval=intervals_inp,
+                                    max_intervals=max_intervals)
     return temp_edgelist
 
 def _load_edgelist(fname, columns, header):

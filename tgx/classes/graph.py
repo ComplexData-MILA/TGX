@@ -15,18 +15,21 @@ class Graph(object):
         
         self.edgelist = edgelist
         self.subsampled_graph = None
-        if discretized:
-            self.discrite_graph = self._generate_graph()
-            self.discrite_edgelist = edgelist
-        else:
-            self.continuous_edgelist = edgelist
+        self.graph = self._generate_graph()
+        self.discretized = discretized
+        
+        # if discretized:
+        #     self.discrite_graph = self._generate_graph()
+        #     self.discrite_edgelist = edgelist
+        # else:
+        #     self.continuous_edgelist = edgelist
         
         
-    def number_of_nodes(self, edgelist: dict = None) -> int:
+    def number_of_nodes(self, edgelist: Optional[dict] = None) -> int:
         r"""
         Calculate total number of nodes present in an edgelist
         Parameters:
-            edgelist: dictionary in the 
+            edgelist: dictionary in the form of {t: {(u, v), freq}}
         """
         if self.edgelist is None:
             return []
@@ -41,7 +44,7 @@ class Graph(object):
                     node_list[v] = 1
         return len(node_list.keys())
 
-    def nodes(self) -> list:
+    def nodes_list(self) -> list:
         r"""
         Return a list of nodes present in an edgelist
         """
