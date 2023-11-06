@@ -15,7 +15,7 @@ setup(
     url="https://github.com/fpour/tgx",
     author="Razieh Shirzadkhani",
     author_email="razieh.shirzadkhani@gmail.com",
-    keywords="demo project",
+    keywords="Temporal Graph visualization",
     license="MIT",
     packages=["tgx"],
     install_requires=[],

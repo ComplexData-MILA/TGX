@@ -1,4 +1,4 @@
-from tgx.readwrite.read_files import read_edgelist
+# from tgx.read_files import read_edgelist
 from tgx.visualizations.TEA import TEA
 from tgx.visualizations.TET import TET
 from tgx.classes.data_loader import *

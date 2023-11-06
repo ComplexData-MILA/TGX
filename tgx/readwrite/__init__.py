@@ -1,2 +1,2 @@
-from tgx.readwrite.read_files import *
+from tgx.read_files import *
 
