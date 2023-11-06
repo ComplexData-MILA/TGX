@@ -1,4 +1,3 @@
 ## Graph
-
-::: tgx.classes.Graph
+::: tgx.classes.graph
 
