@@ -2,6 +2,8 @@ import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.colors as mcolors
+from matplotlib.ticker import MaxNLocator
 
 def create_ts_list(start, end, metric=None, interval=None):
     if metric == "Unix" or metric == "unix" or metric == "UNIX":
@@ -92,6 +94,35 @@ def plot_for_snapshots(data: list,
     if show_ave:
         ave_deg = [np.average(data) for i in range(len(ts))]
         ax.plot(ts, ave_deg, color='#ca0020', linestyle='dashed', lw=3)
+    if plot_path is not None:
+        plt.savefig(f'{plot_path}/{filename}')
+    plt.show()
+
+
+def plot_density_map(data, filename, y_title, plot_path = None):
+    '''
+    Plot a density map using fig and ax
+    '''
+    # Create a 2D list for color values
+    c = np.zeros((np.max(data), len(data)))
+    for i, row in enumerate(data):
+        for value in row:
+            # print(value)
+            c[value-1][i] += 1
+
+    # Plot
+    fig = plt.figure(facecolor='w', figsize=(9, 6))
+    ax = fig.add_subplot(111)
+
+    norm = mcolors.Normalize(vmin=0, vmax=1)
+    cax = ax.imshow(c, cmap='viridis', interpolation='nearest', norm=norm)
+    cbar = fig.colorbar(cax)
+
+    ax.set_title("Heatmap of Node Degrees Over Time")
+    ax.set_xlabel('Time', fontsize=20)
+    ax.set_ylabel(y_title, fontsize=20)
+    ax.tick_params(labelsize=20)
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
     if plot_path is not None:
         plt.savefig(f'{plot_path}/{filename}')
     plt.show()
