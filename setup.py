@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def readme():
@@ -8,7 +8,7 @@ def readme():
 
 setup(
     name="py-tgx",
-    version="0.1.4",
+    version="0.1.7",
     description="Temporal graph",
     long_description=readme(),
     long_description_content_type="text/markdown",
@@ -17,7 +17,7 @@ setup(
     author_email="razieh.shirzadkhani@gmail.com",
     keywords="Temporal Graph visualization",
     license="MIT",
-    packages=["tgx"],
+    packages=find_packages(),
     install_requires=[],
     include_package_data=True,
 )

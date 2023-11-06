@@ -1,13 +1,13 @@
 Metadata-Version: 2.1
 Name: py-tgx
-Version: 0.1.4
+Version: 0.1.7
 Summary: Temporal graph
 Home-page: https://github.com/fpour/tgx
 Author: Razieh Shirzadkhani
 Author-email: razieh.shirzadkhani@gmail.com
 License: MIT
 Project-URL: Bug Tracker, https://github.com/fpour/TGX/issues
-Keywords: demo project
+Keywords: Temporal Graph visualization
 Classifier: Programming Language :: Python :: 3.9
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown

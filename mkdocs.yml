@@ -1,5 +1,5 @@
 site_name: TGX
-# site_url: https://github.com/fpour/TGX
+site_url: https://github.com/fpour/TGX
 nav:
     - Home: index.md
     - API: 
@@ -80,8 +80,8 @@ plugins:
        auto_caption: false
        caption_position: bottom
   - mkdocstrings:
-      # watch:
-      #   - tgx/
+      watch:
+        - tgx/
       handlers:
         python:
           setup_commands:

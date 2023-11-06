@@ -8,6 +8,17 @@ setup.py
 ./py_tgx.egg-info/dependency_links.txt
 ./py_tgx.egg-info/top_level.txt
 ./tgx/__init__.py
+./tgx/classes/__init__.py
+./tgx/classes/data_loader.py
+./tgx/classes/graph.py
+./tgx/io/read_files.py
+./tgx/utils/__init__.py
+./tgx/utils/graph_stat.py
+./tgx/utils/graph_utils.py
+./tgx/utils/plotting_utils.py
+./tgx/viz/TEA.py
+./tgx/viz/TET.py
+./tgx/viz/__init__.py
 py_tgx.egg-info/PKG-INFO
 py_tgx.egg-info/SOURCES.txt
 py_tgx.egg-info/dependency_links.txt
