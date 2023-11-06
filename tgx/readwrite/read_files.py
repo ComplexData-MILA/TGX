@@ -111,6 +111,8 @@ def _load_edgelist(fname, columns, header):
     temp_edgelist = {}
     unique_edges = {}
     total_edges = 0
+    sorted = True
+    previous_t = 0
     if header:
         first_line = 1
     else:
@@ -121,24 +123,36 @@ def _load_edgelist(fname, columns, header):
         t = int(float(values[ts_idx]))
         u = values[u_idx]
         v = values[v_idx]
-
-        if t not in temp_edgelist:
+        
+        # Check if the dataset is sorted
+        if t > previous_t: 
+            sorted = False
+        previous_t = t
+        
+        # Check if this is the first edge occurning in this timestamp
+        if t not in temp_edgelist: 
             temp_edgelist[t] = {}
             temp_edgelist[t][(u, v)] = 1
             
         else:
             if (u, v) not in temp_edgelist[t]:
-                temp_edgelist[t][(u, v)] = 1
+                temp_edgelist[t][(u, v)] = 1 # If the edge was not occured in this timestamp before
             else:
-                temp_edgelist[t][(u, v)] += 1
+                temp_edgelist[t][(u, v)] += 1 
         
         if (u,v) not in unique_edges:
             unique_edges[(u, v)] = 1
 
         total_edges += 1
 
+    if sorted is False:
+        print("Sorting dataset...")
+        myKeys = list(temp_edgelist.keys())
+        myKeys.sort()
+        temp_edgelist = {i: temp_edgelist[i] for i in myKeys}
+        
     print("Number of loaded edges: " + str(total_edges))
-    print("Number of unique edges:" + len(unique_edges.keys()))
+    print("Number of unique edges:" , len(unique_edges.keys()))
     print("Available timestamps: ", len(temp_edgelist.keys()))
     return temp_edgelist
 

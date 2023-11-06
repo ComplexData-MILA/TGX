@@ -1,36 +1,42 @@
 import pandas as pd
 import numpy as np
-
+import requests
+from clint.textui import progress
+import os, io
+import shutil
+import sys
+import zipfile
+import urllib
 
 __all__ = ["data"]
 DataPath={
     'USLegis'   : "/data/USLegis/ml_USLegis.csv",
     'CanParl'   : "/data/CanParl/ml_CanParl.csv",
-    'UNTrade'   : "/data/UNtrade/ml_UNtrade.csv",
-    'UNVote'    : "/data/UNvote/ml_UNvote.csv",
-    'Reddit'    : "/data/reddit/ml_reddit.csv",
+    'UNtrade'   : "/data/UNtrade/ml_UNtrade.csv",
+    'UNvote'    : "/data/UNvote/ml_UNvote.csv",
+    'reddit'    : "/data/reddit/ml_reddit.csv",
     'Wikipedia' : "/data/wikipedia/ml_wikipedia.csv",
-    'Enron'     : "/data/enron/ml_enron.csv",
-    'MOOC'      : "/data/mooc/ml_mooc.csv",
-    'UCI'       : "/data/uci/ml_uci.csv",
+    'enron'     : "/data/enron/ml_enron.csv",
+    'mooc'      : "/data/mooc/ml_mooc.csv",
+    'uci'       : "/data/uci/ml_uci.csv",
     'SocialEvo' : "/data/SocialEvo/ml_SocialEvo.csv",
     'Flights'   : "/data/Flights/ml_Flights.csv",
-    'LastFM'    : "/data/lastfm/ml_lastfm.csv",
+    'lastfm'    : "/data/lastfm/ml_lastfm.csv",
     'Contacts'  : "/data/Contacts/ml_Contacts.csv"
     }
 
 Data_specifications = {
         'USLegis'       : {'discretize' : False,    'intervals': None},
         'CanParl'       : {'discretize' : False,    'intervals': None},
-        'UNVote'        : {'discretize' : False,    'intervals': None},
-        'Reddit'        : {'discretize' : True,     'intervals': 'daily'},
-        'Enron'         : {'discretize' : True,     'intervals': 'monthly'},
-        'MOOC'          : {'discretize' : True,     'intervals': 'daily'},
-        'UCI'           : {'discretize' : True,     'intervals': 'weekly'},
+        'UNvote'        : {'discretize' : False,    'intervals': None},
+        'reddit'        : {'discretize' : True,     'intervals': 'daily'},
+        'enron'         : {'discretize' : True,     'intervals': 'monthly'},
+        'mooc'          : {'discretize' : True,     'intervals': 'daily'},
+        'uci'           : {'discretize' : True,     'intervals': 'weekly'},
         'SocialEvo'     : {'discretize' : True,     'intervals': 'weekly'},
         'Flights'       : {'discretize' : False,     'intervals': 121},
         'Contacts'      : {'discretize' : True,     'intervals': 'daily'},
-        'LastFM'        : {'discretize' : True,     'intervals': 'monthly'},
+        'lastfm'        : {'discretize' : True,     'intervals': 'monthly'},
         'tgbl-wiki'     : {'discretize' : True,     'intervals': 'daily'},
         'tgbl-review'   : {'discretize' : True,     'intervals': 'yearly'},
         'tgbl-coin'     : {'discretize' : True,     'intervals': 'weekly'},
@@ -67,8 +73,11 @@ class data(object):
                         "tgbn-genre", "tgbn-reddit"]
     
         """
-        from tgb.linkproppred.dataset import LinkPropPredDataset
-        from tgb.nodeproppred.dataset import NodePropPredDataset
+        try:
+            from tgb.linkproppred.dataset import LinkPropPredDataset
+            from tgb.nodeproppred.dataset import NodePropPredDataset
+        except:
+            print("First install TGB package using 'pip install py-tgb'")
         
         link_pred = ["tgbl-wiki", "tgbl-review", "tgbl-coin", "tgbl-comment", "tgbl-flight"]
         node_pred = ["tgbn-trade", "tgbn-genre", "tgbn-reddit"]
@@ -104,14 +113,37 @@ class data(object):
         return self
     
     def load_dgb_data(self):
-        data = pd.read_csv(f"{self.root}{self.path}", index_col=0)
+        try:
+            data = pd.read_csv(f"{self.root}{self.path}", index_col=0)
+        except:
+            self.download_file(self)
+            data = pd.read_csv(f"{self.root}{self.path}", index_col=0)
+
         self.data =  data.iloc[:, 0:3].to_numpy()
         return self
     
+    def download_file(self):
+
+        print("Data missing, download recommended!")
+        inp = input('Will you download the dataset(s) now? (y/N)\n').lower()
+        url = f"https://zenodo.org/record/7213796/files/{self.name}.zip"
+        path_download = f"./data"
+        print(path_download)
+        print(url)
+        if inp == 'y':
+            print(f"Download started, this might take a while . . .")
+            zip_path, _ = urllib.request.urlretrieve(url)
+            with zipfile.ZipFile(zip_path, "r") as f:
+                f.extractall(path_download)
+            print("Download completed")
+
+        else:
+            print("Download cancelled")
+
 
     @classmethod
     def mooc(self, root):
-        data = "MOOC"
+        data = "mooc"
         self.root = root
         self.read_specifications(self, data)
         self.load_dgb_data(self)
@@ -119,7 +151,7 @@ class data(object):
     
     @classmethod
     def uci(self, root):
-        data = "UCI"
+        data = "uci"
         self.root = root
         self.read_specifications(self, data)
         self.load_dgb_data(self)
@@ -143,7 +175,7 @@ class data(object):
     
     @classmethod
     def untrade(self, root):
-        data = "UNTrade"
+        data = "UNtrade"
         self.root = root
         self.read_specifications(self, data)
         self.load_dgb_data(self)
@@ -151,7 +183,7 @@ class data(object):
     
     @classmethod
     def unvote(self, root):
-        data = "UNVote"
+        data = "UNvote"
         self.root = root
         self.read_specifications(self, data)
         self.load_dgb_data(self)
@@ -159,7 +191,7 @@ class data(object):
     
     @classmethod
     def reddit(self, root):
-        data = "Reddit"
+        data = "reddit"
         self.root = root
         self.read_specifications(self, data)
         self.load_dgb_data(self)
@@ -175,7 +207,7 @@ class data(object):
     
     @classmethod
     def enron(self, root):
-        data = "Enron"
+        data = "enron"
         self.root = root
         self.read_specifications(self, data)
         self.load_dgb_data(self)
@@ -199,7 +231,7 @@ class data(object):
     
     @classmethod
     def lastfm(self, root):
-        data = "LastFM"
+        data = "lastfm"
         self.root = root
         self.read_specifications(self, data)
         self.load_dgb_data(self)

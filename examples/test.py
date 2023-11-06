@@ -4,19 +4,21 @@ import numpy as np
 # from tgx.utils.graph_utils import subsampling, train_test_split, edgelist_discritizer
 from tgx.utils.graph_stat import get_novelty, get_avg_node_activity, get_reoccurrence, get_surprise, get_avg_node_engagement
 from tgx.utils.plotting_utils import plot_for_snapshots
-data_path = '/network/scratch/r/razieh.shirzadkhani/'
+# data_path = '/network/scratch/r/razieh.shirzadkhani/'
+data_path = "."
 TEA_path = "./docs/gallery/TEA/"
 TET_path = "./docs/gallery/TET/"
 
+# data_path = "/home/mila/r/razieh.shirzadkhani/TGX-2/data/ml_mooc_unsorted.csv"
 # dataset = tgx.data.reddit(root=data_path)
-# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+# data = tgx.read_edgelist(data_path, discretize=False, index=True)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
 
 
-# dataset = tgx.data.uci(root=data_path)
-# data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+dataset = tgx.data.mooc(root=data_path)
+data = tgx.read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 # print(dataset.name)
 # tgx.TEA(data, filepath = TEA_path, network_name=dataset.name)
 # tgx.TET(data, filepath = TET_path, network_name=dataset.name)
