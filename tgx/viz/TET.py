@@ -37,6 +37,9 @@ def TET(temp_edgelist : Union[object, dict],
         timestamp_split_cross_mark_offset : int = 1):
     r"""
     Generate TET plots
+    Parameters:
+        temp_edgelist: a dictionary of temporal edges or a dataset object
+        filepath: Path to save the TEA Plot
     """
     if isinstance(temp_edgelist, object):
         if temp_edgelist.freq_data is None:

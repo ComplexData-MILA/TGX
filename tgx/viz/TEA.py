@@ -20,7 +20,7 @@ def TEA(
     r"""
     generating TEA plot
     Args:
-        temp_edgelist: a dictionary of temporal edges in the form of {t: {(u, v), freq}}
+        temp_edgelist: a dictionary of temporal edges or a dataset object
         filepath: Path to save the TEA Plot
     """
     if isinstance(temp_edgelist, object):
