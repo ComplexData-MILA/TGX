@@ -2,10 +2,10 @@ import tgx
 import time
 import numpy as np
 # from tgx.utils.graph_utils import subsampling, train_test_split, edgelist_discritizer
-from tgx.utils.graph_stat import get_novelty, get_avg_node_activity, get_reoccurrence, get_surprise, get_avg_node_engagement
+from tgx.utils.stat import get_novelty, get_avg_node_activity, get_reoccurrence, get_surprise, get_avg_node_engagement
 from tgx.utils.plotting_utils import plot_for_snapshots
-from tgx.io.read_files import read_edgelist
-from tgx.classes.data_loader import data
+from tgx.io.read import read_edgelist
+from tgx.data import builtin
 
 data_path = '/network/scratch/r/razieh.shirzadkhani/'
 # data_path = "."

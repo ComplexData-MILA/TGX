@@ -23,7 +23,7 @@ E_TRAIN_AND_TEST = 20
 E_TRANSDUCTIVE = 30
 E_INDUCTIVE = 40
 
-def TET(temp_edgelist, 
+def TET(temp_edgelist : Union[object, dict],
         filepath: Optional[str] = None, 
         intervals : Union[str, int] = None,
         network_name : str = None,
@@ -34,17 +34,28 @@ def TET(temp_edgelist,
         ticks_font_size : int = 20,
         axis_tick_gap : int = 20,
         max_intervals : int = 200,
-        timestamp_split_cross_mark_offset : int = 1) -> pd.DataFrame:
+        timestamp_split_cross_mark_offset : int = 1):
     r"""
     Generate TET plots
     """
-    print("Plotting TET plots...")
-    unique_ts = list(temp_edgelist.keys())
+    if isinstance(temp_edgelist, object):
+        if temp_edgelist.freq_data is None:
+            temp_edgelist.count_freq()
+        temp_edgelist = temp_edgelist.freq_data
     
-    if len(unique_ts) > 200 or intervals is not None:
+    # check number of unique timestamps:
+    unique_ts = list(temp_edgelist.keys())
+    if len(unique_ts) > max_intervals:
+        inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
+        if inp == "y":
+            temp_edgelist = edgelist_discritizer(temp_edgelist,
+                                                unique_ts,
+                                                time_interval = max_intervals)
+    elif intervals is not None:
         temp_edgelist = edgelist_discritizer(temp_edgelist,
-                                             unique_ts,
-                                             time_interval = intervals)
+                                            unique_ts,
+                                            time_interval = intervals)
+    
     edge_last_ts = generate_edge_last_timestamp(temp_edgelist)
     edge_idx_map = generate_edge_idx_map(temp_edgelist, edge_last_ts)
     idx_edge_map = {v: k for k, v in edge_idx_map.items()}  # key: edge index; value: actual edge (source, destination)

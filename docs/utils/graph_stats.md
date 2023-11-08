@@ -1,4 +1,4 @@
 ## Graph Stats
-::: tgx.utils.graph_stat
+::: tgx.utils.stat
 
 

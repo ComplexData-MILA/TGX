@@ -1,10 +1,13 @@
 import networkx as nx
 from typing import Optional
-
+from tgx.utils.graph_utils import edgelist_discritizer, frequency_count
+from tgx.io.read import read_csv
 
 class Graph(object):
     def __init__(self, 
-                 edgelist: Optional[dict] = None, 
+                 dataset: Optional[object] = None, 
+                 fname: Optional[str] = None,
+                 edgelist: Optional[dict] = None,
                  discretized: Optional[bool] = False):
         """
         Create a Graph object with specific characteristics
@@ -12,19 +15,32 @@ class Graph(object):
             edgelist: a dictionary of temporal edges in the form of {t: {(u, v), freq}}
             discretized: whether the given edgelist was discretized or not
         """
+
+        if dataset is not None and isinstance(dataset, type):
+            self.data = read_csv(dataset)
+        elif fname is not None and isinstance(fname, str):
+            self.data = read_csv(fname)
+        elif edgelist is not None and isinstance(edgelist, dict):
+            self.data = edgelist
+        else:
+            raise TypeError("Please enter valid input.")
         
-        self.edgelist = edgelist
         self.subsampled_graph = None
-        self.graph = self._generate_graph()
-        self.discretized = discretized
-        
-        # if discretized:
-        #     self.discrite_graph = self._generate_graph()
-        #     self.discrite_edgelist = edgelist
-        # else:
-        #     self.continuous_edgelist = edgelist
+        self.freq_data = None
         
         
+    def discretize(self, intervals):
+        # self.discretized = True
+        disc_G = edgelist_discritizer(self.data,
+                                                  time_interval = intervals)
+        self.continueos_G = self.data
+        self.data = disc_G
+        return self.data    
+
+    def count_freq(self):
+        self.freq_data = frequency_count(self.data)
+        return self
+
     def number_of_nodes(self, edgelist: Optional[dict] = None) -> int:
         r"""
         Calculate total number of nodes present in an edgelist

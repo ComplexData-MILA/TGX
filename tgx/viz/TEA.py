@@ -6,7 +6,7 @@ from tgx.utils.plotting_utils import create_ts_list
 __all__ = ["TEA"]
 
 def TEA(
-        temp_edgelist : dict, 
+        temp_edgelist : Union[object, dict], 
         filepath : Optional[str] = None,
         fig_size : tuple = (7,5),
         font_size : int = 20, 
@@ -14,7 +14,7 @@ def TEA(
         intervals : Union[str, int] = None, 
         real_dates : bool = None,
         test_split : bool = False,
-        max_intervals : int = 200,
+        max_intervals : int = 1000,
         density : bool = False
         ):
     r"""
@@ -23,13 +23,23 @@ def TEA(
         temp_edgelist: a dictionary of temporal edges in the form of {t: {(u, v), freq}}
         filepath: Path to save the TEA Plot
     """
-
+    if isinstance(temp_edgelist, object):
+        if temp_edgelist.freq_data is None:
+            temp_edgelist.count_freq()
+        temp_edgelist = temp_edgelist.freq_data
+    
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
-    if len(unique_ts) > max_intervals or intervals is not None:
+    if len(unique_ts) > max_intervals:
+        inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
+        if inp == "y":
+            temp_edgelist = edgelist_discritizer(temp_edgelist,
+                                                unique_ts,
+                                                time_interval = max_intervals)
+    elif intervals is not None:
         temp_edgelist = edgelist_discritizer(temp_edgelist,
-                                             unique_ts,
-                                             time_interval = intervals)
+                                            unique_ts,
+                                            time_interval = intervals)
 
 
     ts_edges_dist, ts_edges_dist_density, edge_frequency_dict = TEA_process_edgelist_per_timestamp(temp_edgelist)
@@ -51,7 +61,7 @@ def TEA_process_edgelist_per_timestamp(temp_edgelist):
     # generate distribution of the edges history
     unique_ts = list(temp_edgelist.keys())
     # unique_ts.sort()
-    print(f"There are {len(unique_ts)} timestamps.")
+    # print(f"There are {len(unique_ts)} timestamps.")
 
     # get node set & total number of nodes
     node_dict = {}

@@ -5,15 +5,15 @@ __all__ = ["train_test_split",
            "edgelist_discritizer",
            "subsampling",
            "node_list",
-           "is_discretized"]
+           "is_discretized",
+           "frequency_count"]
 
 
 def edgelist_discritizer(edgelist,
-                         unique_ts = None,
-                         time_interval = None,
-                         max_intervals = 200):
-    if unique_ts is None:
-        unique_ts = list(edgelist.keys())
+                         time_interval: Union[str, int],
+                         max_intervals: Optional[int] = 1000):
+    
+    unique_ts = list(edgelist.keys())
         
     total_time = unique_ts[-1] - unique_ts[0]
     if time_interval is not None:
@@ -47,32 +47,42 @@ def edgelist_discritizer(edgelist,
             print('Cannot proceed to TEA and TET plot')
             exit()
         else:
-            interval_size = int(total_time / 100)
+            interval_size = int(total_time / max_intervals)
     num_intervals = int(total_time/interval_size)
     print(f'Discretizing data to {num_intervals} timestamps...')
     if num_intervals == 0:
         print("Warning! Only one timestamp exist in the data.")
+        
     updated_edgelist = {}
     new_ts = {}
     curr_t = 0
-    for ts, edge_data in edgelist.items():
+    for ts, edges_list in edgelist.items():
         bin_ts = int(ts / interval_size)
         if bin_ts >= num_intervals:
             bin_ts -= 1
 
-        if bin_ts not in new_ts:
-            new_ts[bin_ts] = curr_t
-            curr_t += 1
-        
-        if new_ts[bin_ts] not in updated_edgelist:
-            updated_edgelist[new_ts[bin_ts]] = {}
+        # if bin_ts not in new_ts:
+        #     new_ts[bin_ts] = curr_t
+            # curr_t += 1
 
-        for (u,v), n in edge_data.items():
-            if (u, v) not in updated_edgelist[new_ts[bin_ts]]:
-                updated_edgelist[new_ts[bin_ts]][(u, v)] = n
-            else:
-                updated_edgelist[new_ts[bin_ts]][(u, v)] += n
-    print("Descritization Done..!")
+        for edge in edges_list:
+        # if new_ts[bin_ts] not in updated_edgelist:
+        #     updated_edgelist[new_ts[bin_ts]] = {}
+
+        # for (u,v) in edge_data.items():
+        #     if (u, v) not in freq_count_dict[new_ts[bin_ts]]:
+        #         freq_count_dict[new_ts[bin_ts]][(u, v)] = n
+        #     else:
+        #         freq_count_dict[new_ts[bin_ts]][(u, v)] += n
+            if bin_ts not in updated_edgelist:
+                updated_edgelist[bin_ts] = []
+                # updated_edgelist[curr_t] = edges_list
+                # edges_list = []
+                # curr_t = bin_ts
+            updated_edgelist[bin_ts].append(edge)
+
+    # updated_edgelist[curr_t] = edges_list
+    print("Discretization Done..!")
     return updated_edgelist
 
 def subsampling(graph: Union[object, dict], 
@@ -120,7 +130,28 @@ def subsampling(graph: Union[object, dict],
     # print(new_edgelist)
     return new_edgelist
 
+def frequency_count(edgelist: dict):
+    new_edgelist = {}
+
+    for t, edges_list in edgelist.items():
+        for edge in edges_list:
+            (u, v) = edge
+
+            # Check if this is the first edge occurning in this timestamp
+            if t not in new_edgelist: 
+                new_edgelist[t] = {}
+                new_edgelist[t][(u, v)] = 1
+                
+            else:
+                if (u, v) not in new_edgelist[t]:
+                    new_edgelist[t][(u, v)] = 1 # If the edge was not occured in this timestamp before
+                else:
+                    new_edgelist[t][(u, v)] += 1 
+    
+    return new_edgelist
+
 def node_list(dict_edgelist: dict) -> list:
+
     """
     create a list of nodes from edgelist dictionary
     """
