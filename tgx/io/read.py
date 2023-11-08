@@ -26,8 +26,6 @@ def read_csv(fname: Union[str, object] = None,
         fname: directory of a dataset in .csv format or data object created from loading dgb/tgb datasets 
         header: whether first line of data file is header
         index: whether the first column is row indices
-        discretize: whether to discretize the data
-        intervals: to discretize data based on "daily", "weekly", "monthly" or "yearly" or give the number of intervals
         t_col: column indext for timestamps (0 or 2)
         ts_sorted: if data are sorted based on timestamp
         max_intervals: maximum number of intervals to discretize data

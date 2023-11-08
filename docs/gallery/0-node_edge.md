@@ -20,7 +20,7 @@
 
 
 ### UCI
-  ![UCI](node_edge/CanParluci_node&edge_per_ts.png){ width="400"}
+  ![UCI](node_edge/uci_node&edge_per_ts.png){ width="400"}
 
 ### Flights
 ![image](node_edge/Flights_node&edge_per_ts.png){ width="400"}

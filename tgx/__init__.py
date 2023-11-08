@@ -9,7 +9,6 @@ from tgx.io.write import write_csv
 from tgx.viz.TEA import TEA
 from tgx.viz.TET import TET
 
-
 from tgx.utils.stat import *
 from tgx.utils.graph_utils import *
 

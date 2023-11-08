@@ -4,7 +4,7 @@ nav:
     - Home: index.md
     - API: 
       - ReadWrite: 
-        -  Read Data: io.md
+        -  Read Data: io/io.md
       - Utils: 
         - Graph stats: utils/graph_stats.md
         - Graph Utils: utils/graph_utils.md
@@ -14,16 +14,46 @@ nav:
         -  TET Plot: viz/vis_tet.md
       - Classes: 
         - Graph: classes/graph.md
-        - Datasets: classes/datasets.md
+      - Data:
+        - Builtin: data/builtin.md
+        - TGB: data/tgb.md
     - Tutorials:
       - Load data: tutorials/data_loader.ipynb
+      - Features: tutorials/Features.ipynb
       - Generate TEA and TET plots: tutorials/TEA&TET.ipynb
 
     - Gallery:
       - Plots by type: 
-        - TEA Plots: gallery/tea.md
-        - TET Plots: gallery/tet.md
-      - Plots by dataset: gallery/dataset.md
+        - TEA Plots: 
+          - Builtin: gallery/0-tea-builtin.md
+          - TGB: gallery/0-tea-tgb.md
+        - TET Plots: 
+          - Builtin: gallery/0-tet-builtin.md
+          - TGB: gallery/0-tet-tgb.md
+        - Average degree over time: gallery/0-degree.md
+        - Node and Edge over time: gallery/0-node_edge.md
+      - Plots by dataset: 
+        - Builtin:
+          - Reddit: gallery/reddit.md
+          - MOOC: gallery/mooc.md
+          - LastFM: gallery/lastfm.md
+          - Enron: gallery/enron.md
+          - Social Evo: gallery/socialevo.md
+          - UCI: gallery/uci.md
+          - Flights: gallery/flight.md
+          - Can Parl: gallery/canparl.md
+          - US Legis: gallery/uslegis.md
+          - UN Vote: gallery/unvote.md
+          - Contacts: gallery/contact.md
+        - TGB:
+          - tgbl-wiki: gallery/tgbl-wiki.md
+          - tgbl-review: gallery/tgbl-review.md
+          - tgbl-coin: gallery/tgbl-coin.md
+          - tgbl-comment: gallery/tgbl-comment.md
+          - tgbl-flight: gallery/tgbl-flight.md
+          - tgbn-trade: gallery/tgbn-trade.md
+          - tgbn-genre: gallery/tgbn-genre.md
+          - tgbn-reddit: gallery/tgbn-reddit.md
 
 
 theme:

@@ -15,6 +15,7 @@ setup.py
 ./tgx/data/tgb.py
 ./tgx/io/__init__.py
 ./tgx/io/read.py
+./tgx/io/write.py
 ./tgx/utils/__init__.py
 ./tgx/utils/graph_utils.py
 ./tgx/utils/plotting_utils.py

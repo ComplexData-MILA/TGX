@@ -41,16 +41,16 @@ class tgb_data(object):
             edge_idxs: bool = False):
         """
         Load datasets from "tgb" package. To load these datasets you need to install tgb package.
-        Args:
+        Parameters:
             dname: str, name of the dataset from the list:
                         ["tgbl-wiki", "tgbl-review", 
                         "tgbl-coin", "tgbl-comment", 
                         "tgbl-flight","tgbn-trade", 
                         "tgbn-genre", "tgbn-reddit"]
-            edge_feat:
-            weight:
-            edge_label:
-            edge_idx:
+            edge_feat: list of edge features
+            w: edge weights
+            edge_label: edge labels
+            edge_idxs: edge indexes
 
         """
         try:
