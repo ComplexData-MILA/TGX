@@ -57,16 +57,6 @@ def nodes_over_time(graph: list,
     '''
     print("Plotting number of nodes per timestamp")
     active_nodes = _calculate_node_per_ts(graph)
-<<<<<<< HEAD:tgx/utils/stat.py
-    filename = f"{network_name}_nodes_per_ts"
-    plot_for_snapshots(active_nodes, filename, "Number of nodes", plot_path = filepath)
-    print("Plotting Done!")
-    return 
-
-def edges_over_time(graph: list, 
-                 filepath: str, 
-                 network_name: str) -> None:
-=======
     if network_name is not None:
         filename = f"{network_name}_nodes_per_ts"
     else:
@@ -78,7 +68,6 @@ def edges_over_time(graph: list,
 def edges_per_ts(graph: list, 
                  plot_path: str = None, 
                  network_name: str = None) -> None:
->>>>>>> e3bf01a813e4dc777610df63e3b751debe281e1a:tgx/utils/graph_stat.py
     r'''
     Plot number of edges per timestamp.
     Parameters:
@@ -88,16 +77,6 @@ def edges_per_ts(graph: list,
     '''
     print("Plotting number of edges per timestamp")
     active_edges = _calculate_edge_per_ts(graph)
-<<<<<<< HEAD:tgx/utils/stat.py
-    filename = f"{network_name}_edges_per_ts"
-    plot_for_snapshots(active_edges, filepath, filename, "Number of edges")
-    print("Plotting Done!")
-    return 
-
-def nodes_and_edges_over_time(graph: list, 
-                           network_name: str,
-                           filepath: str = None):
-=======
     if network_name is not None:
         filename = f"{network_name}_edges_per_ts"
     else:
@@ -109,7 +88,6 @@ def nodes_and_edges_over_time(graph: list,
 def nodes_and_edges_per_ts(graph: list, 
                            network_name: str ,
                            plot_path: str = None):
->>>>>>> e3bf01a813e4dc777610df63e3b751debe281e1a:tgx/utils/graph_stat.py
     r"""
     Plot number of nodes per timestamp and number of edges per timestamp in one fiugre.
     Parameters:
@@ -123,7 +101,7 @@ def nodes_and_edges_per_ts(graph: list,
 
 
     return plot_nodes_edges_per_ts(edges, nodes, ts, network_name = network_name, plot_path = plot_path)
->>>>>>> e3bf01a813e4dc777610df63e3b751debe281e1a:tgx/utils/graph_stat.py
+
     
 
 def _calculate_average_degree_per_ts(graph, total_nodes):
