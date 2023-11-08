@@ -14,7 +14,8 @@ __all__ = ["degree_over_time",
            "get_reoccurrence",
            "get_surprise",
            "get_avg_node_activity",
-           "get_avg_node_engagement"]
+           "get_avg_node_engagement", 
+           "degree_density"]
 
 
 def degree_over_time(graph: list, 
@@ -31,15 +32,22 @@ def degree_over_time(graph: list,
     '''
     print("Plotting average degree per timestamp")
     ave_degree = _calculate_average_degree_per_ts(graph, total_nodes)
-    filename = f"{network_name}_ave_degree_per_ts"
-    plot_for_snapshots(ave_degree, filename, "Average degree", plot_path = filepath)
+
+    if network_name is not None:
+        filename = f"{network_name}_ave_degree_per_ts"
+    else:
+        filename = "ave_degree_per_ts"
+    plot_for_snapshots(ave_degree, filename, "Average degree", plot_path = plot_path)
+
     print("Plotting Done!")
     return 
+
 
 
 def nodes_over_time(graph: list,  
                  network_name: str,
                  filepath: str = None) -> None:
+
     r'''
     Plot number of active nodes per timestamp.
     Parameters:
@@ -49,6 +57,7 @@ def nodes_over_time(graph: list,
     '''
     print("Plotting number of nodes per timestamp")
     active_nodes = _calculate_node_per_ts(graph)
+<<<<<<< HEAD:tgx/utils/stat.py
     filename = f"{network_name}_nodes_per_ts"
     plot_for_snapshots(active_nodes, filename, "Number of nodes", plot_path = filepath)
     print("Plotting Done!")
@@ -57,6 +66,19 @@ def nodes_over_time(graph: list,
 def edges_over_time(graph: list, 
                  filepath: str, 
                  network_name: str) -> None:
+=======
+    if network_name is not None:
+        filename = f"{network_name}_nodes_per_ts"
+    else:
+        filename = "nodes_per_ts"
+    plot_for_snapshots(active_nodes, filename, "Number of nodes", plot_path = plot_path)
+    print("Plotting Done!")
+    return 
+
+def edges_per_ts(graph: list, 
+                 plot_path: str = None, 
+                 network_name: str = None) -> None:
+>>>>>>> e3bf01a813e4dc777610df63e3b751debe281e1a:tgx/utils/graph_stat.py
     r'''
     Plot number of edges per timestamp.
     Parameters:
@@ -66,6 +88,7 @@ def edges_over_time(graph: list,
     '''
     print("Plotting number of edges per timestamp")
     active_edges = _calculate_edge_per_ts(graph)
+<<<<<<< HEAD:tgx/utils/stat.py
     filename = f"{network_name}_edges_per_ts"
     plot_for_snapshots(active_edges, filepath, filename, "Number of edges")
     print("Plotting Done!")
@@ -74,6 +97,19 @@ def edges_over_time(graph: list,
 def nodes_and_edges_over_time(graph: list, 
                            network_name: str,
                            filepath: str = None):
+=======
+    if network_name is not None:
+        filename = f"{network_name}_edges_per_ts"
+    else:
+        filename = "_edges_per_ts"
+    plot_for_snapshots(active_edges, plot_path, filename, "Number of edges")
+    print("Plotting Done!")
+    return 
+
+def nodes_and_edges_per_ts(graph: list, 
+                           network_name: str ,
+                           plot_path: str = None):
+>>>>>>> e3bf01a813e4dc777610df63e3b751debe281e1a:tgx/utils/graph_stat.py
     r"""
     Plot number of nodes per timestamp and number of edges per timestamp in one fiugre.
     Parameters:
@@ -85,7 +121,9 @@ def nodes_and_edges_over_time(graph: list,
     nodes = _calculate_node_per_ts(graph)
     ts = list(range(0, len(graph)))
 
-    return plot_nodes_edges_per_ts(edges, nodes, ts, network_name, plot_path = filepath)
+
+    return plot_nodes_edges_per_ts(edges, nodes, ts, network_name = network_name, plot_path = plot_path)
+>>>>>>> e3bf01a813e4dc777610df63e3b751debe281e1a:tgx/utils/graph_stat.py
     
 
 def _calculate_average_degree_per_ts(graph, total_nodes):
@@ -222,7 +260,7 @@ def merge(x, y, parent):
 
 def size_connected_components(graph):
     """
-    get the sizes of connected components per timestamp.
+    Calculate the sizes of connected components per timestamp.
 
     Returns:
     - list: A list containing the sizes of connected components in each timestamp.
@@ -249,11 +287,11 @@ def size_connected_components(graph):
         
 
 def num_connected_components_per_ts(graph: list,  
-                 network_name: str,
+                 network_name: str = None,
                  plot_path: str = None) -> None:
     """
     
-    plot the number of connected components per timestamp.
+    Plot the number of connected components per timestamp.
 
     """
 
@@ -271,7 +309,10 @@ def num_connected_components_per_ts(graph: list,
                 num += 1
         num_components.append(num)   
 
-    filename = f"{network_name}_num_connected_components_per_ts"
+    if network_name is not None:
+        filename = f"{network_name}_num_connected_components_per_ts"
+    else:
+        filename = "_num_connected_components_per_ts"
     plot_for_snapshots(num_components, filename, "Number of connected components", plot_path = plot_path)
     print(num_components)
     print("Plotting Done!")
@@ -356,7 +397,7 @@ def get_novelty(graph_edgelist: dict) -> float:
 
 def get_avg_node_activity(graph_edgelist: dict) -> float:
     r"""
-    Calculate the average node activity
+    Calculate the average node activity,
         the proportion of time steps a node is present
     Parameters:
         graph_edgelist: Dictionary containing graph data
@@ -410,9 +451,9 @@ def get_avg_node_engagement(graph_edgelist):
     return engaging_nodes
 
 
-def get_degree_density(graph_edgelist, network_name: str, k=10, plot_path: str = None) -> None:
+def degree_density(graph_edgelist, network_name: str = None, k = 10, plot_path: str = None) -> None:
     r"""
-    get the node degree density plot over timestamps
+    plot the density map of node degrees over timestamps
     """
     degrees_by_k_list = []
     temp = []
@@ -433,12 +474,13 @@ def get_degree_density(graph_edgelist, network_name: str, k=10, plot_path: str =
             degrees_by_k_list.append(temp)
             temp = degrees
             temp_idx = 1
-
     if temp:
         degrees_by_k_list.append(temp)
 
-
-    filename = f"{network_name}_get_degree_density"
+    if network_name is not None:
+        filename = f"{network_name}_get_degree_density"
+    else:
+        filename = "_get_degree_density"
     plot_density_map(degrees_by_k_list, filename, "Node Degree", plot_path = plot_path)
     print("Plotting Done!")
     return 

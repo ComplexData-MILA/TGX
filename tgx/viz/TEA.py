@@ -192,9 +192,7 @@ def TEA_plot_edges_bar(ts_edges_dist,
     plt.legend(fontsize = 13)
     if filepath is not None:
         plt.savefig(f"{filepath}/{network_name}.png")
-        plt.close()
-    else:
-        plt.show()
+    plt.show()
     print("Plotting done!")
 
 

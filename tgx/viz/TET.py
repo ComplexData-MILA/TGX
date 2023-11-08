@@ -280,9 +280,7 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
     if fig_param.fig_name is not None:
         # print("Info: file name: {}".format(fig_param.fig_name))
         plt.savefig(f"{fig_param.fig_name}/{fig_param.network_name}.png")
-        plt.close()
-    else:
-        plt.show()
+    plt.show()
     print("Info: plotting done!")
 
 def set_fig_param(network_name, fig_name = None,
