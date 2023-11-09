@@ -18,9 +18,9 @@ __all__ = ["degree_over_time",
            "degree_density"]
 
 
-def degree_over_time(graph: list,  
-                          network_name: str,
-                          filepath: str = None) -> None:
+def degree_over_time(graph: object,  
+                    network_name: str,
+                    filepath: str = None) -> None:
     r'''
     Plot average degree per timestamp.
     Parameters:
@@ -30,7 +30,7 @@ def degree_over_time(graph: list,
      filepath: path to save the output figure
     '''
     print("Plotting average degree per timestamp")
-    ave_degree = _calculate_average_degree_per_ts(graph, total_nodes)
+    ave_degree = _calculate_average_degree_per_ts(graph)
 
     if network_name is not None:
         filename = f"{network_name}_ave_degree_per_ts"
@@ -54,14 +54,14 @@ def nodes_over_time(graph: list,
      network_name: name of the graph to be used in the output file name
      filepath: path to save the output figure
     '''
-    print("Plotting number of nodes per timestamp")
+    print("Plotting number of nodes per timestamp.")
     active_nodes = _calculate_node_per_ts(graph)
     if network_name is not None:
         filename = f"{network_name}_nodes_per_ts"
     else:
         filename = "nodes_per_ts"
     plot_for_snapshots(active_nodes, filename, "Number of nodes", plot_path = filepath)
-    print("Plotting Done!")
+    # print("Plotting Done!")
     return 
 
 def edges_over_time(graph: list, 
@@ -75,14 +75,14 @@ def edges_over_time(graph: list,
      network_name: name of the graph to be used in the output file name
      filepath: path to save the output figure
     '''
-    print("Plotting number of edges per timestamp")
+    print("Plotting number of edges per timestamp.")
     active_edges = _calculate_edge_per_ts(graph)
     if network_name is not None:
         filename = f"{network_name}_edges_per_ts"
     else:
         filename = "_edges_per_ts"
     plot_for_snapshots(active_edges, plot_path, filename, "Number of edges", plot_path = filepath)
-    print("Plotting Done!")
+    # print("Plotting Done!")
     return 
 
 def nodes_and_edges_over_time(graph: list, 
@@ -95,34 +95,36 @@ def nodes_and_edges_over_time(graph: list,
      network_name: name of the graph to be used in the output file name
      filepath: path to save the output figure
     """
-    edges = _calculate_edge_per_ts(graph.data)
-    nodes = _calculate_node_per_ts(graph.data)
-    ts = list(range(0, len(graph)))
+    print("Plotting number of nodes and edges per timestamp.")
+    edges = _calculate_edge_per_ts(graph)
+    nodes = _calculate_node_per_ts(graph)
+    ts = list(range(0, len(graph.data)))
 
 
     return plot_nodes_edges_per_ts(edges, nodes, ts, network_name = network_name, plot_path = filepath)
 
     
 
-def _calculate_average_degree_per_ts(graph, total_nodes):
-    total_ts = len(graph)
+def _calculate_average_degree_per_ts(graph):
+    total_nodes = graph.total_nodes()
+    total_ts = len(graph.data)
     ave_degree = []
-    for t1 in range(total_ts):
-        num_edges = graph[t1].number_of_edges()
+    for ts in range(total_ts):
+        num_edges = len(graph.data[ts])
         ave_degree.append(num_edges*2/ total_nodes)
     return ave_degree
 
 
 def _calculate_node_per_ts(graph):
     active_nodes = []
-    for ts in range(len(graph)):
-        active_nodes.append(graph[ts].number_of_nodes())
+    for ts in range(len(graph.data)):
+        active_nodes.append(graph.edgelist_node_count(graph.data[ts]))
     return active_nodes
 
 def _calculate_edge_per_ts(graph):
     active_edges = []
-    for ts in range(len(graph)):
-        active_edges.append(graph[ts].number_of_edges())
+    for ts in range(len(graph.data)):
+        active_edges.append(len(graph.data[ts]))
     return active_edges
 
 def get_avg_e_per_ts(graph_edgelist: dict) -> float:

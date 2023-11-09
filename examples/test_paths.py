@@ -1,18 +1,18 @@
 import tgx
-from tgx.io.read_files import read_edgelist
-from tgx.classes import data_loader
+from tgx.io.read import read_edgelist
+from tgx.data import builtin
 
 data_path = '/network/scratch/r/razieh.shirzadkhani/'
 
 
-dataset = data_loader.data.uci(root=data_path)
+dataset = builtin.data.uci(root=data_path)
 data = read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
 
 
 
 #! external csv
 from tgx.io.read import read_csv
-data = read_csv ()
+data = read_csv (.....)
 
 
 #! for built in dataset
@@ -28,7 +28,7 @@ data = tgb_data("tgbl-wiki")
 #! visualization
 
 from tgx.viz.TEA import TEA
-from tgx.utils.graph_stat import nodes_and_edges_per_ts
+from tgx.utils.stat import nodes_and_edges_per_ts
 
 
 TEA(data)
@@ -52,13 +52,7 @@ combine([nodes_over_time, edge_over_time])
 G = read_csv(fname)
 G.discretize(options)
 
-dataset = builtin.uci()
-data = read_csv(dataset)
-G = tgx.Graph(data)
-G.discretize()
-
-
-TEA(G.disc_G) #create the temp dictionary here by going through the edges
+TEA(G) #create the temp dictionary here by going through the edges
 TET(G) #check if the temp dict is created, if not, create it 
 nodes_over_time(G)
 

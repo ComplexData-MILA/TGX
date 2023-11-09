@@ -30,8 +30,12 @@ nav:
         - TET Plots: 
           - Builtin: gallery/0-tet-builtin.md
           - TGB: gallery/0-tet-tgb.md
-        - Average degree over time: gallery/0-degree.md
-        - Node and Edge over time: gallery/0-node_edge.md
+        - Average degree over time: 
+          - Builtin: gallery/0-degree-builtin.md
+          - TGB: gallery/0-degree-tgb.md
+        - Node and Edge over time: 
+          - Builtin: gallery/0-node_edge-builtin.md
+          - TGB: gallery/0-node_edge-tgb.md
       - Plots by dataset: 
         - Builtin:
           - Reddit: gallery/reddit.md

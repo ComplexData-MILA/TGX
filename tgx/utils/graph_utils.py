@@ -52,36 +52,16 @@ def edgelist_discritizer(edgelist,
     print(f'Discretizing data to {num_intervals} timestamps...')
     if num_intervals == 0:
         print("Warning! Only one timestamp exist in the data.")
-        
     updated_edgelist = {}
-    new_ts = {}
-    curr_t = 0
     for ts, edges_list in edgelist.items():
         bin_ts = int(ts / interval_size)
         if bin_ts >= num_intervals:
             bin_ts -= 1
 
-        # if bin_ts not in new_ts:
-        #     new_ts[bin_ts] = curr_t
-            # curr_t += 1
-
         for edge in edges_list:
-        # if new_ts[bin_ts] not in updated_edgelist:
-        #     updated_edgelist[new_ts[bin_ts]] = {}
-
-        # for (u,v) in edge_data.items():
-        #     if (u, v) not in freq_count_dict[new_ts[bin_ts]]:
-        #         freq_count_dict[new_ts[bin_ts]][(u, v)] = n
-        #     else:
-        #         freq_count_dict[new_ts[bin_ts]][(u, v)] += n
             if bin_ts not in updated_edgelist:
                 updated_edgelist[bin_ts] = []
-                # updated_edgelist[curr_t] = edges_list
-                # edges_list = []
-                # curr_t = bin_ts
             updated_edgelist[bin_ts].append(edge)
-
-    # updated_edgelist[curr_t] = edges_list
     print("Discretization Done..!")
     return updated_edgelist
 
@@ -108,26 +88,20 @@ def subsampling(graph: Union[object, dict],
         nodes = node_list(graph)
     else:
         edgelist = graph.edgelist
-        nodes = graph.nodes()
-        # print(nodes[10])
-        
+        nodes = graph.nodes()        
 
     if random_selection:
         node_list = list(np.random.choice(nodes, size = N, replace = False))
-        # print(node_list)
 
     new_edgelist = {}
     for t, edge_data in edgelist.items():
-                # print("t",t)
                 for (u,v), f in edge_data.items():
-                    # print(u)
                     if u in node_list or v in node_list:
                         if t not in new_edgelist:
                             new_edgelist[t] = {}
                             new_edgelist[t][(u, v)] = f
                         else:
                             new_edgelist[t][(u, v)] = f
-    # print(new_edgelist)
     return new_edgelist
 
 def frequency_count(edgelist: dict):
