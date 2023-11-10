@@ -19,6 +19,7 @@ def TEA(
         ):
     r"""
     generating TEA plot
+    
     Parameters:
         temp_edgelist: a dictionary of temporal edges or a dataset object.
         filepath: Path to save the TEA Plot.

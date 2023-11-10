@@ -131,6 +131,7 @@ def _calculate_edge_per_ts(graph):
 def get_avg_e_per_ts(graph_edgelist: dict) -> float:
     r"""
     Calculate the average number of edges per timestamp
+    
     Parameters:
      graph: Graph object created by tgx.Graph containing edgelist
     """
