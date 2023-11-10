@@ -20,8 +20,16 @@ def TEA(
     r"""
     generating TEA plot
     Args:
-        temp_edgelist: a dictionary of temporal edges or a dataset object
-        filepath: Path to save the TEA Plot
+        temp_edgelist: a dictionary of temporal edges or a dataset object.
+        filepath: Path to save the TEA Plot.
+        fig_size: Size of the figure to save.
+        font_size: Size of the text in the figure.
+        network_name: Name of the dataset to be used in the TEA plot file.
+        intervals: intervals for discretizing data if already not done.
+        real_dates: Whether to use the real dates from dataset.
+        test_split: Whether show the test split on the plot.
+        max_intervals: Maximum number of intervals to discretize data.
+        density: Whether to return edge density and edge frequency dictioneries.
     """
     if isinstance(temp_edgelist, object):
         if temp_edgelist.freq_data is None:

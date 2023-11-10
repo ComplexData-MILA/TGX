@@ -13,6 +13,7 @@ __all__ = ["degree_over_time",
            "get_num_unique_edges",
            "get_reoccurrence",
            "get_surprise",
+           "get_novelty",
            "get_avg_node_activity",
            "get_avg_node_engagement", 
            "degree_density"]
@@ -177,15 +178,16 @@ def get_num_timestamps(graph_edgelist:dict) -> int:
     print(f"INFO: Number of timestamps: {len(graph_edgelist)}")
     return len(graph_edgelist)
 
-def get_num_unique_edges(graph_edgelist: dict) -> int:
+def get_num_unique_edges(graph) -> int:
     r"""
     Calculate the number of unique edges
     Parameters:
      graph_edgelist: Dictionary containing graph data
     """
+    graph_edgelist = graph.data
     unique_edges = {}
     for ts, e_list in graph_edgelist.items():
-        for e, repeat in e_list.items():
+        for e in e_list:
             if e not in unique_edges:
                 unique_edges[e] = 1
     print(f"INFO: Number of unique edges: {len(unique_edges)}")
@@ -202,25 +204,15 @@ def _split_data_chronological(graph_edgelist, test_ratio):
     
     # make train-validation & test splits
     train_val_e_set, test_e_set = {}, {}
-    # for ts, e_list in graph_edgelist.items():
-    #     for (u,v), repeat in e_list.items():
-            
-    #         if ts < test_split_time:
-    #             if (u,v) not in train_val_e_set:
-    #                 train_val_e_set[(u,v)] = True
-    #         else:
-    #             if (u,v) not in test_e_set:
-    #                 test_e_set[(u,v)] = True
-
     for ts, e_list in graph_edgelist.items():
-        for (u,v), freq in e_list.items():
+        for (u,v) in e_list:
             
             if ts < test_split_time:
                 if (u,v) not in train_val_e_set:
-                    train_val_e_set[(u,v)] = freq
+                    train_val_e_set[(u,v)] = 1
             else:
                 if (u,v) not in test_e_set:
-                    test_e_set[(u,v)] = freq
+                    test_e_set[(u,v)] = 1
     return train_val_e_set, test_e_set
 
 def find(x, parent):
@@ -300,13 +292,14 @@ def num_connected_components_per_ts(graph: list,
     return 
 
 
-def get_reoccurrence(graph_edgelist: dict, test_ratio: float=0.15) -> float:
+def get_reoccurrence(graph, test_ratio: float=0.15) -> float:
     r"""
     Calculate the recurrence index
     Parameters:
         graph_edgelist: Dictionary containing graph data
         test_ratio: The ratio to split the data chronologically
     """
+    graph_edgelist = graph.data
     train_val_e_set, test_e_set = _split_data_chronological(graph_edgelist, test_ratio)
     train_val_size = len(train_val_e_set)
     # intersect = 0
@@ -328,13 +321,14 @@ def get_reoccurrence(graph_edgelist: dict, test_ratio: float=0.15) -> float:
     print(f"INFO: Reoccurrence: {reoccurrence}")
     return reoccurrence
 
-def get_surprise(graph_edgelist: dict, test_ratio: float = 0.15) -> float:
+def get_surprise(graph, test_ratio: float = 0.15) -> float:
     r"""
     Calculate the surprise index
     Parameters:
         graph_edgelist: Dictionary containing graph data
         test_ratio: The ratio to split the data chronologically
     """
+    graph_edgelist = graph.data
     train_val_e_set, test_e_set = _split_data_chronological(graph_edgelist, test_ratio)
     test_size = len(test_e_set)
 
@@ -353,20 +347,21 @@ def get_surprise(graph_edgelist: dict, test_ratio: float = 0.15) -> float:
     print(f"INFO: Surprise: {surprise}")
     return surprise
 
-def get_novelty(graph_edgelist: dict) -> float:
+def get_novelty(graph) -> float:
     r"""
     Calculate the novelty index
     $\operatorname{ker} f=\{g\in G:f(g)=e_{H}\}{\mbox{.}}$
     Parameters:
         graph_edgelist: Dictionary containing graph data
     """
+    graph_edgelist = graph.data
     unique_ts = np.sort(list(graph_edgelist.keys()))
     novelty_ts = []
     for ts_idx, ts in enumerate(unique_ts):
-        e_set_this_ts = set(list(graph_edgelist[ts].keys()))
+        e_set_this_ts = set(list(graph_edgelist[ts]))
         e_set_seen = []
         for idx in range(0, ts_idx):
-            e_set_seen.append(list(graph_edgelist[unique_ts[idx]].keys()))
+            e_set_seen.append(list(graph_edgelist[unique_ts[idx]]))
         e_set_seen = set(item for sublist in e_set_seen for item in sublist)
         novelty_ts.append(float(len(e_set_this_ts - e_set_seen) * 1.0 / len(e_set_this_ts)))
 
@@ -375,17 +370,18 @@ def get_novelty(graph_edgelist: dict) -> float:
     return novelty
 
 
-def get_avg_node_activity(graph_edgelist: dict) -> float:
+def get_avg_node_activity(graph) -> float:
     r"""
     Calculate the average node activity,
         the proportion of time steps a node is present
     Parameters:
         graph_edgelist: Dictionary containing graph data
     """
+    graph_edgelist = graph.data
     num_unique_ts = len(graph_edgelist)
     node_ts = {}
     for ts, e_list in graph_edgelist.items():
-        for e, repeat in e_list.items():
+        for e in e_list:
             # source
             if e[0] not in node_ts:
                 node_ts[e[0]] = {ts: True}
@@ -409,12 +405,13 @@ def get_avg_node_activity(graph_edgelist: dict) -> float:
     return avg_node_activity
 
 
-def get_avg_node_engagement(graph_edgelist): 
+def get_avg_node_engagement(graph): 
     r"""
     get the average node engagement over time.
     node engagement represents the average number of distinct nodes that establish
     at least one new connection during each time step.
     """
+    graph_edgelist = graph.data
     engaging_nodes = []
     previous_edges = set()
     for ts, e_list in graph_edgelist.items():

@@ -47,7 +47,7 @@ def read_csv(fname: Union[str, object] = None,
 
     cols_to_read = [u_col, v_col, t_col]
 
-    if isinstance(fname, type):
+    if isinstance(fname, type) or isinstance(fname, object):
         return _datasets_edgelist_loader(fname.data) 
     elif isinstance(fname, str):
         return _load_edgelist(fname, cols_to_read, header=header)

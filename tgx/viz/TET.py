@@ -32,14 +32,21 @@ def TET(temp_edgelist : Union[object, dict],
         figsize : tuple = (9, 5),
         axis_title_font_size : int = 20,
         ticks_font_size : int = 20,
-        axis_tick_gap : int = 20,
         max_intervals : int = 200,
         timestamp_split_cross_mark_offset : int = 1):
     r"""
     Generate TET plots
     Parameters:
-        temp_edgelist: a dictionary of temporal edges or a dataset object
-        filepath: Path to save the TEA Plot
+        temp_edgelist: a dictionary of temporal edges or a dataset object.
+        filepath: Path to save the TEA Plot.
+        figsize: Size of the figure to save.
+        axis_title_font_size: The font size of xis titles.
+        ticks_font_size: Size of the text in the figure.
+        add_frame: Add the frame to the plot.
+        network_name: Name of the dataset to be used in the TEA plot file.
+        intervals: intervals for discretizing data if already not done.
+        test_split: Whether show the test split on the plot.
+        max_intervals: Maximum number of intervals to discretize data.
     """
     if isinstance(temp_edgelist, object):
         if temp_edgelist.freq_data is None:
@@ -76,7 +83,6 @@ def TET(temp_edgelist : Union[object, dict],
                               figsize = figsize,
                               axis_title_font_size = axis_title_font_size,
                               ticks_font_size = ticks_font_size,
-                              axis_tick_gap = axis_tick_gap,
                               timestamp_split_cross_mark_offset = timestamp_split_cross_mark_offset)
 
     plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_list, list(idx_edge_map.keys()),

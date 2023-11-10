@@ -17,8 +17,9 @@ class Graph(object):
             discretized: whether the given edgelist was discretized or not
         """
 
-        if dataset is not None and isinstance(dataset, type):
-            self.data = read_csv(dataset)
+        if dataset is not None:
+            if isinstance(dataset, type) or isinstance(dataset,object):
+                self.data = read_csv(dataset)
         elif fname is not None and isinstance(fname, str):
             self.data = read_csv(fname)
         elif edgelist is not None and isinstance(edgelist, dict):
@@ -60,6 +61,19 @@ class Graph(object):
         
         return e_num
 
+    def unique_edges(self) -> int:
+        r"""
+        Calculate the number of unique edges
+        Parameters:
+        graph_edgelist: Dictionary containing graph data
+        """
+        unique_edges = {}
+        for _, e_list in self.data.items():
+            for e in e_list:
+                if e not in unique_edges:
+                    unique_edges[e] = 1
+        return len(unique_edges)
+
     def total_nodes(self) -> int:
         r"""
         Calculate total number of nodes present in an edgelist
@@ -80,7 +94,7 @@ class Graph(object):
         active_nodes = {}
         for ts in range(len(self.data)):
             edgelist_t = self.data[ts]
-            active_nodes.append(self._count_node(edgelist_t))
+            active_nodes.append(self.edgelist_node_count(edgelist_t))
         return active_nodes
 
     def edgelist_node_count(self, edge_data: list):

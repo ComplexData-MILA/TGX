@@ -1,10 +1,4 @@
 import pandas as pd
-import numpy as np
-import requests
-from clint.textui import progress
-import os, io
-import shutil
-import sys
 import zipfile
 import urllib
 
