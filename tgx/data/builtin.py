@@ -3,6 +3,9 @@ import zipfile
 import urllib
 
 __all__ = ["data"]
+
+root_path = "."
+
 DataPath={
     'USLegis'   : "/data/USLegis/ml_USLegis.csv",
     'CanParl'   : "/data/CanParl/ml_CanParl.csv",
@@ -93,7 +96,7 @@ class builtin(object):
 
 
     @classmethod
-    def mooc(self, root):
+    def mooc(self, root=root_path):
         data = "mooc"
         self.root = root
         self.read_specifications(self, data)
@@ -101,7 +104,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def uci(self, root):
+    def uci(self, root=root_path):
         data = "uci"
         self.root = root
         self.read_specifications(self, data)
@@ -109,7 +112,7 @@ class builtin(object):
         return self
 
     @classmethod   
-    def uslegis(self, root):
+    def uslegis(self, root=root_path):
         data = "USLegis"
         self.root = root
         self.read_specifications(self, data)
@@ -117,7 +120,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def canparl(self, root):
+    def canparl(self, root=root_path):
         data = "CanParl"
         self.root = root
         self.read_specifications(self, data)
@@ -125,7 +128,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def untrade(self, root):
+    def untrade(self, root=root_path):
         data = "UNtrade"
         self.root = root
         self.read_specifications(self, data)
@@ -133,7 +136,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def unvote(self, root):
+    def unvote(self, root=root_path):
         data = "UNvote"
         self.root = root
         self.read_specifications(self, data)
@@ -141,7 +144,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def reddit(self, root):
+    def reddit(self, root=root_path):
         data = "reddit"
         self.root = root
         self.read_specifications(self, data)
@@ -149,7 +152,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def wikipedia(self, root):
+    def wikipedia(self, root=root_path):
         data = "Wikipedia"
         self.root = root
         self.read_specifications(self, data)
@@ -157,7 +160,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def enron(self, root):
+    def enron(self, root=root_path):
         data = "enron"
         self.root = root
         self.read_specifications(self, data)
@@ -165,7 +168,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def social_evo(self, root):
+    def social_evo(self, root=root_path):
         data = "SocialEvo"
         self.root = root
         self.read_specifications(self, data)
@@ -173,7 +176,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def flights(self, root):
+    def flights(self, root=root_path):
         data = "Flights"
         self.root = root
         self.read_specifications(self, data)
@@ -181,7 +184,7 @@ class builtin(object):
         return self
     
     @classmethod
-    def lastfm(self, root):
+    def lastfm(self, root=root_path):
         data = "lastfm"
         self.root = root
         self.read_specifications(self, data)
@@ -189,25 +192,9 @@ class builtin(object):
         return self
     
     @classmethod
-    def contacts(self, root):
+    def contacts(self, root=root_path):
         data = "Contacts"
         self.root = root
         self.read_specifications(self, data)
         self.load_dgb_data(self)
         return self
-
-if __name__ == "__main__":
-    import tgx
-    # mooc_data=tgx.data.mooc()
-    # _=tgx.data.canparl()
-    # tt=tgx.data.contacts()
-    # _=tgx.data.enron()
-    # _=tgx.data.flights()
-    # _=tgx.data.lastfm()
-    # _=tgx.data.reddit()
-    # _=tgx.data.social_evo()
-    # _=tgx.data.uci()
-    # _=tgx.data.untrade()
-    # _=tgx.data.unvote()
-    # tgx.data.uslegis(root='/network/scratch/r/razieh.shirzadkhani')
-    tgx.data.enron(root='/network/scratch/r/razieh.shirzadkhani')

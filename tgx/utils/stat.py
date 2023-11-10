@@ -21,11 +21,11 @@ __all__ = ["degree_over_time",
 
 def degree_over_time(graph: object,  
                     network_name: str,
-                    filepath: str = None) -> None:
+                    filepath: str = ".") -> None:
     r'''
     Plot average degree per timestamp.
     Parameters:
-     graph: a list containing graph snapshots
+     graph: Graph object created by tgx.Graph containing edgelist
      total_nodes: number of nodes that appear through all the snapshots
      network_name: name of the graph to be used in the output file name
      filepath: path to save the output figure
@@ -44,14 +44,14 @@ def degree_over_time(graph: object,
 
 
 
-def nodes_over_time(graph: list,  
+def nodes_over_time(graph: object,  
                  network_name: str,
-                 filepath: str = None) -> None:
+                 filepath: str = ".") -> None:
 
     r'''
     Plot number of active nodes per timestamp.
     Parameters:
-     graph: a list containing graph snapshots
+     graph: Graph object created by tgx.Graph containing edgelist
      network_name: name of the graph to be used in the output file name
      filepath: path to save the output figure
     '''
@@ -65,14 +65,14 @@ def nodes_over_time(graph: list,
     # print("Plotting Done!")
     return 
 
-def edges_over_time(graph: list, 
+def edges_over_time(graph: object, 
                  plot_path: str = None, 
                  network_name: str = None,
-                 filepath: str = None) -> None:
+                 filepath: str = ".") -> None:
     r'''
     Plot number of edges per timestamp.
     Parameters:
-     graph: a list containing graph snapshots
+     graph: Graph object created by tgx.Graph containing edgelist
      network_name: name of the graph to be used in the output file name
      filepath: path to save the output figure
     '''
@@ -86,13 +86,13 @@ def edges_over_time(graph: list,
     # print("Plotting Done!")
     return 
 
-def nodes_and_edges_over_time(graph: list, 
+def nodes_and_edges_over_time(graph: object, 
                            network_name: str ,
-                           filepath: str = None):
+                           filepath: str = "."):
     r"""
     Plot number of nodes per timestamp and number of edges per timestamp in one fiugre.
     Parameters:
-     graph: a list containing graph snapshots
+     graph: Graph object created by tgx.Graph containing edgelist
      network_name: name of the graph to be used in the output file name
      filepath: path to save the output figure
     """
@@ -132,7 +132,7 @@ def get_avg_e_per_ts(graph_edgelist: dict) -> float:
     r"""
     Calculate the average number of edges per timestamp
     Parameters:
-     graph_edgelist: Dictionary containing graph data
+     graph: Graph object created by tgx.Graph containing edgelist
     """
     sum_num_e_per_ts = 0
     unique_ts = list(graph_edgelist.keys())
@@ -148,12 +148,13 @@ def get_avg_e_per_ts(graph_edgelist: dict) -> float:
     return avg_num_e_per_ts
 
 
-def get_avg_degree(graph_edgelist: dict) -> float:
+def get_avg_degree(graph: object) -> float:
     r"""
     Calculate average degree over the timestamps
     Parameters:
-     graph_edgelist: Dictionary containing graph data
+     graph: Graph object created by tgx.Graph containing edgelist
     """
+    graph_edgelist = graph.data
     degree_avg_at_ts_list = []
     unique_ts = list(graph_edgelist.keys())
     for ts in unique_ts:
@@ -173,16 +174,16 @@ def get_num_timestamps(graph_edgelist:dict) -> int:
     r"""
     Calculate the number of timestamps
     Parameters:
-     graph_edgelist: Dictionary containing graph data
+     graph: Graph object created by tgx.Graph containing edgelist
     """
     print(f"INFO: Number of timestamps: {len(graph_edgelist)}")
     return len(graph_edgelist)
 
-def get_num_unique_edges(graph) -> int:
+def get_num_unique_edges(graph: object) -> int:
     r"""
     Calculate the number of unique edges
     Parameters:
-     graph_edgelist: Dictionary containing graph data
+     graph: Graph object created by tgx.Graph containing edgelist
     """
     graph_edgelist = graph.data
     unique_edges = {}
@@ -194,7 +195,7 @@ def get_num_unique_edges(graph) -> int:
     return len(unique_edges)
 
 
-def _split_data_chronological(graph_edgelist, test_ratio):
+def _split_data_chronological(graph_edgelist: dict, test_ratio: int):
     r"""
     split the timestamped edge-list chronologically
     """
@@ -230,73 +231,73 @@ def merge(x, y, parent):
         parent[root_x] = root_y  
 
 
-def size_connected_components(graph) -> list:
-    """
-    Calculate the sizes of connected components per timestamp.
+# def size_connected_components(graph) -> list:
+#     """
+#     Calculate the sizes of connected components per timestamp.
 
-    Returns:
-        component_sizes: A list containing the sizes of connected components in each timestamp.
-    """
+#     Returns:
+#         component_sizes: A list containing the sizes of connected components in each timestamp.
+#     """
     
-    component_sizes = []
-    for t in range(len(graph)):
-        parent = list(range(graph[t].number_of_nodes))
+#     component_sizes = []
+#     for t in range(len(graph)):
+#         parent = list(range(graph[t].number_of_nodes))
 
-        for _, edge_data in graph[t].edgelist.items():
-            for (u, v), _ in edge_data.items():
-                merge(u, v, parent)
+#         for _, edge_data in graph[t].edgelist.items():
+#             for (u, v), _ in edge_data.items():
+#                 merge(u, v, parent)
 
-        component_sizes_t = {}
-        for u in graph[t].nodes():
-            root = find(u, parent)
-            if root not in component_sizes_t:
-                component_sizes_t[root] = 0  
-            component_sizes_t[root] += 1  
+#         component_sizes_t = {}
+#         for u in graph[t].nodes():
+#             root = find(u, parent)
+#             if root not in component_sizes_t:
+#                 component_sizes_t[root] = 0  
+#             component_sizes_t[root] += 1  
 
-        component_sizes.append(component_sizes_t)
+#         component_sizes.append(component_sizes_t)
 
-    return component_sizes
+#     return component_sizes
         
 
-def num_connected_components_per_ts(graph: list,  
-                 network_name: str = None,
-                 plot_path: str = None) -> None:
-    """
+# def num_connected_components_per_ts(graph: list,  
+#                  network_name: str = None,
+#                  plot_path: str = None) -> None:
+#     """
     
-    Plot the number of connected components per timestamp.
+#     Plot the number of connected components per timestamp.
 
-    """
+#     """
 
-    num_components = []
-    for t in range(len(graph)):
-        parent = list(range(graph[t].number_of_nodes))
+#     num_components = []
+#     for t in range(len(graph)):
+#         parent = list(range(graph[t].number_of_nodes))
 
-        for _, edge_data in graph[t].edgelist.items():
-            for (u, v), _ in edge_data.items():
-                merge(u, v, parent)
+#         for _, edge_data in graph[t].edgelist.items():
+#             for (u, v), _ in edge_data.items():
+#                 merge(u, v, parent)
 
-        num = 0
-        for u in graph[t].nodes():
-            if parent[u] == u:
-                num += 1
-        num_components.append(num)   
+#         num = 0
+#         for u in graph[t].nodes():
+#             if parent[u] == u:
+#                 num += 1
+#         num_components.append(num)   
 
-    if network_name is not None:
-        filename = f"{network_name}_num_connected_components_per_ts"
-    else:
-        filename = "_num_connected_components_per_ts"
-    plot_for_snapshots(num_components, filename, "Number of connected components", plot_path = plot_path)
-    print(num_components)
-    print("Plotting Done!")
+#     if network_name is not None:
+#         filename = f"{network_name}_num_connected_components_per_ts"
+#     else:
+#         filename = "_num_connected_components_per_ts"
+#     plot_for_snapshots(num_components, filename, "Number of connected components", plot_path = plot_path)
+#     print(num_components)
+#     print("Plotting Done!")
 
-    return 
+#     return 
 
 
-def get_reoccurrence(graph, test_ratio: float=0.15) -> float:
+def get_reoccurrence(graph:object, test_ratio: float=0.15) -> float:
     r"""
     Calculate the recurrence index
     Parameters:
-        graph_edgelist: Dictionary containing graph data
+        graph: Graph object created by tgx.Graph containing edgelist
         test_ratio: The ratio to split the data chronologically
     """
     graph_edgelist = graph.data
@@ -325,7 +326,7 @@ def get_surprise(graph, test_ratio: float = 0.15) -> float:
     r"""
     Calculate the surprise index
     Parameters:
-        graph_edgelist: Dictionary containing graph data
+        graph: Graph object created by tgx.Graph containing edgelist
         test_ratio: The ratio to split the data chronologically
     """
     graph_edgelist = graph.data
@@ -347,12 +348,11 @@ def get_surprise(graph, test_ratio: float = 0.15) -> float:
     print(f"INFO: Surprise: {surprise}")
     return surprise
 
-def get_novelty(graph) -> float:
+def get_novelty(graph : object) -> float:
     r"""
     Calculate the novelty index
-    $\operatorname{ker} f=\{g\in G:f(g)=e_{H}\}{\mbox{.}}$
     Parameters:
-        graph_edgelist: Dictionary containing graph data
+        graph: Graph object created by tgx.Graph containing edgelist
     """
     graph_edgelist = graph.data
     unique_ts = np.sort(list(graph_edgelist.keys()))
@@ -370,12 +370,12 @@ def get_novelty(graph) -> float:
     return novelty
 
 
-def get_avg_node_activity(graph) -> float:
+def get_avg_node_activity(graph: object) -> float:
     r"""
     Calculate the average node activity,
         the proportion of time steps a node is present
     Parameters:
-        graph_edgelist: Dictionary containing graph data
+        graph: Graph object created by tgx.Graph containing edgelist
     """
     graph_edgelist = graph.data
     num_unique_ts = len(graph_edgelist)
@@ -405,7 +405,7 @@ def get_avg_node_activity(graph) -> float:
     return avg_node_activity
 
 
-def get_avg_node_engagement(graph): 
+def get_avg_node_engagement(graph: object): 
     r"""
     get the average node engagement over time.
     node engagement represents the average number of distinct nodes that establish
@@ -416,7 +416,7 @@ def get_avg_node_engagement(graph):
     previous_edges = set()
     for ts, e_list in graph_edgelist.items():
         node_set = set()
-        new_edges = {(u, v) for (u, v), _ in e_list.items() if frozenset({u, v}) not in previous_edges}
+        new_edges = {(u, v) for (u, v) in e_list if frozenset({u, v}) not in previous_edges}
         for u, v in new_edges:
             if u not in node_set:
                 node_set.add(u)
@@ -424,14 +424,15 @@ def get_avg_node_engagement(graph):
                 node_set.add(v)
         # engaging_nodes.append((ts, len(node_set)))
         engaging_nodes.append(len(node_set))
-        previous_edges = {frozenset({u, v}) for (u, v), _ in e_list.items()}        # Update the set of previous edges for the next timestamp
+        previous_edges = {frozenset({u, v}) for (u, v) in e_list}        # Update the set of previous edges for the next timestamp
     return engaging_nodes
 
 
-def degree_density(graph_edgelist, network_name: str = None, k = 10, plot_path: str = None) -> None:
+def degree_density(graph: object, network_name: str = None, k = 10, plot_path: str = None) -> None:
     r"""
     plot the density map of node degrees over timestamps
     """
+    graph_edgelist = graph.data
     degrees_by_k_list = []
     temp = []
     temp_idx = 0

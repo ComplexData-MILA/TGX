@@ -68,7 +68,7 @@ def plot_for_snapshots(data: list,
                        filename: str, 
                        y_title: str, 
                        show_ave: bool=True, 
-                       plot_path:str = None,
+                       plot_path:str = ".",
                        plot_title:str = None):
     '''
     Plot a variable for different timestamps

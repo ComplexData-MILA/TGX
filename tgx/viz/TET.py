@@ -24,7 +24,7 @@ E_TRANSDUCTIVE = 30
 E_INDUCTIVE = 40
 
 def TET(temp_edgelist : Union[object, dict],
-        filepath: Optional[str] = None, 
+        filepath: Optional[str] = ".", 
         intervals : Union[str, int] = None,
         network_name : str = None,
         add_frame : bool = True,
@@ -32,8 +32,7 @@ def TET(temp_edgelist : Union[object, dict],
         figsize : tuple = (9, 5),
         axis_title_font_size : int = 20,
         ticks_font_size : int = 20,
-        max_intervals : int = 200,
-        timestamp_split_cross_mark_offset : int = 1):
+        max_intervals : int = 200):
     r"""
     Generate TET plots
     Parameters:
@@ -82,8 +81,7 @@ def TET(temp_edgelist : Union[object, dict],
                               fig_name = filepath,
                               figsize = figsize,
                               axis_title_font_size = axis_title_font_size,
-                              ticks_font_size = ticks_font_size,
-                              timestamp_split_cross_mark_offset = timestamp_split_cross_mark_offset)
+                              ticks_font_size = ticks_font_size)
 
     plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_list, list(idx_edge_map.keys()),
                               fig_param, test_split = test_split, add_frames=add_frame)

@@ -8,7 +8,7 @@ def readme():
 
 setup(
     name="py-tgx",
-    version="0.1.9",
+    version="0.2.2",
     description="Temporal graph",
     long_description=readme(),
     long_description_content_type="text/markdown",

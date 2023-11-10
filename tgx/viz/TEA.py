@@ -7,7 +7,7 @@ __all__ = ["TEA"]
 
 def TEA(
         temp_edgelist : Union[object, dict], 
-        filepath : Optional[str] = None,
+        filepath : Optional[str] = ".",
         fig_size : tuple = (7,5),
         font_size : int = 20, 
         network_name : str =None,
@@ -19,7 +19,7 @@ def TEA(
         ):
     r"""
     generating TEA plot
-    Args:
+    Parameters:
         temp_edgelist: a dictionary of temporal edges or a dataset object.
         filepath: Path to save the TEA Plot.
         fig_size: Size of the figure to save.
@@ -144,7 +144,7 @@ def TEA_process_edgelist_per_timestamp(temp_edgelist):
 
 
 def TEA_plot_edges_bar(ts_edges_dist, 
-                   filepath = None, 
+                   filepath = ".", 
                    fig_size = (9,5),
                    font_size = 20,
                    network_name = None,
