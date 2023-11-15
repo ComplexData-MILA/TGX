@@ -7,7 +7,7 @@ import tgx
 dataset = tgx.builtin.uci()
 # dataset = tgx.tgb_data("tgbl-wiki")
 G = tgx.Graph(dataset)
-new_G = G.discretize(intervals=dataset.intervals)
+new_G = G.discretize(time_scale=dataset.time_scale)
 # new_G.count_freq()
 tgx.TEA(new_G, network_name=dataset.name)
 tgx.TET(new_G, network_name=dataset.name)

@@ -3,6 +3,8 @@ from typing import Optional, Union
 from tgx.utils.graph_utils import edgelist_discritizer, frequency_count, subsampling
 from tgx.io.read import read_csv
 import copy
+import csv
+
 
 class Graph(object):
     def __init__(self, 
@@ -13,12 +15,14 @@ class Graph(object):
         """
         Create a Graph object with specific characteristics
         Args:
+            dataset: a dataset object
             edgelist: a dictionary of temporal edges in the form of {t: {(u, v), freq}}
             discretized: whether the given edgelist was discretized or not
         """
 
         if dataset is not None:
             if isinstance(dataset, type) or isinstance(dataset,object):
+                #! not sure why read csv here
                 self.data = read_csv(dataset)
         elif fname is not None and isinstance(fname, str):
             self.data = read_csv(fname)
@@ -31,10 +35,16 @@ class Graph(object):
         self.freq_data = None
         
         
-    def discretize(self, intervals: Union[str, int]) -> object:
+    def discretize(self, 
+                   time_scale: Union[str, int]) -> object:
+        """
+        discretize the graph object based on the given time interval
+        Args:
+            time_scale: time interval to discretize the graph
+        """
         new_G = copy.deepcopy(self)        
         disc_G = edgelist_discritizer(self.data,
-                                                  time_interval = intervals)
+                                    time_scale = time_scale)
         new_G.data = disc_G
         return new_G
 
@@ -121,7 +131,26 @@ class Graph(object):
         
         self.node_list = list(node_list.keys())
         return list(node_list.keys())
-
+    
+    def save2csv(self,
+                 fname:str = "output") -> None:
+        r"""
+        Save the graph object in an edgelist format to a csv file
+        Args:
+            fname: name of the csv file to save the graph, no csv suffix needed
+        """
+        outname = fname + ".csv"
+        #iterate through all edges
+        with open(outname, 'w') as csvfile:
+            print ("saving to ", outname)
+            csvwriter = csv.writer(csvfile, delimiter=',')
+            csvwriter.writerow(['timestamp'] + ['source'] + ['destination'])
+            for t, edges_list in self.data.items():
+                for edge in edges_list:
+                    (u, v) = edge
+                    csvwriter.writerow([t] + [u] + [v])
+        
+                    
     # def _generate_graph(self, 
     #                     edgelist: Optional[dict] = None
     #                     ) -> list:

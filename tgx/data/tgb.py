@@ -1,14 +1,14 @@
 import numpy as np
 
 Data_specifications = {
-        'tgbl-wiki'     : {'discretize' : True,     'intervals': 'daily'},
-        'tgbl-review'   : {'discretize' : True,     'intervals': 'yearly'},
-        'tgbl-coin'     : {'discretize' : True,     'intervals': 'weekly'},
-        'tgbl-comment'  : {'discretize' : True,     'intervals': 'monthly'},
-        'tgbl-flight'   : {'discretize' : True,     'intervals': 'monthly'},
-        'tgbn-trade'    : {'discretize' : False,    'intervals': None},
-        'tgbn-genre'    : {'discretize' : True,     'intervals': 'monthly'},
-        'tgbn-reddit'   : {'discretize' : True,     'intervals': 'monthly'}
+        'tgbl-wiki'     : {'discretize' : True,     'time_scale': 'daily'},
+        'tgbl-review'   : {'discretize' : True,     'time_scale': 'yearly'},
+        'tgbl-coin'     : {'discretize' : True,     'time_scale': 'weekly'},
+        'tgbl-comment'  : {'discretize' : True,     'time_scale': 'monthly'},
+        'tgbl-flight'   : {'discretize' : True,     'time_scale': 'monthly'},
+        'tgbn-trade'    : {'discretize' : False,    'time_scale': None},
+        'tgbn-genre'    : {'discretize' : True,     'time_scale': 'monthly'},
+        'tgbn-reddit'   : {'discretize' : True,     'time_scale': 'monthly'}
         }
 
 class tgb_data(object):
@@ -84,7 +84,7 @@ class tgb_data(object):
             self.edge_idxs = data['edge_idxs']
         
         self.discretize = Data_specifications[dname]['discretize']
-        self.intervals = Data_specifications[dname]['intervals']
+        self.time_scale = Data_specifications[dname]['time_scale']
         self.name = dname
 
         return self
@@ -99,5 +99,5 @@ class tgb_data(object):
         """
         self.name = data
         self.discretize = Data_specifications[data]['discretize']
-        self.intervals = Data_specifications[data]['intervals']
+        self.time_scale = Data_specifications[data]['time_scale']
         return self

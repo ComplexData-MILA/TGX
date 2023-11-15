@@ -11,10 +11,10 @@ def TEA(
         fig_size : tuple = (7,5),
         font_size : int = 20, 
         network_name : str = None,
-        intervals : Union[str, int] = None, 
+        time_scale : Union[str, int] = None, 
         real_dates : bool = None,
         test_split : bool = False,
-        max_intervals : int = 1000,
+        max_time_scale : int = 1000,
         density : bool = False
         ):
     r"""
@@ -26,10 +26,10 @@ def TEA(
         fig_size: Size of the figure to save.
         font_size: Size of the text in the figure.
         network_name: Name of the dataset to be used in the TEA plot file.
-        intervals: intervals for discretizing data if already not done.
+        time_scale: time_scale for discretizing data if already not done.
         real_dates: Whether to use the real dates from dataset.
         test_split: Whether show the test split on the plot.
-        max_intervals: Maximum number of intervals to discretize data.
+        max_time_scale: Maximum number of time_scale to discretize data.
         density: Whether to return edge density and edge frequency dictioneries.
     """
     if isinstance(temp_edgelist, object):
@@ -39,16 +39,16 @@ def TEA(
     
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
-    if len(unique_ts) > max_intervals:
+    if len(unique_ts) > max_time_scale:
         inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
         if inp == "y":
             temp_edgelist = edgelist_discritizer(temp_edgelist,
                                                 unique_ts,
-                                                time_interval = max_intervals)
-    elif intervals is not None:
+                                                time_scale = max_time_scale)
+    elif time_scale is not None:
         temp_edgelist = edgelist_discritizer(temp_edgelist,
                                             unique_ts,
-                                            time_interval = intervals)
+                                            time_scale = time_scale)
 
 
     ts_edges_dist, ts_edges_dist_density, edge_frequency_dict = TEA_process_edgelist_per_timestamp(temp_edgelist)
@@ -150,7 +150,7 @@ def TEA_plot_edges_bar(ts_edges_dist: list,
                    font_size: int = 20,
                    network_name: str = None,
                    real_dates: list = None,
-                   intervals: list = None,
+                   time_scale: list = None,
                    test_split: bool = False,
                    show: bool =False):
     r"""
@@ -162,7 +162,7 @@ def TEA_plot_edges_bar(ts_edges_dist: list,
         font_size: Size of the text in the figure.
         network_name: Name of the dataset to be used in the TEA plot file.
         real_dates: list of real dates as ticks
-        intervals: intervals for discretizing data if already not done.
+        time_scale: time_scale for discretizing data if already not done.
         test_split: Whether show the test split on the plot.
         show: Whether to show the plot.
     """
@@ -191,7 +191,7 @@ def TEA_plot_edges_bar(ts_edges_dist: list,
         start = real_dates[0]
         end = real_dates[1]
         metric = real_dates[2]
-        create_ts_list(start, end, metric=metric, interval=intervals)
+        create_ts_list(start, end, metric=metric, interval=time_scale)
     else:
         duration = ts_edges_dist_df['ts'].tolist()
         timestamps = [i for i in range(len(duration))]

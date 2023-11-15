@@ -10,52 +10,52 @@ __all__ = ["train_test_split",
 
 
 def edgelist_discritizer(edgelist,
-                         time_interval: Union[str, int],
-                         max_intervals: Optional[int] = 1000):
+                         time_scale: Union[str, int],
+                         max_time_scale: Optional[int] = 1000):
     
     unique_ts = list(edgelist.keys())
         
     total_time = unique_ts[-1] - unique_ts[0]
-    if time_interval is not None:
-        if isinstance(time_interval, str):
-            if time_interval == "daily":
+    if time_scale is not None:
+        if isinstance(time_scale, str):
+            if time_scale == "daily":
                 interval_size = 86400
-            elif time_interval == "weekly":
+            elif time_scale == "weekly":
                 interval_size = 86400 * 7
-            elif time_interval == "monthly":
+            elif time_scale == "monthly":
                 interval_size = 86400 * 30
-            elif time_interval == "yearly":
+            elif time_scale == "yearly":
                 interval_size = 86400* 365
-            if int(total_time / interval_size) > max_intervals:
+            if int(total_time / interval_size) > max_time_scale:
                 user_input = input("Too many timestamps, discretizing data to 200 timestamps, do you want to proceed?(y/n): ")
                 if user_input.lower() == 'n':
                     print('Cannot proceed to TEA and TET plot')
                     exit()
                 else:
-                    interval_size = max_intervals
-        elif isinstance(time_interval, int):
-            if time_interval > max_intervals:
-                raise ValueError(f"The maximum number of time intervals is {max_intervals}.")
+                    interval_size = max_time_scale
+        elif isinstance(time_scale, int):
+            if time_scale > max_time_scale:
+                raise ValueError(f"The maximum number of time time_scale is {max_time_scale}.")
             else:
-                interval_size = int(total_time / (time_interval))
+                interval_size = int(total_time / (time_scale))
                 
         else:
             raise TypeError("Invalid time interval")
     else:
-        user_input = input(f"discretizing data to {max_intervals} timestamps, do you want to proceed?(y/n): ")
+        user_input = input(f"discretizing data to {max_time_scale} timestamps, do you want to proceed?(y/n): ")
         if user_input.lower() == 'n':
             print('Cannot proceed to TEA and TET plot')
             exit()
         else:
-            interval_size = int(total_time / max_intervals)
-    num_intervals = int(total_time/interval_size)
-    print(f'Discretizing data to {num_intervals} timestamps...')
-    if num_intervals == 0:
+            interval_size = int(total_time / max_time_scale)
+    num_time_scale = int(total_time/interval_size)
+    print(f'Discretizing data to {num_time_scale} timestamps...')
+    if num_time_scale == 0:
         print("Warning! Only one timestamp exist in the data.")
     updated_edgelist = {}
     for ts, edges_list in edgelist.items():
         bin_ts = int(ts / interval_size)
-        if bin_ts >= num_intervals:
+        if bin_ts >= num_time_scale:
             bin_ts -= 1
 
         for edge in edges_list:

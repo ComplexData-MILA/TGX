@@ -25,14 +25,14 @@ E_INDUCTIVE = 40
 
 def TET(temp_edgelist : Union[object, dict],
         filepath: Optional[str] = ".", 
-        intervals : Union[str, int] = None,
+        time_scale : Union[str, int] = None,
         network_name : str = None,
         add_frame : bool = True,
         test_split : bool = False,
         figsize : tuple = (9, 5),
         axis_title_font_size : int = 20,
         ticks_font_size : int = 20,
-        max_intervals : int = 200,
+        max_time_scale : int = 200,
         show: bool = True):
     r"""
     Generate TET plots
@@ -44,9 +44,9 @@ def TET(temp_edgelist : Union[object, dict],
         ticks_font_size: Size of the text in the figure.
         add_frame: Add the frame to the plot.
         network_name: Name of the dataset to be used in the TEA plot file.
-        intervals: intervals for discretizing data if already not done.
+        time_scale: time_scale for discretizing data if already not done.
         test_split: Whether show the test split on the plot.
-        max_intervals: Maximum number of intervals to discretize data.
+        max_time_scale: Maximum number of time_scale to discretize data.
         show: Whether to show the plot.
     """
     if isinstance(temp_edgelist, object):
@@ -56,16 +56,16 @@ def TET(temp_edgelist : Union[object, dict],
     
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
-    if len(unique_ts) > max_intervals:
+    if len(unique_ts) > max_time_scale:
         inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
         if inp == "y":
             temp_edgelist = edgelist_discritizer(temp_edgelist,
                                                 unique_ts,
-                                                time_interval = max_intervals)
-    elif intervals is not None:
+                                                time_scale = max_time_scale)
+    elif time_scale is not None:
         temp_edgelist = edgelist_discritizer(temp_edgelist,
                                             unique_ts,
-                                            time_interval = intervals)
+                                            time_scale = time_scale)
     
     edge_last_ts = generate_edge_last_timestamp(temp_edgelist)
     edge_idx_map = generate_edge_idx_map(temp_edgelist, edge_last_ts)

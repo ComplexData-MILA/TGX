@@ -6,7 +6,7 @@ data_path = '/network/scratch/r/razieh.shirzadkhani/'
 
 
 dataset = builtin.data.uci(root=data_path)
-data = read_edgelist(data=dataset, discretize=dataset.discretize, intervals=dataset.intervals)
+data = read_edgelist(data=dataset, discretize=dataset.discretize, time_scale=dataset.time_scale)
 
 
 
