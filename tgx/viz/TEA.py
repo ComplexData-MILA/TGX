@@ -10,7 +10,7 @@ def TEA(
         filepath : Optional[str] = ".",
         fig_size : tuple = (7,5),
         font_size : int = 20, 
-        network_name : str =None,
+        network_name : str = None,
         intervals : Union[str, int] = None, 
         real_dates : bool = None,
         test_split : bool = False,
@@ -144,14 +144,28 @@ def TEA_process_edgelist_per_timestamp(temp_edgelist):
     return ts_edges_dist, ts_edges_dist_density, edge_frequency_dict
 
 
-def TEA_plot_edges_bar(ts_edges_dist, 
-                   filepath = ".", 
-                   fig_size = (9,5),
-                   font_size = 20,
-                   network_name = None,
-                   real_dates = None,
-                   intervals = None,
-                   test_split = False):
+def TEA_plot_edges_bar(ts_edges_dist: list, 
+                   filepath: str = ".", 
+                   fig_size: list = (9,5),
+                   font_size: int = 20,
+                   network_name: str = None,
+                   real_dates: list = None,
+                   intervals: list = None,
+                   test_split: bool = False,
+                   show: bool =False):
+    r"""
+    Making TEA plot and save into pdf file.
+    Args:
+        ts_edges_dist: list of dictionaries containing the edge distribution over time.
+        filepath: Path to save the TEA Plot.
+        fig_size: Size of the figure to save.
+        font_size: Size of the text in the figure.
+        network_name: Name of the dataset to be used in the TEA plot file.
+        real_dates: list of real dates as ticks
+        intervals: intervals for discretizing data if already not done.
+        test_split: Whether show the test split on the plot.
+        show: Whether to show the plot.
+    """
     
 
     ts_edges_dist_df = pd.DataFrame(ts_edges_dist, columns=['ts', 'new', 'repeated',
@@ -200,8 +214,9 @@ def TEA_plot_edges_bar(ts_edges_dist,
     plt.ylabel("Number of edges", fontsize=font_size)
     plt.legend(fontsize = 13)
     if filepath is not None:
-        plt.savefig(f"{filepath}/{network_name}.png")
-    plt.show()
-    print("Plotting done!")
+        plt.savefig(f"{filepath}/{network_name}.pdf")
+        print("plot saved as " + f"{filepath}/{network_name}.pdf")
+    if (show):
+        plt.show()
 
 

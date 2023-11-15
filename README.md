@@ -14,7 +14,18 @@ pip install -r requirements.txt
 
 
 3. install local dependencies under root directory `/TGX`
-```
+<!-- ```
 pip install -e py-tgx
+``` -->
+```
+pip install -e .
 ```
 
+### Creating new branch ###
+
+first create the branch on github
+```
+git fetch origin
+
+git checkout -b test origin/test
+```

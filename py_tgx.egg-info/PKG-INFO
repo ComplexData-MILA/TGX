@@ -33,3 +33,11 @@ pip install -r requirements.txt
 pip install -e py-tgx
 ```
 
+### Creating new branch ###
+
+first create the branch on github
+```
+git fetch origin
+
+git checkout -b test origin/test
+```
