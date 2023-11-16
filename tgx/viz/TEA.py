@@ -14,7 +14,6 @@ def TEA(
         time_scale : Union[str, int] = None, 
         real_dates : bool = None,
         test_split : bool = False,
-        max_time_scale : int = 1000,
         density : bool = False
         ):
     r"""
@@ -29,7 +28,6 @@ def TEA(
         time_scale: time_scale for discretizing data if already not done.
         real_dates: Whether to use the real dates from dataset.
         test_split: Whether show the test split on the plot.
-        max_time_scale: Maximum number of time_scale to discretize data.
         density: Whether to return edge density and edge frequency dictioneries.
     """
     if isinstance(temp_edgelist, object):
@@ -39,13 +37,13 @@ def TEA(
     
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
-    if len(unique_ts) > max_time_scale:
-        inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
-        if inp == "y":
-            temp_edgelist = edgelist_discritizer(temp_edgelist,
-                                                unique_ts,
-                                                time_scale = max_time_scale)
-    elif time_scale is not None:
+    # if len(unique_ts) > max_time_scale:
+    #     inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
+    #     if inp == "y":
+    #         temp_edgelist = edgelist_discritizer(temp_edgelist,
+    #                                             unique_ts,
+    #                                             time_scale = max_time_scale)
+    if time_scale is not None:
         temp_edgelist = edgelist_discritizer(temp_edgelist,
                                             unique_ts,
                                             time_scale = time_scale)

@@ -132,6 +132,20 @@ class Graph(object):
         self.node_list = list(node_list.keys())
         return list(node_list.keys())
     
+    def check_time_gap(self) -> bool:
+        r"""
+        Check whether the edgelist timestamps have gaps or not (increments bigger than 1)
+        Returns:
+            time_gap: a boolean indicating whether there is a time gap or not
+        """
+        time_gap = False
+        ts = list(self.data.keys())
+        for i in range(1, len(ts)):
+            if ts[i] - ts[i-1] > 1:
+                time_gap = True
+                return time_gap
+        return time_gap
+    
     def save2csv(self,
                  fname:str = "output") -> None:
         r"""

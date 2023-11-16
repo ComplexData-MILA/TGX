@@ -32,7 +32,6 @@ def TET(temp_edgelist : Union[object, dict],
         figsize : tuple = (9, 5),
         axis_title_font_size : int = 20,
         ticks_font_size : int = 20,
-        max_time_scale : int = 200,
         show: bool = True):
     r"""
     Generate TET plots
@@ -56,13 +55,13 @@ def TET(temp_edgelist : Union[object, dict],
     
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
-    if len(unique_ts) > max_time_scale:
-        inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
-        if inp == "y":
-            temp_edgelist = edgelist_discritizer(temp_edgelist,
-                                                unique_ts,
-                                                time_scale = max_time_scale)
-    elif time_scale is not None:
+    # if len(unique_ts) > max_time_scale:
+    #     inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
+    #     if inp == "y":
+    #         temp_edgelist = edgelist_discritizer(temp_edgelist,
+    #                                             unique_ts,
+    #                                             time_scale = max_time_scale)
+    if time_scale is not None:
         temp_edgelist = edgelist_discritizer(temp_edgelist,
                                             unique_ts,
                                             time_scale = time_scale)

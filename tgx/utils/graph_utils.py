@@ -10,15 +10,16 @@ __all__ = ["train_test_split",
 
 
 def edgelist_discritizer(edgelist,
-                         time_scale: Union[str, int],
-                         max_time_scale: Optional[int] = 1000):
+                         time_scale: Union[str, int]):
     
     unique_ts = list(edgelist.keys())
         
     total_time = unique_ts[-1] - unique_ts[0]
     if time_scale is not None:
         if isinstance(time_scale, str):
-            if time_scale == "daily":
+            if time_scale == "hourly":
+                interval_size = 3600
+            elif time_scale == "daily":
                 interval_size = 86400
             elif time_scale == "weekly":
                 interval_size = 86400 * 7
@@ -26,28 +27,12 @@ def edgelist_discritizer(edgelist,
                 interval_size = 86400 * 30
             elif time_scale == "yearly":
                 interval_size = 86400* 365
-            if int(total_time / interval_size) > max_time_scale:
-                user_input = input("Too many timestamps, discretizing data to 200 timestamps, do you want to proceed?(y/n): ")
-                if user_input.lower() == 'n':
-                    print('Cannot proceed to TEA and TET plot')
-                    exit()
-                else:
-                    interval_size = max_time_scale
         elif isinstance(time_scale, int):
-            if time_scale > max_time_scale:
-                raise ValueError(f"The maximum number of time time_scale is {max_time_scale}.")
-            else:
-                interval_size = int(total_time / (time_scale))
-                
+            interval_size = int(total_time / (time_scale))
         else:
             raise TypeError("Invalid time interval")
     else:
-        user_input = input(f"discretizing data to {max_time_scale} timestamps, do you want to proceed?(y/n): ")
-        if user_input.lower() == 'n':
-            print('Cannot proceed to TEA and TET plot')
-            exit()
-        else:
-            interval_size = int(total_time / max_time_scale)
+        raise TypeError("Please provide a time interval")
     num_time_scale = int(total_time/interval_size)
     print(f'Discretizing data to {num_time_scale} timestamps...')
     if num_time_scale == 0:
@@ -179,7 +164,7 @@ def train_test_split(data : dict,
     
 
 def is_discretized(edgelist: Optional[dict],
-                   max_timestamps: Optional[int] = 400) -> bool:
+                   max_timestamps: Optional[int] = 10000) -> bool:
     r"""
     Check if an edgelist is discretized or not.
     """
