@@ -5,7 +5,7 @@ import seaborn as sns
 from tqdm import tqdm
 from typing import Union, Optional
 import matplotlib.pyplot as plt
-from tgx.utils.graph_utils import edgelist_discritizer
+from tgx.utils.graph_utils import discretize_edges
 
 
 # some parameters to be used for drawing
@@ -23,6 +23,8 @@ E_TRAIN_AND_TEST = 20
 E_TRANSDUCTIVE = 30
 E_INDUCTIVE = 40
 
+
+#! should be merged graph class?
 def TET(temp_edgelist : Union[object, dict],
         filepath: Optional[str] = ".", 
         time_scale : Union[str, int] = None,
@@ -62,9 +64,8 @@ def TET(temp_edgelist : Union[object, dict],
     #                                             unique_ts,
     #                                             time_scale = max_time_scale)
     if time_scale is not None:
-        temp_edgelist = edgelist_discritizer(temp_edgelist,
-                                            unique_ts,
-                                            time_scale = time_scale)
+        temp_edgelist = discretize_edges(temp_edgelist,
+                                        time_scale = time_scale)
     
     edge_last_ts = generate_edge_last_timestamp(temp_edgelist)
     edge_idx_map = generate_edge_idx_map(temp_edgelist, edge_last_ts)

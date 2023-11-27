@@ -1,6 +1,6 @@
 # import networkx as nx
 from typing import Optional, Union
-from tgx.utils.graph_utils import edgelist_discritizer, frequency_count, subsampling
+from tgx.utils.graph_utils import discretize_edges, frequency_count, subsampling
 from tgx.io.read import read_csv
 import copy
 import csv
@@ -10,14 +10,12 @@ class Graph(object):
     def __init__(self, 
                  dataset: Optional[object] = None, 
                  fname: Optional[str] = None,
-                 edgelist: Optional[dict] = None,
-                 discretized: Optional[bool] = False):
+                 edgelist: Optional[dict] = None):
         """
         Create a Graph object with specific characteristics
         Args:
             dataset: a dataset object
             edgelist: a dictionary of temporal edges in the form of {t: {(u, v), freq}}
-            discretized: whether the given edgelist was discretized or not
         """
 
         if dataset is not None:
@@ -36,17 +34,24 @@ class Graph(object):
         
         
     def discretize(self, 
-                   time_scale: Union[str, int]) -> object:
+                   time_scale: Union[str, int],
+                   store_unix: bool = False) -> object:
         """
         discretize the graph object based on the given time interval
         Args:
             time_scale: time interval to discretize the graph
         """
         new_G = copy.deepcopy(self)        
-        disc_G = edgelist_discritizer(self.data,
-                                    time_scale = time_scale)
+        # discretie differently based on # of intervals of time granularity
+        output = discretize_edges(self.data,
+                                    time_scale = time_scale,
+                                    store_unix = store_unix)
+        disc_G = output[0]
         new_G.data = disc_G
-        return new_G
+        if (store_unix):
+            return new_G, output[1]
+        else:
+            return new_G
 
     def count_freq(self):
         self.freq_data = frequency_count(self.data)

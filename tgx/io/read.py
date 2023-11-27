@@ -2,7 +2,6 @@ import pandas as pd
 import csv
 import numpy as np
 from typing import Optional, Union
-from tgx.utils.graph_utils import edgelist_discritizer
 # from tgx.datasets.data_loader import read_dataset
 
 

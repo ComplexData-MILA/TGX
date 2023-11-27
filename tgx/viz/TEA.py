@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from typing import Union, Optional
-from tgx.utils.graph_utils import edgelist_discritizer
+from tgx.utils.graph_utils import discretize_edges
 from tgx.utils.plotting_utils import create_ts_list
 __all__ = ["TEA"]
 
@@ -44,9 +44,8 @@ def TEA(
     #                                             unique_ts,
     #                                             time_scale = max_time_scale)
     if time_scale is not None:
-        temp_edgelist = edgelist_discritizer(temp_edgelist,
-                                            unique_ts,
-                                            time_scale = time_scale)
+        temp_edgelist = discretize_edges(temp_edgelist,
+                                        time_scale = time_scale)
 
 
     ts_edges_dist, ts_edges_dist_density, edge_frequency_dict = TEA_process_edgelist_per_timestamp(temp_edgelist)
