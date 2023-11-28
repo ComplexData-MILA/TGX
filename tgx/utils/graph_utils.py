@@ -23,8 +23,8 @@ def ceiling_division(n, d):
 
 
 def discretize_edges(edgelist: dict,
-                         time_scale: Union[int,str],
-                         store_unix: Optional[bool] = False) -> list:
+                    time_scale: Union[int,str],
+                    store_unix: Optional[bool] = False) -> list:
     """
     util function for discretizing edgelist, expected timestamp on edges are unixtimestamp
     this func supports discretization of edge timestamp 
@@ -37,9 +37,7 @@ def discretize_edges(edgelist: dict,
     Returns:
         output list: the first item in the list is always the updated edgelist (dict, dictionary of edges with discretized timestamps) and the second item is the converted timestamps in unix format (list) if store_unix is True
     """
-    
-    unique_ts = list(edgelist.keys())
-        
+    unique_ts = list(edgelist.keys())        
     total_time = unique_ts[-1] - unique_ts[0]
     if time_scale is not None:
         if isinstance(time_scale, int):
