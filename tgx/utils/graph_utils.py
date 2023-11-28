@@ -8,7 +8,7 @@ __all__ = ["train_test_split",
            "is_discretized",
            "frequency_count"]
 
-
+SEC_IN_MIN = 60
 SEC_IN_HOUR = 3600
 SEC_IN_DAY = 86400
 SEC_IN_WEEK = 86400 * 7
@@ -43,7 +43,9 @@ def discretize_edges(edgelist: dict,
         if isinstance(time_scale, int):
             interval_size = total_time // time_scale  #integer timestamp of the bin, discounting any bin that has a smaller duration than others
         elif isinstance(time_scale, str): 
-            if time_scale == "hourly":
+            if time_scale == "minutely":
+                interval_size = SEC_IN_MIN
+            elif time_scale == "hourly":
                 interval_size = SEC_IN_HOUR
             elif time_scale == "daily":
                 interval_size = SEC_IN_DAY
