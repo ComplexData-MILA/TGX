@@ -23,17 +23,17 @@ DataPath={
     }
 
 Data_specifications = {
-        'USLegis'       : {'discretize' : False,    'intervals': None},
-        'CanParl'       : {'discretize' : False,    'intervals': None},
-        'UNvote'        : {'discretize' : False,    'intervals': None},
-        'reddit'        : {'discretize' : True,     'intervals': 'daily'},
-        'enron'         : {'discretize' : True,     'intervals': 'monthly'},
-        'mooc'          : {'discretize' : True,     'intervals': 'daily'},
-        'uci'           : {'discretize' : True,     'intervals': 'weekly'},
-        'SocialEvo'     : {'discretize' : True,     'intervals': 'weekly'},
-        'Flights'       : {'discretize' : False,     'intervals': 121},
-        'Contacts'      : {'discretize' : True,     'intervals': 'daily'},
-        'lastfm'        : {'discretize' : True,     'intervals': 'monthly'}
+        'USLegis'       : {'discretize' : False,    'time_scale': None},
+        'CanParl'       : {'discretize' : False,    'time_scale': None},
+        'UNvote'        : {'discretize' : False,    'time_scale': None},
+        'reddit'        : {'discretize' : True,     'time_scale': 'daily'},
+        'enron'         : {'discretize' : True,     'time_scale': 'monthly'},
+        'mooc'          : {'discretize' : True,     'time_scale': 'daily'},
+        'uci'           : {'discretize' : True,     'time_scale': 'weekly'},
+        'SocialEvo'     : {'discretize' : True,     'time_scale': 'weekly'},
+        'Flights'       : {'discretize' : False,     'time_scale': 121},
+        'Contacts'      : {'discretize' : True,     'time_scale': 'daily'},
+        'lastfm'        : {'discretize' : True,     'time_scale': 'monthly'}
         }
 
 class builtin(object):
@@ -63,7 +63,7 @@ class builtin(object):
         # self.header = Data_specifications[data]['header']
         # self.index = Data_specifications[data]['index']
         self.discretize = Data_specifications[data]['discretize']
-        self.intervals = Data_specifications[data]['intervals']
+        self.time_scale = Data_specifications[data]['time_scale']
         return self
     
     def load_dgb_data(self):

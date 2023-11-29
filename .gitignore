@@ -1,5 +1,8 @@
 !requirements*.txt
 #dataset
+
+*.cpython-39.pyc
+*.pyc
 *.xz
 *.parquet
 *.gz
@@ -13,8 +16,12 @@
 *.out
 *.pkl
 *.txt
-# Byte-compiled / optimized / DLL files
+*.csv
+*.npz
 __pycache__/
+*/.ipynb_checkpoints/
+# Byte-compiled / optimized / DLL files
+
 raw/
 books/
 electronics/

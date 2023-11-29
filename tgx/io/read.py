@@ -2,23 +2,18 @@ import pandas as pd
 import csv
 import numpy as np
 from typing import Optional, Union
-from tgx.utils.graph_utils import edgelist_discritizer
 # from tgx.datasets.data_loader import read_dataset
 
 
+#  data: Optional[object] = None,
+#  is_discretized: bool = False,
+#  discretize: bool = False,
+#  time_scale: Union[str, int, None] = None,
+
 def read_csv(fname: Union[str, object] = None, 
-            #  data: Optional[object] = None,
              header: bool = False,
              index: bool = False,
-            #  is_discretized: bool = False,
-            #  discretize: bool = False,
-            #  intervals: Union[str, int, None] = None,
-             t_col: int = 2, 
-             ts_sorted: bool = True,
-             max_intervals: int = 2000,
-             weight: bool = False, 
-             edge_feat: bool = False,
-             feat_size: int = 0) -> dict:
+             t_col: int = 2,) -> dict:
     
     """
     Read temporal edgelist and store it in a dictionary.
@@ -28,7 +23,6 @@ def read_csv(fname: Union[str, object] = None,
         index: whether the first column is row indices
         t_col: column indext for timestamps (0 or 2)
         ts_sorted: if data are sorted based on timestamp
-        max_intervals: maximum number of intervals to discretize data
 
     Returns:
         temp_edgelist: A dictionary of edges and their frequency at each time interval
@@ -54,26 +48,6 @@ def read_csv(fname: Union[str, object] = None,
     else:
         raise TypeError("Invalid input")
 
-
-    # if discretize:
-    #     unique_ts = list(temp_edgelist.keys())
-    #     return edgelist_discritizer(temp_edgelist,
-    #                                 unique_ts=unique_ts,
-    #                                 time_interval=intervals,
-    #                                 max_intervals=max_intervals)
-    
-    # elif not discretize and not is_discretized:
-    #     unique_ts = list(temp_edgelist.keys())
-    #     inp = input("Is the dataset discretized? (y/n)").lower()
-    #     if inp == "y":
-    #         return temp_edgelist
-    #     elif inp == "n":
-    #         intervals_inp = input("Please enter number of intervals (integer) or duration of interval (daily, weekly, etc.)")
-    #         return edgelist_discritizer(temp_edgelist,
-    #                                 unique_ts=unique_ts,
-    #                                 time_interval=intervals_inp,
-    #                                 max_intervals=max_intervals)
-    
 
 def _load_edgelist(fname, columns, header):
     """
@@ -131,7 +105,7 @@ def _load_edgelist(fname, columns, header):
     # temp_edgelist[curr_t] = edges_list
     
     if sorted is False:
-        print("Sorting dataset...")
+        print("edgelist not sorted, sorting dataset...")
         myKeys = list(temp_edgelist.keys())
         myKeys.sort()
         temp_edgelist = {i: temp_edgelist[i] for i in myKeys}
@@ -141,10 +115,7 @@ def _load_edgelist(fname, columns, header):
     print("Available timestamps: ", len(temp_edgelist.keys()))
     return temp_edgelist
 
-def _datasets_edgelist_loader(data, 
-                              discretize=False, 
-                              intervals : int = 200, 
-                              max_intervals=200) -> dict:
+def _datasets_edgelist_loader(data) -> dict:
     """
     load built-in datasets and tgb datasets
     """
@@ -188,12 +159,6 @@ def _datasets_edgelist_loader(data,
     print("Number of loaded edges: " + str(total_edges))
     print("Number of unique edges:" + str(len(unique_edges.keys())))
     print("Available timestamps: ", len(temp_edgelist.keys()))
-    # if discretize:
-    #     unique_ts = list(temp_edgelist.keys())
-    #     return edgelist_discritizer(temp_edgelist,
-    #                                 unique_ts=unique_ts,
-    #                                 time_interval=intervals,
-    #                                 max_intervals=max_intervals)
     
     return temp_edgelist
 
@@ -201,8 +166,8 @@ def _datasets_edgelist_loader(data,
 def _load_edgelist_with_discretizer(
         fname : str, 
         columns : list, 
-        time_interval : Union[str , int] = 86400, 
-        header : Optional[bool] = True):
+        time_scale : Union[str , int] = 86400, 
+        header : Optional[bool] = True) -> dict:
     """
     load temporal edgelist into a dictionary
     assumption: the edges are ordered in increasing order of their timestamp
@@ -222,23 +187,20 @@ def _load_edgelist_with_discretizer(
     
     u_idx, v_idx, ts_idx = columns
 
-    if isinstance(time_interval, str):
-        if time_interval == "daily":
+    if isinstance(time_scale, str):
+        if time_scale == "daily":
             interval_size = 86400
-        elif time_interval == "weekly":
+        elif time_scale == "weekly":
             interval_size = 86400 * 7
-        elif time_interval == "monthly":
+        elif time_scale == "monthly":
             interval_size = 86400 * 30
-        elif time_interval == "yearly":
+        elif time_scale == "yearly":
             interval_size = 86400* 365
-    elif isinstance(time_interval, int):
-        if time_interval > 100:
-            raise ValueError("The maximum number of time intervals is {max_intervals}.")
-        else:
+    elif isinstance(time_scale, int):
             last_line = lines[-1]
             values = last_line.split(',')
             total_time = float(values[ts_idx])
-            interval_size = int(total_time / (time_interval-1))
+            interval_size = int(total_time / (time_scale-1))
     else:
         raise TypeError("Invalid time interval")
 

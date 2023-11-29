@@ -5,7 +5,7 @@ import seaborn as sns
 from tqdm import tqdm
 from typing import Union, Optional
 import matplotlib.pyplot as plt
-from tgx.utils.graph_utils import edgelist_discritizer
+from tgx.utils.graph_utils import discretize_edges
 
 
 # some parameters to be used for drawing
@@ -23,19 +23,21 @@ E_TRAIN_AND_TEST = 20
 E_TRANSDUCTIVE = 30
 E_INDUCTIVE = 40
 
+
+#! should be merged graph class?
 def TET(temp_edgelist : Union[object, dict],
         filepath: Optional[str] = ".", 
-        intervals : Union[str, int] = None,
+        time_scale : Union[str, int] = None,
         network_name : str = None,
         add_frame : bool = True,
         test_split : bool = False,
         figsize : tuple = (9, 5),
         axis_title_font_size : int = 20,
         ticks_font_size : int = 20,
-        max_intervals : int = 200):
+        show: bool = True):
     r"""
     Generate TET plots
-    Parameters:
+    Args:
         temp_edgelist: a dictionary of temporal edges or a dataset object.
         filepath: Path to save the TEA Plot.
         figsize: Size of the figure to save.
@@ -43,9 +45,10 @@ def TET(temp_edgelist : Union[object, dict],
         ticks_font_size: Size of the text in the figure.
         add_frame: Add the frame to the plot.
         network_name: Name of the dataset to be used in the TEA plot file.
-        intervals: intervals for discretizing data if already not done.
+        time_scale: time_scale for discretizing data if already not done.
         test_split: Whether show the test split on the plot.
-        max_intervals: Maximum number of intervals to discretize data.
+        max_time_scale: Maximum number of time_scale to discretize data.
+        show: Whether to show the plot.
     """
     if isinstance(temp_edgelist, object):
         if temp_edgelist.freq_data is None:
@@ -54,16 +57,15 @@ def TET(temp_edgelist : Union[object, dict],
     
     # check number of unique timestamps:
     unique_ts = list(temp_edgelist.keys())
-    if len(unique_ts) > max_intervals:
-        inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
-        if inp == "y":
-            temp_edgelist = edgelist_discritizer(temp_edgelist,
-                                                unique_ts,
-                                                time_interval = max_intervals)
-    elif intervals is not None:
-        temp_edgelist = edgelist_discritizer(temp_edgelist,
-                                            unique_ts,
-                                            time_interval = intervals)
+    # if len(unique_ts) > max_time_scale:
+    #     inp = input(f"There are {unique_ts} timestamps in the data.\nDo you want to discretize the data to 1000 timestamps?(y/n)").lower()
+    #     if inp == "y":
+    #         temp_edgelist = edgelist_discritizer(temp_edgelist,
+    #                                             unique_ts,
+    #                                             time_scale = max_time_scale)
+    if time_scale is not None:
+        temp_edgelist = discretize_edges(temp_edgelist,
+                                        time_scale = time_scale)
     
     edge_last_ts = generate_edge_last_timestamp(temp_edgelist)
     edge_idx_map = generate_edge_idx_map(temp_edgelist, edge_last_ts)
@@ -84,7 +86,7 @@ def TET(temp_edgelist : Union[object, dict],
                               ticks_font_size = ticks_font_size)
 
     plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_list, list(idx_edge_map.keys()),
-                              fig_param, test_split = test_split, add_frames=add_frame)
+                              fig_param, test_split = test_split, add_frames=add_frame, show=show)
     return 
 
 
@@ -198,8 +200,14 @@ def process_presence_matrix(e_presence_matrix, test_ratio_p):
     return e_presence_matrix, test_split_ts_value
 
 
-def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_list,
-                              idx_edge_list, fig_param, test_split = False, add_frames=True):
+def plot_edge_presence_matrix(e_presence_mat, 
+                              test_split_ts_value, 
+                              unique_ts_list,
+                              idx_edge_list, 
+                              fig_param, 
+                              test_split = False, 
+                              add_frames=True,
+                              show=False):
     print("Info: plotting edge presence heatmap for {} ...".format(fig_param.fig_name))
 
     fig, ax = plt.subplots(figsize=fig_param.figsize)
@@ -286,7 +294,7 @@ def plot_edge_presence_matrix(e_presence_mat, test_split_ts_value, unique_ts_lis
 
     if fig_param.fig_name is not None:
         # print("Info: file name: {}".format(fig_param.fig_name))
-        plt.savefig(f"{fig_param.fig_name}/{fig_param.network_name}.png")
+        plt.savefig(f"{fig_param.fig_name}/{fig_param.network_name}.pdf")
     plt.show()
     print("Info: plotting done!")
 

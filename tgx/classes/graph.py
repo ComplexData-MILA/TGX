@@ -1,24 +1,26 @@
 # import networkx as nx
 from typing import Optional, Union
-from tgx.utils.graph_utils import edgelist_discritizer, frequency_count, subsampling
+from tgx.utils.graph_utils import discretize_edges, frequency_count, subsampling
 from tgx.io.read import read_csv
 import copy
+import csv
+
 
 class Graph(object):
     def __init__(self, 
                  dataset: Optional[object] = None, 
                  fname: Optional[str] = None,
-                 edgelist: Optional[dict] = None,
-                 discretized: Optional[bool] = False):
+                 edgelist: Optional[dict] = None):
         """
         Create a Graph object with specific characteristics
         Args:
+            dataset: a dataset object
             edgelist: a dictionary of temporal edges in the form of {t: {(u, v), freq}}
-            discretized: whether the given edgelist was discretized or not
         """
 
         if dataset is not None:
             if isinstance(dataset, type) or isinstance(dataset,object):
+                #! not sure why read csv here
                 self.data = read_csv(dataset)
         elif fname is not None and isinstance(fname, str):
             self.data = read_csv(fname)
@@ -31,12 +33,25 @@ class Graph(object):
         self.freq_data = None
         
         
-    def discretize(self, intervals: Union[str, int]) -> object:
+    def discretize(self, 
+                   time_scale: Union[str, int],
+                   store_unix: bool = False) -> object:
+        """
+        discretize the graph object based on the given time interval
+        Args:
+            time_scale: time interval to discretize the graph
+        """
         new_G = copy.deepcopy(self)        
-        disc_G = edgelist_discritizer(self.data,
-                                                  time_interval = intervals)
+        # discretie differently based on # of intervals of time granularity
+        output = discretize_edges(self.data,
+                                    time_scale = time_scale,
+                                    store_unix = store_unix)
+        disc_G = output[0]
         new_G.data = disc_G
-        return new_G
+        if (store_unix):
+            return new_G, output[1]
+        else:
+            return new_G
 
     def count_freq(self):
         self.freq_data = frequency_count(self.data)
@@ -121,7 +136,40 @@ class Graph(object):
         
         self.node_list = list(node_list.keys())
         return list(node_list.keys())
-
+    
+    def check_time_gap(self) -> bool:
+        r"""
+        Check whether the edgelist timestamps have gaps or not (increments bigger than 1)
+        Returns:
+            time_gap: a boolean indicating whether there is a time gap or not
+        """
+        time_gap = False
+        ts = list(self.data.keys())
+        for i in range(1, len(ts)):
+            if ts[i] - ts[i-1] > 1:
+                time_gap = True
+                return time_gap
+        return time_gap
+    
+    def save2csv(self,
+                 fname:str = "output") -> None:
+        r"""
+        Save the graph object in an edgelist format to a csv file
+        Args:
+            fname: name of the csv file to save the graph, no csv suffix needed
+        """
+        outname = fname + ".csv"
+        #iterate through all edges
+        with open(outname, 'w') as csvfile:
+            print ("saving to ", outname)
+            csvwriter = csv.writer(csvfile, delimiter=',')
+            csvwriter.writerow(['timestamp'] + ['source'] + ['destination'])
+            for t, edges_list in self.data.items():
+                for edge in edges_list:
+                    (u, v) = edge
+                    csvwriter.writerow([t] + [u] + [v])
+        
+                    
     # def _generate_graph(self, 
     #                     edgelist: Optional[dict] = None
     #                     ) -> list:
