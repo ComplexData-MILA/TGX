@@ -104,10 +104,10 @@ def plot_density_map(data, filename, y_title, plot_path = None):
     Plot a density map using fig and ax
     '''
     # Create a 2D list for color values
-    c = np.zeros((np.max(data), len(data)))
+    max_value = np.max([np.max(inner) for inner in data if inner])
+    c = np.zeros((max_value, len(data)))
     for i, row in enumerate(data):
         for value in row:
-            # print(value)
             c[value-1][i] += 1
 
     # Plot
@@ -115,10 +115,10 @@ def plot_density_map(data, filename, y_title, plot_path = None):
     ax = fig.add_subplot(111)
 
     norm = mcolors.Normalize(vmin=0, vmax=1)
-    cax = ax.imshow(c, cmap='viridis', interpolation='nearest', norm=norm)
+    cax = ax.imshow(c, cmap='viridis', interpolation='nearest', norm=norm, aspect='auto')
     cbar = fig.colorbar(cax)
 
-    ax.set_title("Heatmap of Node Degrees Over Time")
+    ax.set_title(f"Heatmap of {y_title} Over Time")
     ax.set_xlabel('Time', fontsize=20)
     ax.set_ylabel(y_title, fontsize=20)
     ax.tick_params(labelsize=20)
