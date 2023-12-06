@@ -48,12 +48,12 @@ combine([nodes_over_time, edge_over_time])
 
 
 
-# Load data into dictionary
-G = read_csv(fname)
-G.discretize(options)
+# # Load data into dictionary
+# G = read_csv(fname)
+# G.discretize(options)
 
-TEA(G) #create the temp dictionary here by going through the edges
-TET(G) #check if the temp dict is created, if not, create it 
-nodes_over_time(G)
+# TEA(G) #create the temp dictionary here by going through the edges
+# TET(G) #check if the temp dict is created, if not, create it 
+# nodes_over_time(G)
 
 

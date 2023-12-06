@@ -2,6 +2,7 @@ from tgx.utils.plotting_utils import plot_for_snapshots, plot_nodes_edges_per_ts
 import networkx as nx
 import numpy as np
 from tgx.utils.graph_utils import train_test_split
+from typing import List, Dict
 
 __all__ = ["degree_over_time",
            "nodes_over_time",
@@ -16,7 +17,10 @@ __all__ = ["degree_over_time",
            "get_novelty",
            "get_avg_node_activity",
            "get_avg_node_engagement", 
-           "degree_density"]
+           "degree_density",
+           "connected_components_per_ts", 
+           "size_connected_components",
+           "get_avg_node_engagement"]
 
 
 def degree_over_time(graph: object,  
@@ -38,8 +42,6 @@ def degree_over_time(graph: object,
     else:
         filename = "ave_degree_per_ts"
     plot_for_snapshots(ave_degree, filename, "Average degree", plot_path = filepath)
-
-    print("Plotting Done!")
     return 
 
 
@@ -62,7 +64,6 @@ def nodes_over_time(graph: object,
     else:
         filename = "nodes_per_ts"
     plot_for_snapshots(active_nodes, filename, "Number of nodes", plot_path = filepath)
-    # print("Plotting Done!")
     return 
 
 def edges_over_time(graph: object, 
@@ -83,7 +84,6 @@ def edges_over_time(graph: object,
     else:
         filename = "_edges_per_ts"
     plot_for_snapshots(active_edges, plot_path, filename, "Number of edges", plot_path = filepath)
-    # print("Plotting Done!")
     return 
 
 def nodes_and_edges_over_time(graph: object, 
@@ -231,69 +231,6 @@ def merge(x, y, parent):
     if root_x != root_y:
         parent[root_x] = root_y  
 
-
-# def size_connected_components(graph) -> list:
-#     """
-#     Calculate the sizes of connected components per timestamp.
-
-#     Returns:
-#         component_sizes: A list containing the sizes of connected components in each timestamp.
-#     """
-    
-#     component_sizes = []
-#     for t in range(len(graph)):
-#         parent = list(range(graph[t].number_of_nodes))
-
-#         for _, edge_data in graph[t].edgelist.items():
-#             for (u, v), _ in edge_data.items():
-#                 merge(u, v, parent)
-
-#         component_sizes_t = {}
-#         for u in graph[t].nodes():
-#             root = find(u, parent)
-#             if root not in component_sizes_t:
-#                 component_sizes_t[root] = 0  
-#             component_sizes_t[root] += 1  
-
-#         component_sizes.append(component_sizes_t)
-
-#     return component_sizes
-        
-
-# def num_connected_components_per_ts(graph: list,  
-#                  network_name: str = None,
-#                  plot_path: str = None) -> None:
-#     """
-    
-#     Plot the number of connected components per timestamp.
-
-#     """
-
-#     num_components = []
-#     for t in range(len(graph)):
-#         parent = list(range(graph[t].number_of_nodes))
-
-#         for _, edge_data in graph[t].edgelist.items():
-#             for (u, v), _ in edge_data.items():
-#                 merge(u, v, parent)
-
-#         num = 0
-#         for u in graph[t].nodes():
-#             if parent[u] == u:
-#                 num += 1
-#         num_components.append(num)   
-
-#     if network_name is not None:
-#         filename = f"{network_name}_num_connected_components_per_ts"
-#     else:
-#         filename = "_num_connected_components_per_ts"
-#     plot_for_snapshots(num_components, filename, "Number of connected components", plot_path = plot_path)
-#     print(num_components)
-#     print("Plotting Done!")
-
-#     return 
-
-
 def get_reoccurrence(graph:object, test_ratio: float=0.15) -> float:
     r"""
     Calculate the recurrence index
@@ -406,34 +343,19 @@ def get_avg_node_activity(graph: object) -> float:
     return avg_node_activity
 
 
-def get_avg_node_engagement(graph: object): 
+#* new graph stats added 
+#TODO to not require k as input but get it from the Graph object
+def degree_density(graph : object, k: int = 10, network_name: str = None, plot_path: str = None) -> None:
     r"""
-    get the average node engagement over time.
-    node engagement represents the average number of distinct nodes that establish
-    at least one new connection during each time step.
+    Plot density map of node degrees per time window
+    Parameters:
+        graph: Graph object created by tgx.Graph containing edgelist
+        k: number of time windows
+        network_name: name of the graph to be used in the output file name
+        plot_path: path to save the output figure
     """
     graph_edgelist = graph.data
-    engaging_nodes = []
-    previous_edges = set()
-    for ts, e_list in graph_edgelist.items():
-        node_set = set()
-        new_edges = {(u, v) for (u, v) in e_list if frozenset({u, v}) not in previous_edges}
-        for u, v in new_edges:
-            if u not in node_set:
-                node_set.add(u)
-            if v not in node_set:
-                node_set.add(v)
-        # engaging_nodes.append((ts, len(node_set)))
-        engaging_nodes.append(len(node_set))
-        previous_edges = {frozenset({u, v}) for (u, v) in e_list}        # Update the set of previous edges for the next timestamp
-    return engaging_nodes
 
-
-def degree_density(graph: object, network_name: str = None, k = 10, plot_path: str = None) -> None:
-    r"""
-    plot the density map of node degrees over timestamps
-    """
-    graph_edgelist = graph.data
     degrees_by_k_list = []
     temp = []
     temp_idx = 0
@@ -463,3 +385,166 @@ def degree_density(graph: object, network_name: str = None, k = 10, plot_path: s
     plot_density_map(degrees_by_k_list, filename, "Node Degree", plot_path = plot_path)
     print("Plotting Done!")
     return 
+
+def _find(x, parent):
+    if parent[x] == x:
+        return x
+    parent[x] = _find(parent[x], parent)  
+    return parent[x]
+
+
+def _merge(x, y, parent):
+    root_x = _find(x, parent)
+    root_y = _find(y, parent)
+
+    if root_x != root_y:
+        parent[root_x] = root_y  
+
+
+#TODO to be fixed
+def connected_components_per_ts(graph: list,  
+                 network_name: str = None,
+                 plot_path: str = None) -> None:
+    r"""
+    Plot number of connected components per timestamp
+    Parameters:
+        graph: a list containing graph snapshots
+        network_name: name of the graph to be used in the output file name
+        plot_path: path to save the output figure
+    """
+    num_components = []
+    for t in range(len(graph)):
+        parent = list(range(graph[t].number_of_nodes))
+
+        for _, edge_data in graph[t].edgelist.items():
+            for (u, v), _ in edge_data.items():
+                _merge(u, v, parent)
+
+        num = 0
+        for u in graph[t].nodes():
+            if parent[u] == u:
+                num += 1
+        num_components.append(num)   
+
+    if network_name is not None:
+        filename = f"{network_name}_connected_components_per_ts"
+    else:
+        filename = "_connected_components_per_ts"
+    plot_for_snapshots(num_components, filename, "Number of connected components", plot_path = plot_path)
+    print(num_components)
+    print("Plotting Done!")
+
+    return 
+
+#TODO to be fixed
+def size_connected_components(graph: list) -> List[Dict]: 
+    r"""
+    Calculate the sizes of connected components per timestamp
+    Returns:
+        list: A list containing the sizes of connected components in each timestamp.
+    """
+    component_sizes = []
+    for t in range(len(graph)):
+        parent = list(range(graph[t].number_of_nodes))
+
+        for _, edge_data in graph[t].edgelist.items():
+            for (u, v), _ in edge_data.items():
+                _merge(u, v, parent)
+
+        component_sizes_t = {}
+        for u in graph[t].nodes():
+            root = _find(u, parent)
+            if root not in component_sizes_t:
+                component_sizes_t[root] = 0  
+            component_sizes_t[root] += 1  
+
+        component_sizes.append(component_sizes_t)
+
+    return component_sizes
+
+
+def get_avg_node_engagement(graph_edgelist: dict) -> List[int]: 
+    r"""
+    Calculate the average node engagement per timestamp,
+        the average number of distinct nodes that establish
+        at least one new connection.
+    Parameters:
+        graph_edgelist: Dictionary containing graph data
+    """
+    engaging_nodes = []
+    previous_edges = set()
+    for ts, e_list in graph_edgelist.items():
+        node_set = set()
+        new_edges = {(u, v) for (u, v), _ in e_list.items() if frozenset({u, v}) not in previous_edges}
+        for u, v in new_edges:
+            if u not in node_set:
+                node_set.add(u)
+            if v not in node_set:
+                node_set.add(v)
+        engaging_nodes.append(len(node_set))
+        previous_edges = {frozenset({u, v}) for (u, v), _ in e_list.items()}        # Update the set of previous edges for the next timestamp
+    return engaging_nodes
+
+
+
+
+# def size_connected_components(graph) -> list:
+#     """
+#     Calculate the sizes of connected components per timestamp.
+
+#     Returns:
+#         component_sizes: A list containing the sizes of connected components in each timestamp.
+#     """
+    
+#     component_sizes = []
+#     for t in range(len(graph)):
+#         parent = list(range(graph[t].number_of_nodes))
+
+#         for _, edge_data in graph[t].edgelist.items():
+#             for (u, v), _ in edge_data.items():
+#                 merge(u, v, parent)
+
+#         component_sizes_t = {}
+#         for u in graph[t].nodes():
+#             root = find(u, parent)
+#             if root not in component_sizes_t:
+#                 component_sizes_t[root] = 0  
+#             component_sizes_t[root] += 1  
+
+#         component_sizes.append(component_sizes_t)
+
+#     return component_sizes
+        
+
+# def num_connected_components_per_ts(graph: list,  
+#                  network_name: str = None,
+#                  plot_path: str = None) -> None:
+#     """
+    
+#     Plot the number of connected components per timestamp.
+
+#     """
+
+#     num_components = []
+#     for t in range(len(graph)):
+#         parent = list(range(graph[t].number_of_nodes))
+
+#         for _, edge_data in graph[t].edgelist.items():
+#             for (u, v), _ in edge_data.items():
+#                 merge(u, v, parent)
+
+#         num = 0
+#         for u in graph[t].nodes():
+#             if parent[u] == u:
+#                 num += 1
+#         num_components.append(num)   
+
+#     if network_name is not None:
+#         filename = f"{network_name}_num_connected_components_per_ts"
+#     else:
+#         filename = "_num_connected_components_per_ts"
+#     plot_for_snapshots(num_components, filename, "Number of connected components", plot_path = plot_path)
+#     print(num_components)
+#     print("Plotting Done!")
+
+#     return 

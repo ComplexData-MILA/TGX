@@ -211,8 +211,8 @@ def TEA_plot_edges_bar(ts_edges_dist: list,
     plt.ylabel("Number of edges", fontsize=font_size)
     plt.legend(fontsize = 13)
     if filepath is not None:
-        plt.savefig(f"{filepath}/{network_name}.pdf")
-        print("plot saved as " + f"{filepath}/{network_name}.pdf")
+        plt.savefig(f"{filepath}/{network_name}_TEA.pdf")
+        print("plot saved as " + f"{filepath}/{network_name}_TEA.pdf")
     if (show):
         plt.show()
 
