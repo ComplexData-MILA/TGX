@@ -19,13 +19,24 @@ ctdg = tgx.Graph(dataset)
 time_scale = "daily"
 dtdg = ctdg.discretize(time_scale=time_scale)
 
-"""
+
 #! plotting the statistics, works
 tgx.degree_over_time(dtdg, network_name=data_name)
 tgx.nodes_over_time(dtdg, network_name=data_name)
 tgx.edges_over_time(dtdg, network_name=data_name)
 tgx.nodes_and_edges_over_time(dtdg, network_name=data_name)
-"""
+
+tgx.TET(dtdg, 
+        network_name=data_name, 
+        figsize = (9, 5),
+        axis_title_font_size = 24,
+        ticks_font_size = 24)
+
+
+tgx.TEA(dtdg, 
+        network_name=data_name)
+
+
 
 #! compute statistics
 test_ratio = 0.15
@@ -35,6 +46,8 @@ tgx.get_surprise(ctdg, test_ratio=test_ratio)
 #* these two much faster on dtdgs
 tgx.get_avg_node_activity(dtdg)
 tgx.get_novelty(dtdg)
+
+
 
 
 
