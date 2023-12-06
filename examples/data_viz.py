@@ -9,20 +9,38 @@ from tgx.utils.graph_utils import list2csv
 """
 
 #! load the datasets
-# dataset = tgx.builtin.uci()
+# dataset = tgx.builtin.uci() #built in datasets 
 
 data_name = "tgbl-wiki" #"tgbl-review" 
-dataset = tgx.tgb_data(data_name)
+dataset = tgx.tgb_data(data_name) #tgb datasets
 
 
 ctdg = tgx.Graph(dataset)
-# ctdg.save2csv("ctdg")
+time_scale = "daily"
+dtdg = ctdg.discretize(time_scale=time_scale)
 
-time_scale = "hourly" #"monthly" #"weekly" #"daily"  #"hourly" #"minutely" 
-dtdg, ts_list = ctdg.discretize(time_scale=time_scale, store_unix=True)
-print ("discretize to ", time_scale)
-print ("there is time gap, ", dtdg.check_time_gap())
-list2csv(ts_list, data_name + "_ts" + "_" + time_scale + ".csv")
+"""
+#! plotting the statistics, works
+tgx.degree_over_time(dtdg, network_name=data_name)
+tgx.nodes_over_time(dtdg, network_name=data_name)
+tgx.edges_over_time(dtdg, network_name=data_name)
+tgx.nodes_and_edges_over_time(dtdg, network_name=data_name)
+"""
+
+#! compute statistics
+test_ratio = 0.15
+tgx.get_reoccurrence(ctdg, test_ratio=test_ratio)
+tgx.get_surprise(ctdg, test_ratio=test_ratio)
+
+#* these two much faster on dtdgs
+tgx.get_avg_node_activity(dtdg)
+tgx.get_novelty(dtdg)
 
 
 
+# #! statistics to be updated and fixed 
+# #TODO 
+# tgx.degree_density()
+# tgx.connected_components_per_ts()
+# tgx.size_connected_components()
+# tgx.get_avg_node_engagement()
