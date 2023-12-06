@@ -273,3 +273,10 @@ def is_discretized(edgelist: Optional[dict],
         discretized = False
     
     return discretized
+
+def list2csv(lst: list,
+             fname: str,
+             delimiter: str = ",",
+             fmt: str = '%i'):
+    out_list = np.array(lst)
+    np.savetxt(fname, out_list, delimiter=delimiter,  fmt=fmt)

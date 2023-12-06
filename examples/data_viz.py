@@ -13,8 +13,6 @@ from tgx.utils.graph_utils import list2csv
 
 data_name = "tgbl-wiki" #"tgbl-review" 
 dataset = tgx.tgb_data(data_name)
-# dataset = tgx.tgb_data("tgbl-review")
-# dataset = tgx.tgb_data("tgbl-coin") 
 
 
 ctdg = tgx.Graph(dataset)
