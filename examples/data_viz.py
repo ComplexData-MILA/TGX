@@ -10,13 +10,14 @@ from tgx.utils.graph_utils import list2csv
 
 #! load the datasets
 # dataset = tgx.builtin.uci() #built in datasets 
+# data_name = "uci"
 
-data_name = "tgbl-wiki" #"tgbl-review" 
+data_name = "tgbn-token" #"tgbl-wiki" #"tgbl-review" 
 dataset = tgx.tgb_data(data_name) #tgb datasets
 
 
+time_scale =  "daily" #"hourly"
 ctdg = tgx.Graph(dataset)
-time_scale = "daily"
 dtdg = ctdg.discretize(time_scale=time_scale)
 
 
@@ -40,8 +41,8 @@ tgx.TEA(dtdg,
 
 #! compute statistics
 test_ratio = 0.15
-tgx.get_reoccurrence(ctdg, test_ratio=test_ratio)
-tgx.get_surprise(ctdg, test_ratio=test_ratio)
+tgx.get_reoccurrence(dtdg, test_ratio=test_ratio)
+tgx.get_surprise(dtdg, test_ratio=test_ratio)
 
 #* these two much faster on dtdgs
 tgx.get_avg_node_activity(dtdg)

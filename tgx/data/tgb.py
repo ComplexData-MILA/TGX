@@ -8,7 +8,8 @@ Data_specifications = {
         'tgbl-flight'   : {'discretize' : True,     'time_scale': 'monthly'},
         'tgbn-trade'    : {'discretize' : False,    'time_scale': None},
         'tgbn-genre'    : {'discretize' : True,     'time_scale': 'monthly'},
-        'tgbn-reddit'   : {'discretize' : True,     'time_scale': 'monthly'}
+        'tgbn-reddit'   : {'discretize' : True,     'time_scale': 'monthly'},
+        'tgbn-token'   : {'discretize' : True,     'time_scale': 'weekly'}
         }
 
 class tgb_data(object):
@@ -60,9 +61,10 @@ class tgb_data(object):
             from tgb.nodeproppred.dataset import NodePropPredDataset
         except:
             print("First install TGB package using 'pip install py-tgb'")
-        
+
+        #TODO not hard code the dataset name anymore
         link_pred = ["tgbl-wiki", "tgbl-review", "tgbl-coin", "tgbl-comment", "tgbl-flight"]
-        node_pred = ["tgbn-trade", "tgbn-genre", "tgbn-reddit"]
+        node_pred = ["tgbn-trade", "tgbn-genre", "tgbn-reddit", "tgbn-token"]
         if dname in link_pred:
             data = LinkPropPredDataset(name=dname, root="datasets", preprocess=True)
         elif dname in node_pred:
