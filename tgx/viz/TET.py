@@ -294,7 +294,7 @@ def plot_edge_presence_matrix(e_presence_mat,
 
     if fig_param.fig_name is not None:
         # print("Info: file name: {}".format(fig_param.fig_name))
-        plt.savefig(f"{fig_param.fig_name}/{fig_param.network_name}.pdf")
+        plt.savefig(f"{fig_param.fig_name}/{fig_param.network_name}_TET.pdf")
     plt.show()
     print("Info: plotting done!")
 

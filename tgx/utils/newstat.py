@@ -10,7 +10,7 @@ __all__ = ["connected_components_per_ts",
            "degree_density"]
 
 
-def degree_density(graph: object, k: int = 10, network_name: str = None, plot_path: str = None) -> None:
+def degree_density(graph: tuple, k: int = 10, network_name: str = None, plot_path: str = None) -> None:
     r"""
     Plot density map of node degrees per time window
     Parameters:
@@ -70,7 +70,7 @@ def _merge(x, y, parent):
         parent[root_x] = root_y  
 
 
-def connected_components_per_ts(graph: object,  
+def connected_components_per_ts(graph: tuple,  
                  network_name: str = None,
                  plot_path: str = None) -> None:
     r"""
@@ -105,7 +105,7 @@ def connected_components_per_ts(graph: object,
     return 
 
 
-def size_connected_components(graph: object) -> List[List]: 
+def size_connected_components(graph: tuple) -> List[List]: 
     r"""
     Calculate the sizes of connected components per timestamp
     Returns:
@@ -134,7 +134,7 @@ def size_connected_components(graph: object) -> List[List]:
     return component_sizes
 
 
-def get_avg_node_engagement(graph: object) -> List[int]: 
+def get_avg_node_engagement(graph: tuple) -> List[int]: 
     r"""
     Calculate the average node engagement per timestamp,
         the average number of distinct nodes that establish

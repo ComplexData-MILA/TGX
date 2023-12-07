@@ -5,7 +5,7 @@ from tgx.io.read import read_csv
 import copy
 import csv
 
-
+#TODO should contain a new property tracking the number of timestamps
 class Graph(object):
     def __init__(self, 
                  dataset: Optional[object] = None, 
@@ -31,6 +31,8 @@ class Graph(object):
         
         self.subsampled_graph = None
         self.freq_data = None
+
+
         
         
     def discretize(self, 
@@ -51,7 +53,7 @@ class Graph(object):
         if (store_unix):
             return new_G, output[1]
         else:
-            return new_G
+            return (new_G, )
 
     def count_freq(self):
         self.freq_data = frequency_count(self.data)

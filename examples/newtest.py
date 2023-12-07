@@ -7,7 +7,7 @@ plot_path = "/home/mila/e/elahe.kooshafar/projects/TGX_results"
 
 dataset = tgx.builtin.uci()
 G = tgx.Graph(dataset)
-new_G = G.discretize(time_scale="weekly")
+new_G = G.discretize(time_scale="weekly")[0]
 
 # Number of Connected Components
 newstat.connected_components_per_ts(new_G, network_name=dataset.name, plot_path = plot_path)

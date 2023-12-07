@@ -1,3 +1,5 @@
+# Temporal Graph Analysis with TGX (to appear in WSDM 2024)
+
 ### Install dependency
 Our implementation works with python >= 3.9 and can be installed as follows
 
