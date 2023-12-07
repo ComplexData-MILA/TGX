@@ -99,16 +99,16 @@ def plot_for_snapshots(data: list,
     plt.show()
 
 
-def plot_density_map(data, filename, y_title, plot_path = None):
+def plot_density_map(data, filename, y_title, plot_path=None):
     '''
     Plot a density map using fig and ax
     '''
-    # Create a 2D list for color values
-    c = np.zeros((np.max(data), len(data)))
+    max_value = max(max(inner) for inner in data if inner)
+    c = np.zeros((max_value, len(data)))
+
     for i, row in enumerate(data):
         for value in row:
-            # print(value)
-            c[value-1][i] += 1
+            c[value - 1][i] += 1
 
     # Plot
     fig = plt.figure(facecolor='w', figsize=(9, 6))
@@ -117,12 +117,17 @@ def plot_density_map(data, filename, y_title, plot_path = None):
     norm = mcolors.Normalize(vmin=0, vmax=1)
     cax = ax.imshow(c, cmap='viridis', interpolation='nearest', norm=norm)
     cbar = fig.colorbar(cax)
+    cbar.set_label('Frequency')
 
     ax.set_title("Heatmap of Node Degrees Over Time")
     ax.set_xlabel('Time', fontsize=20)
     ax.set_ylabel(y_title, fontsize=20)
     ax.tick_params(labelsize=20)
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+
+    # Adjust the aspect ratio of the plot
+    ax.set_aspect('auto')
+
     if plot_path is not None:
         plt.savefig(f'{plot_path}/{filename}')
     plt.show()

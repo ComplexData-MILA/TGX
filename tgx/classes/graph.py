@@ -123,6 +123,16 @@ class Graph(object):
             if v not in node_list:
                 node_list[v] = 1
         return len(node_list.keys())
+    
+    def edgelist_node_list(self, edge_data: list):
+        node_list = {}
+        for edge in edge_data:
+            (u, v) = edge
+            if u not in node_list:
+                node_list[u] = 1
+            if v not in node_list:
+                node_list[v] = 1
+        return list(node_list.keys())
 
     def nodes_list(self) -> list:
         r"""
