@@ -28,8 +28,7 @@ def create_ts_list(start, end, metric=None, interval=None):
 def plot_nodes_edges_per_ts(edges: list,
                             nodes: list, 
                             ts: list,
-                            network_name: str, 
-                            plot_path: str = None, 
+                            filename: str = None,
                             ylabel_1: str = 'Edges per Timestamp',
                             ylabel_2: str = 'Nodes per Timestamp'):
     """
@@ -38,8 +37,7 @@ def plot_nodes_edges_per_ts(edges: list,
         edges: A list containing number of edges per timestamp
         nodes: A list containing number of nodes per timestamp
         ts: list of timestamps
-        network_name: Name of the network to be used in the output file name
-        plot_path: Path to save the output figure
+        filename: Name of the output file name, containing the path
         ylabel_1: Label for the edges per timestamp line
         ylabel_2: Label for the nodes per timestamp line
     """
@@ -59,10 +57,10 @@ def plot_nodes_edges_per_ts(edges: list,
     ax1.set_ylim(0)
     ax2.set_ylim(0)
     ax1.set_xlim(0, len(ts)-1)
-    if plot_path is not None:
-        filename = f"{network_name}_node&edge_per_ts"
-        plt.savefig(f'{plot_path}/{filename}')
-    plt.show()
+    if filename is not None:
+        plt.savefig(f'{filename}')
+    else:
+        plt.show()
 
 def plot_for_snapshots(data: list,  
                        y_title: str, 
@@ -72,10 +70,9 @@ def plot_for_snapshots(data: list,
     Plot a variable for different timestamps
     Parameters:
         data: A list of desired variable to be plotted
-        filename: Name of the output file name
         y_title: Title of the y axis
+        filename: Name of the output file name, containing the path
         show_ave: Whether to plot a line showing the average of the variable over all timestamps
-        plot_path: The path to save the output file
     '''
     ts = list(range(0, len(data)))
     # plt.rcParams["font.family"] = "Times New Roman"
@@ -96,9 +93,15 @@ def plot_for_snapshots(data: list,
         plt.show()
 
 
-def plot_density_map(data, filename, y_title, plot_path=None):
+def plot_density_map(data: list, 
+                     y_title: str,
+                     filename: str = None,):
     '''
     Plot a density map using fig and ax
+    Parameters:
+        data: A list of desired variable to be plotted
+        y_title: Title of the y axis
+        filename: Name of the output file name, containing the path
     '''
     max_value = max(max(inner) for inner in data if inner)
     c = np.zeros((max_value, len(data)))
@@ -125,9 +128,10 @@ def plot_density_map(data, filename, y_title, plot_path=None):
     # Adjust the aspect ratio of the plot
     ax.set_aspect('auto')
 
-    if plot_path is not None:
-        plt.savefig(f'{plot_path}/{filename}')
-    plt.show()
+    if filename is not None:
+        plt.savefig(f'{filename}')
+    else:
+        plt.show()
 
 if __name__ == "__main__":
     create_ts_list(86400, 86400*365, "unix", "month")
