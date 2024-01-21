@@ -65,11 +65,9 @@ def plot_nodes_edges_per_ts(edges: list,
     plt.show()
 
 def plot_for_snapshots(data: list,  
-                       filename: str, 
                        y_title: str, 
-                       show_ave: bool=True, 
-                       plot_path:str = ".",
-                       plot_title:str = None):
+                       filename: str = None, 
+                       show_ave: bool=True, ):
     '''
     Plot a variable for different timestamps
     Parameters:
@@ -88,15 +86,14 @@ def plot_for_snapshots(data: list,
     ax.set_xlabel('Time', fontsize=20)
     ax.set_ylabel(y_title, fontsize=20)
     ax.tick_params(labelsize=20)
-    # ax.set_ylim(0, 7.5)
     ax.set_xlim(0, len(ts)-1)
-    ax.set_title(plot_title, fontsize=20)
     if show_ave:
         ave_deg = [np.average(data) for i in range(len(ts))]
         ax.plot(ts, ave_deg, color='#ca0020', linestyle='dashed', lw=3)
-    if plot_path is not None:
-        plt.savefig(f'{plot_path}/{filename}')
-    plt.show()
+    if filename is not None:
+        plt.savefig(f'{filename}')
+    else:
+        plt.show()
 
 
 def plot_density_map(data, filename, y_title, plot_path=None):

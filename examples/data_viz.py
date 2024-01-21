@@ -17,7 +17,7 @@ dataset = tgx.tgb_data(data_name) #tgb datasets
 
 ctdg = tgx.Graph(dataset)
 time_scale = "daily"
-dtdg = ctdg.discretize(time_scale=time_scale)
+dtdg = ctdg.discretize(time_scale=time_scale)[0]
 
 
 #! plotting the statistics, works
