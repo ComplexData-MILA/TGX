@@ -1,5 +1,14 @@
 # Temporal Graph Analysis with TGX (to appear in WSDM 2024)
 
+
+### Example Usage ###
+TGX provides many built in datasets as well as supporting TGB datasets. In addition, TGX provides dataset discretization and visualization.
+To get started, see our [starting example](https://github.com/ComplexData-MILA/TGX/blob/master/starting_example.py)
+```
+python starting_example.py -d tgbl-wiki -t daily
+```
+
+
 ### Install dependency
 Our implementation works with python >= 3.9 and can be installed as follows
 
