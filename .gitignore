@@ -1,7 +1,8 @@
 !requirements*.txt
 #dataset
-
-*.png
+*.png  
+*.pdf
+>>>>>>> master
 *.cpython-39.pyc
 *.pyc
 *.xz

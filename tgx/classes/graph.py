@@ -5,7 +5,7 @@ from tgx.io.read import read_csv
 import copy
 import csv
 
-#TODO should contain a new property tracking the number of timestamps
+#TODO should contain a new property tracking the number of timestamps#TODO should contain a new property tracking the number of timestamps
 class Graph(object):
     def __init__(self, 
                  dataset: Optional[object] = None, 
@@ -31,6 +31,8 @@ class Graph(object):
         
         self.subsampled_graph = None
         self.freq_data = None
+
+
 
 
         
