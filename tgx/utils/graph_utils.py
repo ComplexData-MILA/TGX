@@ -87,68 +87,6 @@ def discretize_edges(edgelist: dict,
         output.append(unix_dict)
     return output
 
-
-# def edgelist_discritizer(edgelist: dict,
-#                          time_scale: Union[str, int]):
-#     """
-#     util function for discretizing edgelist, expected timestamp on edges are unixtimestamp
-#     this func supports discretization in two different ways
-#     1. by providing the number of intervals (int), it will equally divide the data into that number of intervals. Note that the last bin can have less duration than others.
-#     2. by providing a time granularity (str), it will divide the data into intervals based on the given granularity, i.e. "hourly", "daily", "weekly", "monthly", "yearly"
-#     In the second way however, the intervals will be based on utc timezone (dividing into days, hours this way) thus both first bin and last bin can have last duration than others.
-
-#     Parameters:
-#         edgelist: dict, dictionary of edges
-#         time_scale: str or int, time interval to discretize the graph
-#     Returns:
-#         updated_edgelist: dict, dictionary of edges with discretized timestamps
-#     """
-    
-#     unique_ts = list(edgelist.keys())
-        
-#     total_time = unique_ts[-1] - unique_ts[0]
-#     if time_scale is not None:
-#         if isinstance(time_scale, str):
-#             if time_scale == "hourly":
-#                 interval_size = SEC_IN_HOUR
-#             elif time_scale == "daily":
-#                 interval_size = SEC_IN_DAY
-#             elif time_scale == "weekly":
-#                 interval_size = SEC_IN_WEEK
-#             elif time_scale == "monthly":
-#                 interval_size = SEC_IN_MONTH
-#             elif time_scale == "yearly":
-#                 interval_size = SEC_IN_YEAR
-#         elif isinstance(time_scale, int):
-#             interval_size = int(total_time / (time_scale))
-#         else:
-#             raise TypeError("Invalid time interval")
-#     else:
-#         raise TypeError("Please provide a time interval")
-#     num_time_scale = int(total_time/interval_size)
-#     print(f'Discretizing data to {num_time_scale} timestamps...')
-#     # if num_time_scale == 0:
-#     #     print("Warning! Only one timestamp exist in the data.")
-
-#     updated_edgelist = {}
-#     for ts, edges_list in edgelist.items():
-#         bin_ts = int(ts / interval_size)
-#         if bin_ts >= num_time_scale:
-#             bin_ts -= 1
-
-#         for edge in edges_list:
-#             if bin_ts not in updated_edgelist:
-#                 updated_edgelist[bin_ts] = []
-#             updated_edgelist[bin_ts].append(edge)
-#     print("Discretization Done..!")
-#     return updated_edgelist
-
-
-
-
-
-
-
 def subsampling(graph: Union[object, dict], 
                       node_list: Optional[list] = [], 
                       random_selection: Optional[bool] = False, 
@@ -280,3 +218,61 @@ def list2csv(lst: list,
              fmt: str = '%i'):
     out_list = np.array(lst)
     np.savetxt(fname, out_list, delimiter=delimiter,  fmt=fmt)
+
+
+
+
+# def edgelist_discritizer(edgelist: dict,
+#                          time_scale: Union[str, int]):
+#     """
+#     util function for discretizing edgelist, expected timestamp on edges are unixtimestamp
+#     this func supports discretization in two different ways
+#     1. by providing the number of intervals (int), it will equally divide the data into that number of intervals. Note that the last bin can have less duration than others.
+#     2. by providing a time granularity (str), it will divide the data into intervals based on the given granularity, i.e. "hourly", "daily", "weekly", "monthly", "yearly"
+#     In the second way however, the intervals will be based on utc timezone (dividing into days, hours this way) thus both first bin and last bin can have last duration than others.
+
+#     Parameters:
+#         edgelist: dict, dictionary of edges
+#         time_scale: str or int, time interval to discretize the graph
+#     Returns:
+#         updated_edgelist: dict, dictionary of edges with discretized timestamps
+#     """
+    
+#     unique_ts = list(edgelist.keys())
+        
+#     total_time = unique_ts[-1] - unique_ts[0]
+#     if time_scale is not None:
+#         if isinstance(time_scale, str):
+#             if time_scale == "hourly":
+#                 interval_size = SEC_IN_HOUR
+#             elif time_scale == "daily":
+#                 interval_size = SEC_IN_DAY
+#             elif time_scale == "weekly":
+#                 interval_size = SEC_IN_WEEK
+#             elif time_scale == "monthly":
+#                 interval_size = SEC_IN_MONTH
+#             elif time_scale == "yearly":
+#                 interval_size = SEC_IN_YEAR
+#         elif isinstance(time_scale, int):
+#             interval_size = int(total_time / (time_scale))
+#         else:
+#             raise TypeError("Invalid time interval")
+#     else:
+#         raise TypeError("Please provide a time interval")
+#     num_time_scale = int(total_time/interval_size)
+#     print(f'Discretizing data to {num_time_scale} timestamps...')
+#     # if num_time_scale == 0:
+#     #     print("Warning! Only one timestamp exist in the data.")
+
+#     updated_edgelist = {}
+#     for ts, edges_list in edgelist.items():
+#         bin_ts = int(ts / interval_size)
+#         if bin_ts >= num_time_scale:
+#             bin_ts -= 1
+
+#         for edge in edges_list:
+#             if bin_ts not in updated_edgelist:
+#                 updated_edgelist[bin_ts] = []
+#             updated_edgelist[bin_ts].append(edge)
+#     print("Discretization Done..!")
+#     return updated_edgelist

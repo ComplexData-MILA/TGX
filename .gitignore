@@ -2,6 +2,7 @@
 #dataset
 *.png  
 *.pdf
+>>>>>>> master
 *.cpython-39.pyc
 *.pyc
 *.xz

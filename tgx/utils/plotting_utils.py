@@ -28,8 +28,7 @@ def create_ts_list(start, end, metric=None, interval=None):
 def plot_nodes_edges_per_ts(edges: list,
                             nodes: list, 
                             ts: list,
-                            network_name: str, 
-                            plot_path: str = None, 
+                            filename: str = None,
                             ylabel_1: str = 'Edges per Timestamp',
                             ylabel_2: str = 'Nodes per Timestamp'):
     """
@@ -38,8 +37,7 @@ def plot_nodes_edges_per_ts(edges: list,
         edges: A list containing number of edges per timestamp
         nodes: A list containing number of nodes per timestamp
         ts: list of timestamps
-        network_name: Name of the network to be used in the output file name
-        plot_path: Path to save the output figure
+        filename: Name of the output file name, containing the path
         ylabel_1: Label for the edges per timestamp line
         ylabel_2: Label for the nodes per timestamp line
     """
@@ -59,25 +57,22 @@ def plot_nodes_edges_per_ts(edges: list,
     ax1.set_ylim(0)
     ax2.set_ylim(0)
     ax1.set_xlim(0, len(ts)-1)
-    if plot_path is not None:
-        filename = f"{network_name}_node&edge_per_ts"
-        plt.savefig(f'{plot_path}/{filename}')
-    plt.show()
+    if filename is not None:
+        plt.savefig(f'{filename}')
+    else:
+        plt.show()
 
 def plot_for_snapshots(data: list,  
-                       filename: str, 
                        y_title: str, 
-                       show_ave: bool=True, 
-                       plot_path:str = ".",
-                       plot_title:str = None):
+                       filename: str = None, 
+                       show_ave: bool=True, ):
     '''
     Plot a variable for different timestamps
     Parameters:
         data: A list of desired variable to be plotted
-        filename: Name of the output file name
         y_title: Title of the y axis
+        filename: Name of the output file name, containing the path
         show_ave: Whether to plot a line showing the average of the variable over all timestamps
-        plot_path: The path to save the output file
     '''
     ts = list(range(0, len(data)))
     # plt.rcParams["font.family"] = "Times New Roman"
@@ -88,27 +83,32 @@ def plot_for_snapshots(data: list,
     ax.set_xlabel('Time', fontsize=20)
     ax.set_ylabel(y_title, fontsize=20)
     ax.tick_params(labelsize=20)
-    # ax.set_ylim(0, 7.5)
     ax.set_xlim(0, len(ts)-1)
-    ax.set_title(plot_title, fontsize=20)
     if show_ave:
         ave_deg = [np.average(data) for i in range(len(ts))]
         ax.plot(ts, ave_deg, color='#ca0020', linestyle='dashed', lw=3)
-    if plot_path is not None:
-        plt.savefig(f'{plot_path}/{filename}')
-    plt.show()
+    if filename is not None:
+        plt.savefig(f'{filename}')
+    else:
+        plt.show()
 
 
-def plot_density_map(data, filename, y_title, plot_path = None):
+def plot_density_map(data: list, 
+                     y_title: str,
+                     filename: str = None,):
     '''
     Plot a density map using fig and ax
+    Parameters:
+        data: A list of desired variable to be plotted
+        y_title: Title of the y axis
+        filename: Name of the output file name, containing the path
     '''
-    # Create a 2D list for color values
-    c = np.zeros((np.max(data), len(data)))
+    max_value = max(max(inner) for inner in data if inner)
+    c = np.zeros((max_value, len(data)))
+
     for i, row in enumerate(data):
         for value in row:
-            # print(value)
-            c[value-1][i] += 1
+            c[value - 1][i] += 1
 
     # Plot
     fig = plt.figure(facecolor='w', figsize=(9, 6))
@@ -117,15 +117,21 @@ def plot_density_map(data, filename, y_title, plot_path = None):
     norm = mcolors.Normalize(vmin=0, vmax=1)
     cax = ax.imshow(c, cmap='viridis', interpolation='nearest', norm=norm)
     cbar = fig.colorbar(cax)
+    cbar.set_label('Frequency')
 
     ax.set_title("Heatmap of Node Degrees Over Time")
     ax.set_xlabel('Time', fontsize=20)
     ax.set_ylabel(y_title, fontsize=20)
     ax.tick_params(labelsize=20)
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    if plot_path is not None:
-        plt.savefig(f'{plot_path}/{filename}')
-    plt.show()
+
+    # Adjust the aspect ratio of the plot
+    ax.set_aspect('auto')
+
+    if filename is not None:
+        plt.savefig(f'{filename}')
+    else:
+        plt.show()
 
 if __name__ == "__main__":
     create_ts_list(86400, 86400*365, "unix", "month")
