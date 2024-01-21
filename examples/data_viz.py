@@ -46,6 +46,9 @@ tgx.get_novelty(dtdg)
 # Number of Connected Components
 tgx.connected_components_per_ts(dtdg, network_name=dataset.name)
 
+# Degree Density
+tgx.degree_density(dtdg, k=3, network_name=dataset.name)
+
 # Size of Largest Connected Component
 component_sizes = tgx.size_connected_components(dtdg)
 largest_component_sizes = [max(inner_list) if inner_list else 0 for inner_list in component_sizes]
@@ -57,5 +60,3 @@ engagements = tgx.get_avg_node_engagement(dtdg)
 filename = f"{dataset.name}_average_node_engagement"
 plot_for_snapshots(engagements, y_title="Average Engagement", filename="./"+filename)
 
-# Degree Density
-tgx.degree_density(dtdg, k=3, network_name=dataset.name)
