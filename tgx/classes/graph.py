@@ -39,17 +39,21 @@ class Graph(object):
         
     def discretize(self, 
                    time_scale: Union[str, int],
-                   store_unix: bool = False) -> object:
+                   store_unix: bool = False,
+                   freq_weight: bool = False) -> object:
         """
         discretize the graph object based on the given time interval
         Args:
             time_scale: time interval to discretize the graph
+            store_unix: whether to store converted unix time in a list
+            freq_weight: whether to weight the edges by frequency in the new graph object
         """
         new_G = copy.deepcopy(self)        
         # discretie differently based on # of intervals of time granularity
         output = discretize_edges(self.data,
                                     time_scale = time_scale,
-                                    store_unix = store_unix)
+                                    store_unix = store_unix,
+                                    freq_weight = freq_weight)
         disc_G = output[0]
         new_G.data = disc_G
         if (store_unix):
@@ -181,8 +185,7 @@ class Graph(object):
             for t, edges_list in self.data.items():
                 for edge in edges_list:
                     (u, v) = edge
-                    csvwriter.writerow([t] + [u] + [v])
-        
+                    csvwriter.writerow([t] + [u] + [v])        
                     
     # def _generate_graph(self, 
     #                     edgelist: Optional[dict] = None

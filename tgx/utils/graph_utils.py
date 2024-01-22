@@ -24,7 +24,8 @@ def ceiling_division(n, d):
 
 def discretize_edges(edgelist: dict,
                     time_scale: Union[int,str],
-                    store_unix: Optional[bool] = False) -> list:
+                    store_unix: Optional[bool] = False,
+                    freq_weight: Optional[bool] = False) -> list:
     """
     util function for discretizing edgelist, expected timestamp on edges are unixtimestamp
     this func supports discretization of edge timestamp 
@@ -34,6 +35,7 @@ def discretize_edges(edgelist: dict,
         edgelist: dict, dictionary of edges
         time_scale: int or str, time interval to discretize the graph
         store_unix: bool, whether to return the converted timestamps in unix format
+        freq_weight: bool, whether to weight the edges based on their frequency
     Returns:
         output list: the first item in the list is always the updated edgelist (dict, dictionary of edges with discretized timestamps) and the second item is the converted timestamps in unix format (list) if store_unix is True
     """
@@ -73,9 +75,17 @@ def discretize_edges(edgelist: dict,
 
         for edge in edges_list:
             if bin_ts not in updated_edgelist:
-                updated_edgelist[bin_ts] = [edge]
+                updated_edgelist[bin_ts] = {edge: 1}
+                #updated_edgelist[bin_ts] = [edge]
             else:
-                updated_edgelist[bin_ts].append(edge)
+                if (not freq_weight):
+                    updated_edgelist[bin_ts][edge] = 1
+                else:
+                    if (edge in updated_edgelist[bin_ts]):
+                        updated_edgelist[bin_ts] += 1
+                    else:
+                        updated_edgelist[bin_ts][edge] = 1
+                #updated_edgelist[bin_ts].append(edge)
         
         if (store_unix):
             unix_ts = start_time + int(ts // interval_size) * interval_size #round to the nearest start time
