@@ -182,6 +182,9 @@ class Graph(object):
                 for edge in edges_list:
                     (u, v) = edge
                     csvwriter.writerow([t] + [u] + [v])
+
+    def get_edges_ts(self) -> list: 
+        print ("hi")
         
                     
     # def _generate_graph(self, 
