@@ -66,13 +66,13 @@ class tgb_data(object):
         link_pred = ["tgbl-wiki", "tgbl-review", "tgbl-coin", "tgbl-comment", "tgbl-flight"]
         node_pred = ["tgbn-trade", "tgbn-genre", "tgbn-reddit", "tgbn-token"]
         if dname in link_pred:
-            data = LinkPropPredDataset(name=dname, root="datasets", preprocess=True)
+            dataset = LinkPropPredDataset(name=dname, root="datasets", preprocess=True)
         elif dname in node_pred:
-            data = NodePropPredDataset(name=dname, root="datasets", preprocess=True)
+            dataset = NodePropPredDataset(name=dname, root="datasets", preprocess=True)
         else:
             raise ValueError("Invalid tgb dataset name")
         
-        data = data.full_data
+        data = dataset.full_data
         data = np.array([data['sources'], data["destinations"], data["timestamps"]])
         self.data = np.transpose(data)
 
@@ -87,6 +87,9 @@ class tgb_data(object):
         
         self.discretize = Data_specifications[dname]['discretize']
         self.time_scale = Data_specifications[dname]['time_scale']
+        self.train_mask = dataset.train_mask
+        self.val_mask = dataset.val_mask
+        self.test_mask = dataset.test_mask
         self.name = dname
 
         return self

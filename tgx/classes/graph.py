@@ -101,7 +101,6 @@ class Graph(object):
         r"""
         Calculate total number of nodes present in an edgelist
         """
-        
         edgelist = self.data
         node_list = {}
         for _, edge_data in edgelist.items():
