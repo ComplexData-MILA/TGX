@@ -96,22 +96,39 @@ class Graph(object):
                 if e not in unique_edges:
                     unique_edges[e] = 1
         return len(unique_edges)
+    
 
     def total_nodes(self) -> int:
         r"""
-        Calculate total number of nodes present in an edgelist
+        Calculate total number of unique nodes present in an edgelist
         """
         edgelist = self.data
         node_list = {}
         for _, edge_data in edgelist.items():
-            for edge in edge_data:
-                (u, v) = edge
+            for u,v in edge_data.keys():
                 if u not in node_list:
                     node_list[u] = 1
                 if v not in node_list:
                     node_list[v] = 1
-        return len(node_list.keys())
+        return len(node_list)
     
+
+    def max_nid(self) -> int:
+        r"""
+        find the largest node ID in the dataset
+        """
+        edgelist = self.data
+        node_list = {}
+        max_id = 0
+        for _, edge_data in edgelist.items():
+            for u,v in edge_data.keys():
+                if u > max_id:
+                    max_id = u
+                if v > max_id:
+                    max_id = v
+        return max_id + 1 #offset by 1
+    
+
     def node_per_ts(self):
         active_nodes = {}
         for ts in range(len(self.data)):
