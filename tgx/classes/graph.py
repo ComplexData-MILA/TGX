@@ -31,11 +31,17 @@ class Graph(object):
         
         self.subsampled_graph = None
         self.freq_data = None
+        self.id_map = None #a map from original node id to new node id based on their order of appearance
 
-
-
-
-        
+    def shift_time_to_zero(self) -> None:
+        r"""
+        shift all edges in the dataset to start with timestamp 0
+        """
+        min_t = list(self.data.keys())[0]
+        new_data = {}
+        for ts in self.data.keys():
+            new_data[ts - min_t] = self.data[ts]
+        self.data = new_data
         
     def discretize(self, 
                    time_scale: Union[str, int],
@@ -48,7 +54,7 @@ class Graph(object):
             store_unix: whether to store converted unix time in a list
             freq_weight: whether to weight the edges by frequency in the new graph object
         """
-        new_G = copy.deepcopy(self)        
+        new_G = copy.deepcopy(self)    
         # discretie differently based on # of intervals of time granularity
         output = discretize_edges(self.data,
                                     time_scale = time_scale,
@@ -96,23 +102,61 @@ class Graph(object):
                 if e not in unique_edges:
                     unique_edges[e] = 1
         return len(unique_edges)
+    
 
     def total_nodes(self) -> int:
         r"""
-        Calculate total number of nodes present in an edgelist
+        Calculate total number of unique nodes present in an edgelist
         """
-        
         edgelist = self.data
         node_list = {}
         for _, edge_data in edgelist.items():
-            for edge in edge_data:
-                (u, v) = edge
+            for u,v in edge_data.keys():
                 if u not in node_list:
                     node_list[u] = 1
                 if v not in node_list:
                     node_list[v] = 1
-        return len(node_list.keys())
+        return len(node_list)
     
+
+    def max_nid(self) -> int:
+        r"""
+        find the largest node ID in the dataset
+        """
+        edgelist = self.data
+        max_id = 0
+        for _, edge_data in edgelist.items():
+            for u,v in edge_data.keys():
+                if u > max_id:
+                    max_id = u
+                if v > max_id:
+                    max_id = v
+        return max_id + 1 #offset by 1
+    
+    def map_nid(self) -> dict:
+        r"""
+        remap all node ids in the dataset to start from 0 and based on node order of appearance. Also updates self.data
+        Output: 
+            id_map: a dictionary mapping original node id to new node id
+        """
+        edgelist = self.data
+        id_map = {}
+        nid = 0
+        new_edgelist = {}
+        for ts, edge_data in edgelist.items():
+            new_edgelist[ts] = {}
+            for u,v in edge_data.keys():
+                if u not in id_map:
+                    id_map[u] = nid
+                    nid += 1
+                if v not in id_map:
+                    id_map[v] = nid
+                    nid += 1
+                new_edgelist[ts][(id_map[u],id_map[v])] = edge_data[(u,v)]
+        self.data = new_edgelist
+        return id_map
+
+
     def node_per_ts(self):
         active_nodes = {}
         for ts in range(len(self.data)):
