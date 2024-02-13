@@ -157,7 +157,22 @@ class Graph(object):
                     max_id = u
                 if v > max_id:
                     max_id = v
-        return max_id + 1 #offset by 1
+        return max_id #offset by 1
+    
+    def min_nid(self) -> int:
+        r"""
+        find the smallest node ID in the dataset
+        """
+        edgelist = self.data
+        min_id = 1000000000
+        for _, edge_data in edgelist.items():
+            for u,v in edge_data.keys():
+                if u < min_id:
+                    min_id = u
+                if v < min_id:
+                    min_id = v
+        return min_id #offset by 1
+
     
     def map_nid(self) -> dict:
         r"""
