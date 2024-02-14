@@ -1,4 +1,14 @@
-# Temporal Graph Analysis with TGX (to appear in WSDM 2024)
+<!-- # TGB -->
+![TGB logo](imgs/2023_TGX_logo.png)
+
+# Temporal Graph Analysis with TGX (WSDM 2024 Demo Track)
+<h4>
+	<a href="https://arxiv.org/abs/2402.03651"><img src="https://img.shields.io/badge/arXiv-pdf-yellowgreen"></a>
+	<a href="https://complexdata-mila.github.io/TGX/"><img src="https://img.shields.io/badge/docs-orange"></a>
+</h4> 
+
+<!-- <a href="https://pypi.org/project/py-tgb/"><img src="https://img.shields.io/pypi/v/py-tgb.svg?color=brightgreen"></a>
+<a href="https://tgb.complexdatalab.com/"><img src="https://img.shields.io/badge/website-blue"></a> -->
 
 
 ### Example Usage ###
