@@ -31,10 +31,9 @@ tgx.connected_components_per_ts(dtdg, network_name=dataset.name)
 tgx.degree_density(dtdg, k=3, network_name=dataset.name)
 
 tgx.TET(dtdg, 
-        network_name=dataset.name, 
-        figsize = (9, 5),
-        axis_title_font_size = 24,
-        ticks_font_size = 24)
+        network_name=dataset.name)
+
+#tgx.TET(dtdg, network_name=dataset.name, figsize = (9, 5), axis_title_font_size = 24, ticks_font_size = 24)
 
 
 tgx.TEA(dtdg, 
@@ -47,7 +46,7 @@ test_ratio = 0.15
 tgx.get_reoccurrence(ctdg, test_ratio=test_ratio)
 tgx.get_surprise(ctdg, test_ratio=test_ratio)
 tgx.get_novelty(dtdg)
-
+tgx.get_avg_node_activity(dtdg)
 
 # Size of Largest Connected Component
 component_sizes = tgx.size_connected_components(dtdg)
