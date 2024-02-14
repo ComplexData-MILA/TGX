@@ -24,6 +24,12 @@ tgx.nodes_over_time(dtdg, network_name=dataset.name)
 tgx.edges_over_time(dtdg, network_name=dataset.name)
 tgx.nodes_and_edges_over_time(dtdg, network_name=dataset.name)
 
+# Number of Connected Components
+tgx.connected_components_per_ts(dtdg, network_name=dataset.name)
+
+# Degree Density
+tgx.degree_density(dtdg, k=3, network_name=dataset.name)
+
 tgx.TET(dtdg, 
         network_name=dataset.name, 
         figsize = (9, 5),
@@ -42,12 +48,6 @@ tgx.get_reoccurrence(ctdg, test_ratio=test_ratio)
 tgx.get_surprise(ctdg, test_ratio=test_ratio)
 tgx.get_novelty(dtdg)
 
-
-# Number of Connected Components
-tgx.connected_components_per_ts(dtdg, network_name=dataset.name)
-
-# Degree Density
-tgx.degree_density(dtdg, k=3, network_name=dataset.name)
 
 # Size of Largest Connected Component
 component_sizes = tgx.size_connected_components(dtdg)

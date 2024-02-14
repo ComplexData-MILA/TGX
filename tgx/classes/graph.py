@@ -71,7 +71,7 @@ class Graph(object):
         
     def discretize(self, 
                    time_scale: Union[str, int],
-                   store_unix: bool = False,
+                   store_unix: bool = True,
                    freq_weight: bool = False) -> object:
         """
         discretize the graph object based on the given time interval
@@ -91,7 +91,7 @@ class Graph(object):
         if (store_unix):
             return new_G, output[1]
         else:
-            return (new_G, )
+            return (new_G, None)
 
     def count_freq(self):
         self.freq_data = frequency_count(self.data)
