@@ -19,8 +19,7 @@ nav:
         - TGB: data/tgb.md
     - Tutorials:
       - Load data: tutorials/data_loader.ipynb
-      - Features: tutorials/Features.ipynb
-      - Generate TEA and TET plots: tutorials/TEA&TET.ipynb
+      - Visualization and Statistics: tutorials/data_viz_stats.ipynb
 
     - Gallery:
       - Plots by type: 

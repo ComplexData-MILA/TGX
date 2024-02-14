@@ -1,5 +1,6 @@
 import tgx
 from tgx.utils.plotting_utils import plot_for_snapshots
+from tgx.utils.graph_utils import subsampling
 
 """
 master example to show all visualization in tgx
@@ -16,6 +17,11 @@ dataset = tgx.builtin.uci() #built in datasets
 ctdg = tgx.Graph(dataset)
 time_scale = "weekly" #"daily"
 dtdg = ctdg.discretize(time_scale=time_scale)[0]
+
+#* example for subsampling
+sub_edges = subsampling(ctdg, selection_strategy="random", N=1000)
+subgraph = tgx.Graph(edgelist=sub_edges)
+
 
 
 #* plotting the statistics
