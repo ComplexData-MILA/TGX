@@ -1,5 +1,6 @@
 import tgx
 from tgx.utils.plotting_utils import plot_for_snapshots
+from tgx.utils.graph_utils import subsampling
 
 """
 master example to show all visualization in tgx
@@ -17,6 +18,11 @@ ctdg = tgx.Graph(dataset)
 time_scale = "weekly" #"daily"
 dtdg = ctdg.discretize(time_scale=time_scale)[0]
 
+#* example for subsampling
+sub_edges = subsampling(ctdg, selection_strategy="random", N=1000)
+subgraph = tgx.Graph(edgelist=sub_edges)
+
+
 
 #* plotting the statistics
 tgx.degree_over_time(dtdg, network_name=dataset.name)
@@ -24,11 +30,16 @@ tgx.nodes_over_time(dtdg, network_name=dataset.name)
 tgx.edges_over_time(dtdg, network_name=dataset.name)
 tgx.nodes_and_edges_over_time(dtdg, network_name=dataset.name)
 
+# Number of Connected Components
+tgx.connected_components_per_ts(dtdg, network_name=dataset.name)
+
+# Degree Density
+tgx.degree_density(dtdg, k=3, network_name=dataset.name)
+
 tgx.TET(dtdg, 
-        network_name=dataset.name, 
-        figsize = (9, 5),
-        axis_title_font_size = 24,
-        ticks_font_size = 24)
+        network_name=dataset.name)
+
+#tgx.TET(dtdg, network_name=dataset.name, figsize = (9, 5), axis_title_font_size = 24, ticks_font_size = 24)
 
 
 tgx.TEA(dtdg, 
@@ -41,13 +52,7 @@ test_ratio = 0.15
 tgx.get_reoccurrence(ctdg, test_ratio=test_ratio)
 tgx.get_surprise(ctdg, test_ratio=test_ratio)
 tgx.get_novelty(dtdg)
-
-
-# Number of Connected Components
-tgx.connected_components_per_ts(dtdg, network_name=dataset.name)
-
-# Degree Density
-tgx.degree_density(dtdg, k=3, network_name=dataset.name)
+tgx.get_avg_node_activity(dtdg)
 
 # Size of Largest Connected Component
 component_sizes = tgx.size_connected_components(dtdg)

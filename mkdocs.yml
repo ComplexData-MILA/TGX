@@ -1,4 +1,4 @@
-site_name: TGX
+site_name: Temporal Graph Analysis with TGX
 site_url: https://shenyanghuang.github.io/TGX
 nav:
     - Home: index.md
@@ -19,8 +19,7 @@ nav:
         - TGB: data/tgb.md
     - Tutorials:
       - Load data: tutorials/data_loader.ipynb
-      - Features: tutorials/Features.ipynb
-      - Generate TEA and TET plots: tutorials/TEA&TET.ipynb
+      - Visualization and Statistics: tutorials/data_viz_stats.ipynb
 
     - Gallery:
       - Plots by type: 
@@ -63,21 +62,15 @@ nav:
 theme:
   name: material
   features:
+    - navigation.tabs
+    - toc.integrate
     - navigation.footer
     - navigation.indexes
-    # - navigation.instant
-    # - navigation.instant.prefetch
-    # - navigation.instant.progress
-    # - navigation.prune
     - navigation.sections
-    - navigation.tabs
     - navigation.top
     - navigation.tracking
     - navigation.tabs.sticky
-    # - navigation.sections
     - navigation.expand
-    # - toc.integrate
-    # - navigation.top
     - search.suggest
     - search.highlight
     - content.tabs.link
@@ -95,11 +88,13 @@ theme:
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode    
-      primary: orange
+      primary: blue
       accent: lime
 
 
 plugins: 
+  - search
+
   - glightbox:
        touchNavigation: true
        loop: false
@@ -132,16 +127,9 @@ plugins:
 
   - mkdocs-jupyter:
       execute: false
-#         handlers:
-#           python:
-#             paths: [.] 
+
 markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
   - attr_list
   - md_in_html
-
-# extra_javascript:
-#   - javascripts/mathjax.js
-#   - https://polyfill.io/v3/polyfill.min.js?features=es6
-#   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

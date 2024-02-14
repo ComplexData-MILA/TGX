@@ -100,33 +100,32 @@ def discretize_edges(edgelist: dict,
         output.append(unix_dict)
     return output
 
-def subsampling(graph: Union[object, dict], 
-                      node_list: Optional[list] = [], 
-                      random_selection: Optional[bool] = False, 
-                      N: Optional[int] = 100
-                      ) -> dict:
+def subsampling(graph: object, 
+                node_list: Optional[list] = [], 
+                selection_strategy: str = "random", 
+                N: Optional[int] = 100
+                ) -> dict:
     """
     Subsampling a part of graph by only monitoring the contacts from specific nodes' list
 
     Parameters:
-        graph: graph object or edgelist dict
+        graph: graph object
         node_list: list, a set of nodes to extract their contacts from the graph
-        random_selection: bool, wether randomly subsample a set of nodes from graph
+        selection_strategy: str, currently supports random sampling
         N: int, number of nodes to be randomly sampled from graph
     
     Returns:
         new_edgelist: dict, a dictionary of edges corresponding to nodes in the node_list
     """
     print("Generate graph subsample...")
-    if isinstance(graph, dict):
-        edgelist = graph
-        nodes = node_list(graph)
-    else:
-        edgelist = graph.edgelist
-        nodes = graph.nodes()        
+    edgelist = graph.data
+    nodes = graph.nodes_list()
 
-    if random_selection:
-        node_list = list(np.random.choice(nodes, size = N, replace = False))
+    if (len(node_list) == 0): #decide on selection strategy if nodelist not provided
+        if (selection_strategy == "random"):
+            node_list = list(np.random.choice(nodes, size = N, replace = False))
+        else:
+            raise ValueError("Selection strategy not supported", selection_strategy)
 
     new_edgelist = {}
     for t, edge_data in edgelist.items():

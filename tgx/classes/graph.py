@@ -21,18 +21,33 @@ class Graph(object):
 
         if dataset is not None:
             if isinstance(dataset, type) or isinstance(dataset,object):
-                #! not sure why read csv here
-                self.data = read_csv(dataset)
+                data = read_csv(dataset) 
         elif fname is not None and isinstance(fname, str):
-            self.data = read_csv(fname)
+            data = read_csv(fname)
         elif edgelist is not None and isinstance(edgelist, dict):
-            self.data = edgelist
+            data = edgelist
         else:
             raise TypeError("Please enter valid input.")
         
+        init_key = list(data.keys())[0]
+        if isinstance(data[init_key], list):
+            data = self._list2dict(data)
+        self.data = data
         self.subsampled_graph = None
         self.freq_data = None
         self.id_map = None #a map from original node id to new node id based on their order of appearance
+
+    def _list2dict(self, data) -> dict:
+        r"""
+        convert data into a dictionary of dictionary of temporal edges
+        """
+        new_data = {}
+        for t in data.keys():
+            edgelist = {}
+            for u,v in data[t]:
+                edgelist[(u,v)] = 1
+            new_data[t] = edgelist
+        return new_data
 
     #TODO support edge features, edge weights, node features and more, currently supports, timestamp, source, destination
     def export_full_data(self):
@@ -71,7 +86,7 @@ class Graph(object):
         
     def discretize(self, 
                    time_scale: Union[str, int],
-                   store_unix: bool = False,
+                   store_unix: bool = True,
                    freq_weight: bool = False) -> object:
         """
         discretize the graph object based on the given time interval
@@ -91,7 +106,7 @@ class Graph(object):
         if (store_unix):
             return new_G, output[1]
         else:
-            return (new_G, )
+            return (new_G, None)
 
     def count_freq(self):
         self.freq_data = frequency_count(self.data)
@@ -230,13 +245,13 @@ class Graph(object):
         Return a list of nodes present in an edgelist
         """
         node_list = {}
-        for _, edge_data in self.edgelist.items():
-            for (u,v), _ in edge_data.items():
+        edgelist = self.data
+        for _, edge_data in edgelist.items():
+            for u,v in edge_data.keys():
                 if u not in node_list:
                     node_list[u] = 1
                 if v not in node_list:
                     node_list[v] = 1
-        
         self.node_list = list(node_list.keys())
         return list(node_list.keys())
     
@@ -272,32 +287,5 @@ class Graph(object):
                     (u, v) = edge
                     csvwriter.writerow([t] + [u] + [v])        
                     
-    # def _generate_graph(self, 
-    #                     edgelist: Optional[dict] = None
-    #                     ) -> list:
-    #     r'''
-    #     Generate a list of graph snapshots. Each snapshot is a 
-    #     Networkx graph object.
-    #     Parameters:
-    #         edgelist: a dictionary containing in the form of {t: {(u, v), freq}}
-    #     Returns:
-    #         G_times: a list of networkx graphs
-    #     '''
-    #     if self.edgelist is None:
-    #         return []
-    #     elif edgelist is None:
-    #         edgelist = self.edgelist
-    #     G_times = []
-    #     G = nx.Graph()
-    #     cur_t = 0
-    #     for ts, edge_data in edgelist.items():
-    #         for (u,v), n in edge_data.items():
-    #             if (ts != cur_t):
-    #                 G_times.append(G)   
-    #                 G = nx.Graph()  
-    #                 cur_t = ts 
-    #             G.add_edge(u, v, freq=n) 
-    #     G_times.append(G)
-    #     return G_times
     
     

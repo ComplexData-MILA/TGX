@@ -1,26 +1,64 @@
-# Welcome to TGX
+<!-- # TGX -->
+![TGX logo](2023_TGX_logo.png)
+
+# Temporal Graph Analysis with TGX (WSDM 2024 Demo Track)
+<h4>
+	<a href="https://arxiv.org/abs/2402.03651"><img src="https://img.shields.io/badge/arXiv-pdf-yellowgreen"></a>
+	<a href="https://complexdata-mila.github.io/TGX/"><img src="https://img.shields.io/badge/docs-orange"></a>
+</h4> 
+
+TGX supports all datasets from [TGB](https://tgb.complexdatalab.com/) and [Poursafaei et al. 2022](https://openreview.net/forum?id=1GVpwr2Tfdg) as well as any custom dataset in `.csv` format. 
+TGX provides numerous temporal graph visualization plots and statistics out of the box
 
 
+### Data Loading ###
+For detailed tutorial on how to load the datasets into `tgx.Graph`, see [`docs/tutorials/data_loader.ipynb`](https://github.com/ComplexData-MILA/TGX/blob/master/docs/tutorials/data_loader.ipynb)
 
-### Pip Install
-
-You can install TGX via [pip](https://pypi.org/project/py-tgb/)
+1. Load TGB datasets
 ```
-pip install py-tgx
+import tgx
+dataset = tgx.tgb_data("tgbl-wiki")
+ctdg = tgx.Graph(dataset)
 ```
 
-<!-- ### Links and Datasets
+2. Load built-in datasets
+```
+dataset = tgx.builtin.uci()
+ctdg = tgx.Graph(dataset)
+```
 
-<!-- The project website can be found [here](https://tgb.complexdatalab.com/). -->
+3. Load custom datasets from `.csv` 
+```
+from tgx.io.read import read_csv
+toy_fname = "docs/tutorials/toy_data.csv"
+edgelist = read_csv(toy_fname, header=True,index=False, t_col=0,)
+tgx.Graph(edgelist=edgelist)
+```
 
-<!-- The API documentations can be found [here](https://shenyanghuang.github.io/TGB/). -->
+### Visualization and Statistics ###
+For detailed tutorial on how to generate visualizations and compute statistics for temporal graphs, see [`docs/tutorials/data_viz_stats.ipynb`](https://github.com/ComplexData-MILA/TGX/blob/master/docs/tutorials/data_viz_stats.ipynb)
 
-<!-- all dataset download links can be found at [info.py](https://github.com/shenyangHuang/TGB/blob/main/tgb/utils/info.py)
+1. Discretize the network (required for viz)
 
-TGB dataloader will also automatically download the dataset as well as the negative samples for the link property prediction datasets. --> 
+```
+dataset = tgx.builtin.uci()
+ctdg = tgx.Graph(dataset)
+time_scale = "weekly"
+dtdg, ts_list = ctdg.discretize(time_scale=time_scale, store_unix=True)
+```
+
+2. Plot the number of nodes over time
+
+```
+tgx.degree_over_time(dtdg, network_name="uci")
+```
+
+3. Compute novelty index
+```
+tgx.get_novelty(dtdg)
+```
 
 
-<!-- ### Install dependency -->
 ### Install dependency
 Our implementation works with python >= 3.9 and can be installed as follows
 
@@ -35,141 +73,34 @@ source ~/tgx_env/bin/activate
 pip install -r requirements.txt
 ```
 
-
-
 3. install local dependencies under root directory `/TGX`
-```
+<!-- ```
 pip install -e py-tgx
-```
-
-
-<!-- ### Instruction for tracking new documentation and running mkdocs locally
-
-1. first run the mkdocs server locally in your terminal 
-```
-mkdocs serve
-```
-
-2. go to the local hosted web address similar to
-```
-[14:18:13] Browser connected: http://127.0.0.1:8000/
 ``` -->
-
-<!-- Example: to track documentation of a new hi.py file in tgb/edgeregression/hi.py -->
-
-
-<!-- 3. create docs/api/tgb.hi.md and add the following
 ```
-# `tgb.edgeregression`
-
-::: tgb.edgeregression.hi
-``` -->
-
-<!-- 4. edit mkdocs.yml 
+pip install -e .
 ```
-nav:
-  - Overview: index.md
-  - About: about.md
-  - API:
-	other *.md files 
-	- tgb.edgeregression: api/tgb.hi.md
-``` -->
+
+
+
+3. [alternatively] install from test-pypi
+
+```
+pip install -i https://test.pypi.org/simple/ py-tgx
+```
+You can specify the version with `==`, note that the pypi version might not always be the most updated version
+
+
+4. [optional] install mkdocs dependencies to serve the documentation locally
+```
+pip install mkdocs-glightbox
+```
 
 ### Creating new branch ###
+
+first create the branch on github
 ```
 git fetch origin
 
 git checkout -b test origin/test
 ```
-
-### dependencies for mkdocs (documentation)
-```
-pip install mkdocs
-pip install mkdocs-material
-pip install mkdocstrings-python
-pip install mkdocs-jupyter
-pip install notebook
-pip install mkdocs-glightbox
-```
-
-
-### full dependency list
-Our implementation works with python >= 3.9 and has the following dependencies
-```
-matplotlib==3.8.0
-pandas==2.1.1
-numpy==1.26.0
-seaborn==0.13.0
-tqdm==4.66.1
-scikit-learn==1.3.1
-tgb==0.9.0
-```
-
-
-
-<!-- ## Code blocks
-
-`pip install tgb` -->
-
-
-
-<!-- 
-
-### Plain codeblock
-
-A plain codeblock:
-
-```
-Some code here
-def myfunction()
-// some comment
-```
-
-#### Code for a specific language
-
-Some more code with the `py` at the start:
-
-``` py
-import tensorflow as tf
-def whatever()
-```
-
-#### With a title
-
-``` py title="bubble_sort.py"
-def bubble_sort(items):
-    for i in range(len(items)):
-        for j in range(len(items) - 1 - i):
-            if items[j] > items[j + 1]:
-                items[j], items[j + 1] = items[j + 1], items[j]
-```
-
-#### With line numbers
-
-``` py linenums="1"
-def bubble_sort(items):
-    for i in range(len(items)):
-        for j in range(len(items) - 1 - i):
-            if items[j] > items[j + 1]:
-                items[j], items[j + 1] = items[j + 1], items[j]
-```
-
-#### Highlighting lines
-
-``` py hl_lines="2 3"
-def bubble_sort(items):
-    for i in range(len(items)):
-        for j in range(len(items) - 1 - i):
-            if items[j] > items[j + 1]:
-                items[j], items[j + 1] = items[j + 1], items[j]
-```
-
-## Icons and Emojs
-
-:smile: 
-
-:fontawesome-regular-face-laugh-wink:
-
-:fontawesome-brands-twitter:{ .twitter }
-
-:octicons-heart-fill-24:{ .heart } -->

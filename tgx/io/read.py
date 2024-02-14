@@ -41,10 +41,10 @@ def read_csv(fname: Union[str, object] = None,
 
     cols_to_read = [u_col, v_col, t_col]
 
-    if isinstance(fname, type) or isinstance(fname, object):
-        return _datasets_edgelist_loader(fname.data) 
-    elif isinstance(fname, str):
+    if (isinstance(fname, str)):
         return _load_edgelist(fname, cols_to_read, header=header)
+    elif isinstance(fname, type) or isinstance(fname, object):
+        return _datasets_edgelist_loader(fname.data) 
     else:
         raise TypeError("Invalid input")
 
@@ -80,8 +80,8 @@ def _load_edgelist(fname, columns, header):
         line = lines[i]
         values = line.split(',')
         t = int(float(values[ts_idx]))
-        u = values[u_idx]
-        v = values[v_idx]
+        u = values[u_idx].strip()
+        v = values[v_idx].strip()
         
         if i == first_line:
             curr_t = t
@@ -92,13 +92,13 @@ def _load_edgelist(fname, columns, header):
         previous_t = t
 
         if t not in temp_edgelist:
-            temp_edgelist[t] = []
+            temp_edgelist[t] = {}
+        if (u, v) not in temp_edgelist[t]:
+            temp_edgelist[t][(u, v)] = 1
+        else:
+            temp_edgelist[t][(u, v)] += 1
 
-            # temp_edgelist[curr_t] = edges_list
-            # edges_list = []
-            # curr_t = t
-
-        temp_edgelist[t].append((u, v))
+        # temp_edgelist[t].append((u, v))
         if (u,v) not in unique_edges:
             unique_edges[(u, v)] = 1
         total_edges += 1

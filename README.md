@@ -1,11 +1,61 @@
-# Temporal Graph Analysis with TGX (to appear in WSDM 2024)
+<!-- # TGX -->
+![TGX logo](imgs/2023_TGX_logo.png)
+
+# Temporal Graph Analysis with TGX (WSDM 2024 Demo Track)
+<h4>
+	<a href="https://arxiv.org/abs/2402.03651"><img src="https://img.shields.io/badge/arXiv-pdf-yellowgreen"></a>
+	<a href="https://complexdata-mila.github.io/TGX/"><img src="https://img.shields.io/badge/docs-orange"></a>
+</h4> 
+
+TGX supports all datasets from [TGB](https://tgb.complexdatalab.com/) and [Poursafaei et al. 2022](https://openreview.net/forum?id=1GVpwr2Tfdg) as well as any custom dataset in `.csv` format. 
+TGX provides numerous temporal graph visualization plots and statistics out of the box
 
 
-### Example Usage ###
-TGX provides many built in datasets as well as supporting TGB datasets. In addition, TGX provides dataset discretization and visualization.
-To get started, see our [starting example](https://github.com/ComplexData-MILA/TGX/blob/master/starting_example.py)
+### Data Loading ###
+For detailed tutorial on how to load the datasets into `tgx.Graph`, see [`docs/tutorials/data_loader.ipynb`](https://github.com/ComplexData-MILA/TGX/blob/master/docs/tutorials/data_loader.ipynb)
+
+1. Load TGB datasets
 ```
-python starting_example.py -d tgbl-wiki -t daily
+import tgx
+dataset = tgx.tgb_data("tgbl-wiki")
+ctdg = tgx.Graph(dataset)
+```
+
+2. Load built-in datasets
+```
+dataset = tgx.builtin.uci()
+ctdg = tgx.Graph(dataset)
+```
+
+3. Load custom datasets from `.csv` 
+```
+from tgx.io.read import read_csv
+toy_fname = "docs/tutorials/toy_data.csv"
+edgelist = read_csv(toy_fname, header=True,index=False, t_col=0,)
+tgx.Graph(edgelist=edgelist)
+```
+
+### Visualization and Statistics ###
+For detailed tutorial on how to generate visualizations and compute statistics for temporal graphs, see [`docs/tutorials/data_viz_stats.ipynb`](https://github.com/ComplexData-MILA/TGX/blob/master/docs/tutorials/data_viz_stats.ipynb)
+
+1. Discretize the network (required for viz)
+
+```
+dataset = tgx.builtin.uci()
+ctdg = tgx.Graph(dataset)
+time_scale = "weekly"
+dtdg, ts_list = ctdg.discretize(time_scale=time_scale, store_unix=True)
+```
+
+2. Plot the number of nodes over time
+
+```
+tgx.degree_over_time(dtdg, network_name="uci")
+```
+
+3. Compute novelty index
+```
+tgx.get_novelty(dtdg)
 ```
 
 
