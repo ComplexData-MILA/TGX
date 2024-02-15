@@ -13,6 +13,17 @@ Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE
 
+# Temporal Graph Analysis with TGX (to appear in WSDM 2024)
+
+
+### Example Usage ###
+TGX provides many built in datasets as well as supporting TGB datasets. In addition, TGX provides dataset discretization and visualization.
+To get started, see our [starting example](https://github.com/ComplexData-MILA/TGX/blob/master/starting_example.py)
+```
+python starting_example.py -d tgbl-wiki -t daily
+```
+
+
 ### Install dependency
 Our implementation works with python >= 3.9 and can be installed as follows
 
@@ -27,10 +38,27 @@ source ~/tgx_env/bin/activate
 pip install -r requirements.txt
 ```
 
-
 3. install local dependencies under root directory `/TGX`
-```
+<!-- ```
 pip install -e py-tgx
+``` -->
+```
+pip install -e .
+```
+
+
+
+3. [alternatively] install from test-pypi
+
+```
+pip install -i https://test.pypi.org/simple/ py-tgx
+```
+You can specify the version with `==`, note that the pypi version might not always be the most updated version
+
+
+4. [optional] install mkdocs dependencies to serve the documentation locally
+```
+pip install mkdocs-glightbox
 ```
 
 ### Creating new branch ###
