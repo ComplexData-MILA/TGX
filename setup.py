@@ -8,7 +8,7 @@ def readme():
 
 setup(
     name="py-tgx",
-    version="0.3.0",
+    version="0.3.1",
     description="Temporal Graph Visualization with TGX",
     url="https://github.com/ComplexData-MILA/TGX",
     keywords="Temporal Graph Visualization",
