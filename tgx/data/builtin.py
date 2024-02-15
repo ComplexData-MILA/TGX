@@ -1,10 +1,13 @@
 import pandas as pd
 import zipfile
 import urllib
+import requests
+
 
 __all__ = ["data"]
 
 root_path = "."
+
 
 DataPath={
     'USLegis'   : "/data/USLegis/ml_USLegis.csv",
@@ -35,6 +38,18 @@ Data_specifications = {
         'Contacts'      : {'discretize' : True,     'time_scale': 'daily'},
         'lastfm'        : {'discretize' : True,     'time_scale': 'monthly'}
         }
+
+def download(url: str, output_path: str):
+    get_response = requests.get(url,stream=True)
+    file_name  = url.split("/")[-1]
+    fpath = output_path + file_name
+    with open(output_path + file_name, 'wb') as f:
+        for chunk in get_response.iter_content(chunk_size=1024):
+            if chunk: # filter out keep-alive new chunks
+                f.write(chunk)
+    return fpath
+
+
 
 class builtin(object):
     def __init__(self):
@@ -85,8 +100,8 @@ class builtin(object):
         print(path_download)
         print(url)
         if inp == 'y':
-            print(f"Download started, this might take a while . . .")
-            zip_path, _ = urllib.request.urlretrieve(url)
+            print(f"Downloading {self.name} dataset . . .")
+            zip_path = download(url, path_download)
             with zipfile.ZipFile(zip_path, "r") as f:
                 f.extractall(path_download)
             print("Download completed")
