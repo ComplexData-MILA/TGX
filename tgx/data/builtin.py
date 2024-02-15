@@ -42,8 +42,8 @@ Data_specifications = {
 def download(url: str, output_path: str):
     get_response = requests.get(url,stream=True)
     file_name  = url.split("/")[-1]
-    fpath = output_path + file_name
-    with open(output_path + file_name, 'wb') as f:
+    fpath = output_path + "/" + file_name
+    with open(fpath, 'wb') as f:
         for chunk in get_response.iter_content(chunk_size=1024):
             if chunk: # filter out keep-alive new chunks
                 f.write(chunk)
@@ -96,7 +96,7 @@ class builtin(object):
         print("Data missing, download recommended!")
         inp = input('Will you download the dataset(s) now? (y/N)\n').lower()
         url = f"https://zenodo.org/record/7213796/files/{self.name}.zip"
-        path_download = f"./data"
+        path_download = f"./data" 
         print(path_download)
         print(url)
         if inp == 'y':
