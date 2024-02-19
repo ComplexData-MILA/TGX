@@ -137,9 +137,12 @@ celerybeat.pid
 env/
 venv/
 ENV/
+ENV_tgx/
 env.bak/
 venv.bak/
 cc_env.sh
+py_tgx.egg-info/
+.github/
 
 # Spyder project settings
 .spyderproject
