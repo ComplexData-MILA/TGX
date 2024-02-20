@@ -4,6 +4,7 @@
 # Temporal Graph Analysis with TGX
 <h4>
 	<a href="https://arxiv.org/abs/2402.03651"><img src="https://img.shields.io/badge/arXiv-pdf-yellowgreen"></a>
+	<a href="https://pypi.org/project/py-tgx/"><img src="https://img.shields.io/pypi/v/py-tgx.svg?color=brightgreen"></a>
 	<a href="https://complexdata-mila.github.io/TGX/"><img src="https://img.shields.io/badge/docs-orange"></a>
 </h4> 
 
