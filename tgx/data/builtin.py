@@ -1,7 +1,8 @@
 import pandas as pd
 import zipfile
-import urllib
 import requests
+import os
+
 
 
 __all__ = ["data"]
@@ -100,6 +101,10 @@ class builtin(object):
         print(path_download)
         print(url)
         if inp == 'y':
+            if not os.path.exists(path_download):
+                os.mkdir(path_download)
+                print("Folder %s created!" % path_download)
+
             print(f"Downloading {self.name} dataset . . .")
             zip_path = download(url, path_download)
             with zipfile.ZipFile(zip_path, "r") as f:

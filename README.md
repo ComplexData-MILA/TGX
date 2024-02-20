@@ -24,26 +24,28 @@ TGX implementation works with `python >= 3.9` and can be installed as follows.
 	source tgx_env/bin/activate
 	```
 
-2. Install external packages
+2. Upgrade pip (Optional)
+	```
+	pip install --upgrade pip
+	```
+
+3. Install external packages
 	```
 	pip install -r requirements.txt
 	```
 
-3. Install local dependencies under root directory `/TGX`.
+4. Install local dependencies under root directory `/TGX`.
 	```
 	pip install -e .
 	```
 
-
-
-4. [Aternative] Install TGX from [`PyPi`](https://pypi.org/project/py-tgx/):
+5. [Aternative] Install TGX from [`PyPi`](https://pypi.org/project/py-tgx/):
 
 	```
 	pip install py-tgx
 	```
 
-
-5. [optional] Install `mkdocs` dependencies to serve the documentation locally.
+6. [optional] Install `mkdocs` dependencies to serve the documentation locally.
 	```
 	pip install mkdocs-glightbox
 	```
