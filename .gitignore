@@ -1,8 +1,8 @@
 !requirements*.txt
+!full_requirements*.txt
 #dataset
 *.png  
 *.pdf
->>>>>>> master
 *.cpython-39.pyc
 *.pyc
 *.xz
