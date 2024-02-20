@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: py-tgx
-Version: 0.3.1
+Version: 0.4.0
 Summary: Temporal Graph Visualization with TGX
 Home-page: https://github.com/ComplexData-MILA/TGX
 Author: ["Razieh Shirzadkhani <razieh.shirzadkhani@gmail.com>", "shenyang Huang <shenyang.huang@mail.mcgill.ca>", "Elahe Kooshafar", "Farimah Poursafaei"]
