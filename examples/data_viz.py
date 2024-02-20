@@ -3,28 +3,28 @@ from tgx.utils.plotting_utils import plot_for_snapshots
 from tgx.utils.graph_utils import subsampling
 
 """
-master example to show all visualization in tgx
+A master example to show all visualization in TGX
 """
+ 
+# === load built in datasets ===
+dataset = tgx.builtin.uci() 
 
-#* load built in datasets
-dataset = tgx.builtin.uci() #built in datasets 
-
-#* load the tgb datasets
+# === load the tgb datasets ===
 # data_name = "tgbl-wiki" #"tgbl-review" 
 # dataset = tgx.tgb_data(data_name) #tgb datasets
 
-
+# initialize a Graph object from the loaded dataset 
+# & discretize its timestamps...
 ctdg = tgx.Graph(dataset)
-time_scale = "weekly" #"daily"
+time_scale = "weekly"  # other choices: "daily", "hourly", ...
 dtdg = ctdg.discretize(time_scale=time_scale)[0]
 
-#* example for subsampling
+# === example for subsampling
 sub_edges = subsampling(ctdg, selection_strategy="random", N=1000)
 subgraph = tgx.Graph(edgelist=sub_edges)
 
 
-
-#* plotting the statistics
+# === plot the statistics
 tgx.degree_over_time(dtdg, network_name=dataset.name)
 tgx.nodes_over_time(dtdg, network_name=dataset.name)
 tgx.edges_over_time(dtdg, network_name=dataset.name)
@@ -39,15 +39,18 @@ tgx.degree_density(dtdg, k=3, network_name=dataset.name)
 tgx.TET(dtdg, 
         network_name=dataset.name)
 
-#tgx.TET(dtdg, network_name=dataset.name, figsize = (9, 5), axis_title_font_size = 24, ticks_font_size = 24)
+# tgx.TET(dtdg, 
+#         network_name=dataset.name, 
+#         figsize = (9, 5), 
+#         axis_title_font_size = 24, 
+#         ticks_font_size = 24)
+
+# tgx.TEA(dtdg, 
+#         network_name=dataset.name)
 
 
-tgx.TEA(dtdg, 
-        network_name=dataset.name)
 
-
-
-#* compute statistics
+# === compute statistics
 test_ratio = 0.15
 tgx.get_reoccurrence(ctdg, test_ratio=test_ratio)
 tgx.get_surprise(ctdg, test_ratio=test_ratio)
