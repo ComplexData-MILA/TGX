@@ -1,5 +1,5 @@
 <!-- # TGX -->
-![TGX logo](imgs/2023_TGX_logo.png)
+![TGX logo](docs/2023_TGX_logo.png)
 
 # Temporal Graph Analysis with TGX
 <h4>
