@@ -47,7 +47,12 @@ TGX implementation works with `python >= 3.9` and can be installed as follows.
 
 6. [optional] Install `mkdocs` dependencies to serve the documentation locally.
 	```
+	pip install mkdocs 
+	pip install mkdocs-material
+	pip install mkdocstrings-python
 	pip install mkdocs-glightbox
+	pip install mkdocs-jupyter
+	pip install ipython_genutils
 	```
 
 

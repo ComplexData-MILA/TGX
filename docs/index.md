@@ -8,7 +8,7 @@
 </h4> 
 
 TGX supports all datasets from [TGB](https://tgb.complexdatalab.com/) and [Poursafaei et al. 2022](https://openreview.net/forum?id=1GVpwr2Tfdg) as well as any custom dataset in `.csv` format. 
-TGX provides numerous temporal graph visualization plots and statistics out of the box
+TGX provides numerous temporal graph visualization plots and statistics out of the box.
 
 
 ### Data Loading ###
