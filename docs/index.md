@@ -5,6 +5,7 @@
 <h4>
 	<a href="https://arxiv.org/abs/2402.03651"><img src="https://img.shields.io/badge/arXiv-pdf-yellowgreen"></a>
 	<a href="https://complexdata-mila.github.io/TGX/"><img src="https://img.shields.io/badge/docs-orange"></a>
+	<a href="https://github.com/ComplexData-MILA/TGX"><img src="https://img.shields.io/badge/Github-link-lightgrey"></a>
 </h4> 
 
 TGX supports all datasets from [TGB](https://tgb.complexdatalab.com/) and [Poursafaei et al. 2022](https://openreview.net/forum?id=1GVpwr2Tfdg) as well as any custom dataset in `.csv` format. 

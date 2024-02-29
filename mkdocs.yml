@@ -58,9 +58,11 @@ nav:
           - tgbn-reddit: gallery/tgbn-reddit.md
           
     - Contribute: contribute.md
+    - Github: 'https://github.com/ComplexData-MILA/TGX'
 
 
 theme:
+  logo: tgx_logo_no_txt.png
   name: material
   features:
     - navigation.tabs
