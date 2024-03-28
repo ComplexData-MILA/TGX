@@ -42,6 +42,7 @@ def discretize_edges(edgelist: dict,
     """
     unique_ts = list(edgelist.keys())        
     total_time = unique_ts[-1] - unique_ts[0]
+
     if time_scale is not None:
         if isinstance(time_scale, int):
             interval_size = total_time // time_scale  #integer timestamp of the bin, discounting any bin that has a smaller duration than others
@@ -73,25 +74,26 @@ def discretize_edges(edgelist: dict,
     if (store_unix):
         unix_dict = []
         start_time = int(unique_ts[0])
+
     for ts, edges_list in edgelist.items():
         bin_ts = ceiling_division(ts, interval_size)  #will correctly put edges into the last bin
 
         for edge in edges_list:
             if bin_ts not in updated_edgelist:
                 updated_edgelist[bin_ts] = {edge: 1}
-                #updated_edgelist[bin_ts] = [edge]
             else:
                 if (not freq_weight):
                     updated_edgelist[bin_ts][edge] = 1
                 else:
                     if (edge in updated_edgelist[bin_ts]):
-                        updated_edgelist[bin_ts] += 1
+                        updated_edgelist[bin_ts][edge] += 1
                     else:
                         updated_edgelist[bin_ts][edge] = 1
-                #updated_edgelist[bin_ts].append(edge)
         
         if (store_unix):
-            unix_ts = start_time + int(ts // interval_size) * interval_size #round to the nearest start time
+            #! should use bin_ts here
+            unix_ts = start_time + bin_ts * interval_size
+            # unix_ts = start_time + int(ts // interval_size) * interval_size #round to the nearest start time
             unix_ts = int(unix_ts)
             unix_dict.extend([unix_ts] * len(edges_list))
     
