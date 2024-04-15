@@ -94,10 +94,6 @@ def discretize_edges(edgelist: dict,
         if (store_unix):
             #! should use bin_ts here
             unix_ts = start_time + bin_ts * interval_size
-            print (ts)
-            print (bin_ts)
-            print (start_time)
-            print (unix_ts)
 
             # unix_ts = start_time + int(ts // interval_size) * interval_size #round to the nearest start time
             unix_ts = int(unix_ts)
