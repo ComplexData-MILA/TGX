@@ -76,7 +76,8 @@ def discretize_edges(edgelist: dict,
         start_time = int(unique_ts[0])
 
     for ts, edges_list in edgelist.items():
-        bin_ts = ceiling_division(ts, interval_size)  #will correctly put edges into the last bin
+        #? no longer assume ts start with 0
+        bin_ts = ceiling_division(ts-start_time, interval_size)  #will correctly put edges into the last bin
 
         for edge in edges_list:
             if bin_ts not in updated_edgelist:
@@ -93,6 +94,11 @@ def discretize_edges(edgelist: dict,
         if (store_unix):
             #! should use bin_ts here
             unix_ts = start_time + bin_ts * interval_size
+            print (ts)
+            print (bin_ts)
+            print (start_time)
+            print (unix_ts)
+
             # unix_ts = start_time + int(ts // interval_size) * interval_size #round to the nearest start time
             unix_ts = int(unix_ts)
             unix_dict.extend([unix_ts] * len(edges_list))
