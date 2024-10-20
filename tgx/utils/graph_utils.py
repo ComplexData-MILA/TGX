@@ -43,6 +43,8 @@ def discretize_edges(edgelist: dict,
     unique_ts = list(edgelist.keys())        
     total_time = unique_ts[-1] - unique_ts[0]
 
+    #! adding intermediate hour and days, to remove
+
     if time_scale is not None:
         if isinstance(time_scale, int):
             interval_size = total_time // time_scale  #integer timestamp of the bin, discounting any bin that has a smaller duration than others
@@ -51,8 +53,20 @@ def discretize_edges(edgelist: dict,
                 interval_size = SEC_IN_MIN
             elif time_scale == "hourly":
                 interval_size = SEC_IN_HOUR
+            elif time_scale == "2hourly":
+                interval_size = 2*SEC_IN_HOUR
+            elif time_scale == "4hourly":
+                interval_size = 4*SEC_IN_HOUR
+            elif time_scale == "6hourly":
+                interval_size = 6*SEC_IN_HOUR
+            elif time_scale == "12hourly":
+                interval_size = 12*SEC_IN_HOUR
             elif time_scale == "daily":
                 interval_size = SEC_IN_DAY
+            elif time_scale == "2daily":
+                interval_size = 2*SEC_IN_DAY
+            elif time_scale == "4daily":
+                interval_size = 4*SEC_IN_DAY
             elif time_scale == "weekly":
                 interval_size = SEC_IN_WEEK
             elif time_scale == "monthly":
