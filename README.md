@@ -39,7 +39,7 @@ TGX implementation works with `python >= 3.9` and can be installed as follows.
 	pip install -e .
 	```
 
-5. [Aternative] Install TGX from [`PyPi`](https://pypi.org/project/py-tgx/):
+5. [Alternative] Install TGX from [`PyPi`](https://pypi.org/project/py-tgx/):
 
 	```
 	pip install py-tgx
