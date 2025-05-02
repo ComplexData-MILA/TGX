@@ -62,12 +62,9 @@ class tgb_data(object):
         except:
             print("First install TGB package using 'pip install py-tgb'")
 
-        #TODO not hard code the dataset name anymore
-        link_pred = ["tgbl-wiki", "tgbl-review", "tgbl-coin", "tgbl-comment", "tgbl-flight"]
-        node_pred = ["tgbn-trade", "tgbn-genre", "tgbn-reddit", "tgbn-token"]
-        if dname in link_pred:
+        if "tgbl" in dname:
             dataset = LinkPropPredDataset(name=dname, root="datasets", preprocess=True)
-        elif dname in node_pred:
+        elif "tgbn" in dname:
             dataset = NodePropPredDataset(name=dname, root="datasets", preprocess=True)
         else:
             raise ValueError("Invalid tgb dataset name")
