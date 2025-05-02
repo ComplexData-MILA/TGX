@@ -81,9 +81,13 @@ class tgb_data(object):
             self.edge_label = data['edge_label']
         if edge_idxs:
             self.edge_idxs = data['edge_idxs']
-        
-        self.discretize = Data_specifications[dname]['discretize']
-        self.time_scale = Data_specifications[dname]['time_scale']
+
+        if (dname in Data_specifications):
+            self.discretize = Data_specifications[dname]['discretize']
+            self.time_scale = Data_specifications[dname]['time_scale']
+        else:
+            self.discretize = False
+            self.time_scale = None
         self.train_mask = dataset.train_mask
         self.val_mask = dataset.val_mask
         self.test_mask = dataset.test_mask
